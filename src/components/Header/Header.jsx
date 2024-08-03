@@ -64,13 +64,17 @@ function Header() {
                         </div>
 
                         <div className='flex gap-24'>
-                              <Link>
+                              <NavLink>
                                     Search
-                              </Link>
+                              </NavLink>
 
-                              <Link>
-                                    Account
-                              </Link>
+                              <NavLink to= "/LogIn"
+                                                className={({isActive}) => `  ${isActive ? 'text-green-500' : 'text-black'}`
+                                                    
+                                                 }
+                                          >
+                                                Account
+                                          </NavLink>
                         </div>
                   </div>
             </nav>
