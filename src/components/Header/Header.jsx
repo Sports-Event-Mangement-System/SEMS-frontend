@@ -68,7 +68,7 @@ function Header() {
                                     Search
                               </Link>
 
-                              <Link>
+                              <Link to= "/account">
                                     Account
                               </Link>
                         </div>

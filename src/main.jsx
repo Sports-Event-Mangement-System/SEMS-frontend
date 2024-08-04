@@ -9,6 +9,7 @@ import About from './components/About Us/About';
 import Tournaments from './components/Tournaments/Tournaments';
 import Gallery from './components/Gallery/Gallery'
 import Contact from './components/Contact Us/Contact';
+import Account from './components/Account/Account';
 
 
 const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/contact',
         element: <Contact />
+      },
+      {
+        path: '/account',
+        element: <Account />
       }
     ]
   }
