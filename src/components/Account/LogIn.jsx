@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react'
 import './LogIn.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../store/UserSlice';
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function LogIn() {
   //States
@@ -10,10 +10,10 @@ export default function LogIn() {
   const [password, setPassword] = useState('');
   const [isLoggedIn, setisLoggedIn] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate()
 
   //redux states
   const { loading, error } = useSelector((state) => state.user);
-
   //Login form handle with axios and redux.
   const handleLogin = (e) => {
     e.preventDefault();
@@ -22,22 +22,24 @@ export default function LogIn() {
     }
     console.log(email);
     dispatch(loginUser(userCredentaials)).then((result) => {
-      console.log(result);
       if (result.payload.status === true) {
         setisLoggedIn(true);
         setEmail('');
         setPassword('');
-        NavLink('/');
+        navigate('/');
+      }
+      else {
+        setisLoggedIn(false);
       }
     });
   };
   useEffect(() => {
     if (isLoggedIn) {
       setTimeout(() => {
-        // window.location.href = '/';
+        navigate('/');
       }, 1500);
     }
-  }, [isLoggedIn]);
+  }, [navigate,isLoggedIn]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -46,8 +48,10 @@ export default function LogIn() {
           <h1>Log In</h1>
         </div>
         <form action="" className="flex flex-col items-center w-full" onSubmit={handleLogin}>
-          <div className="flex items-center mb-4 w-full">
-            <label htmlFor="email" className="w-24 text-right mr-2">Email:</label>
+          <div className="flex items-center mb-2 w-full">
+            <label htmlFor="email" className="w-24 text-right mr-2">Email:<span className="text-red-500 text-md">
+                *
+              </span></label>
             <input
               type="email"
               id="email"
@@ -57,21 +61,32 @@ export default function LogIn() {
               placeholder="Enter Email"
               className="w-64 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
             />
-            {error.email && <div className="text-red-500 text-sm">{error.email}</div>}
           </div>
-          <div className="flex items-center mb-4 w-full">
-            <label htmlFor="password" className="w-24 text-right mr-2">Password:</label>
+          {error.email && (
+              <span className="text-red-500 text-md">
+                {error.email}
+              </span>
+            )}
+          <div className="flex items-center mb-2 w-full">
+            <label htmlFor="password" className="w-24 text-right mr-2">Password:<span className="text-red-500 text-md">
+                *
+              </span></label>
             <input
               type="password"
               id="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)} 
+              onChange={(e) => setPassword(e.target.value)}
               name="password"
               placeholder="Enter Password"
               className="w-64 border border-gray-300 p-2 rounded-md focus:outline-none focus:ring focus:ring-blue-300"
             />
-            {error.password && <div className="text-red-500 text-sm">{error.password}</div>}
-          </div>
+          </div>  
+          {error.password && (
+              <span className="text-red-500 text-md">
+                {error.password}
+              </span>
+            )}
+          {error.message && <span className="text-red-500 text-md">{error.message}</span>}
           <a href="#" className="mb-4 underline text-sm">Forgot password?</a>
           <button type="submit" className="w-32 h-10 bg-blue-500 text-white rounded-md mb-4 hover:bg-blue-700 focus:outline-none">
             {loading ? 'Loading...' : 'LOGIN'}

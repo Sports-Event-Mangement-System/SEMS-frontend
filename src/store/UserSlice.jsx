@@ -10,10 +10,15 @@ export const loginUser = createAsyncThunk(
             localStorage.setItem('role', response.data.role);
             return response.data;
         } catch (error) {
-            if (!error.response) {
-                throw error;
+            console.log(error);
+            if (error.response && error.response.data.errors) {
+                return rejectWithValue(error.response.data.errors)
+            } else if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.data)
             }
-            return rejectWithValue(error.response.data.errors);
+            else {
+                return rejectWithValue(error)
+            }
         }
     }
 );
@@ -22,32 +27,26 @@ const userSlice = createSlice({
     name: 'user',
     initialState: {
         user: null,
+        loading: false,
+        error: {},
     },
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
                 state.user = null;
-                state.error = null;
+                state.error = {};
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
-                state.error = null;
+                state.error = {};
             })
-                .addCase(loginUser.rejected, (state, action) => {
-                    state.loading = false;
-                    state.user = null;
-                    console.log(action.error);
-                    if (action.payload) {
-                        state.error = action.payload;
-                    } else if (action.error.message === 'Network Error') {
-                        state.error = 'Network error occurred. Please try again later.';
-                    } else {
-                        state.error = action.error.message;
-                    }
-
-                })
+            .addCase(loginUser.rejected, (state, action) => {
+                state.loading = false;
+                state.user = null;
+                state.error = action.payload;
+            })
     },
     reducers: {
         login: (state, action) => {
