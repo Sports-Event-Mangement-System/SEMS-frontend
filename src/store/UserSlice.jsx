@@ -1,30 +1,55 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { persistStore } from 'redux-persist';
 
 export const loginUser = createAsyncThunk(
-    'user/login',
+    'auth/login',
     async (userCredentials, { rejectWithValue }) => {
         try {
             const response = await axios.post(`${import.meta.env.VITE_API_URL}api/login`, userCredentials);
-            localStorage.setItem('access_token', response.data.access_token);
-            localStorage.setItem('role', response.data.role);
             return response.data;
         } catch (error) {
-            console.log(error);
             if (error.response && error.response.data.errors) {
-                return rejectWithValue(error.response.data.errors)
+                return rejectWithValue(error.response.data.errors);
             } else if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.data)
-            }
-            else {
-                return rejectWithValue(error)
+                return rejectWithValue(error.response.data);
+            } else {
+                return rejectWithValue(error);
             }
         }
     }
 );
 
-const userSlice = createSlice({
-    name: 'user',
+export const getCurrentUser = createAsyncThunk(
+    'auth/getCurrentUser',
+    async (_, { rejectWithValue }) => {
+        try {
+            const token = localStorage.getItem('access_token') ?? '';
+
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/user`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            localStorage.setItem('access_token', response.data.access_token);
+            localStorage.setItem('role', response.data.role);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response.data);
+        }
+    }
+);
+
+export const logout = createAsyncThunk("auth/logout", async () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("role");
+    // localStorage.removeItem("persist:root");
+});
+
+const authSlice = createSlice({
+    name: 'auth',
     initialState: {
         user: null,
         loading: false,
@@ -47,17 +72,23 @@ const userSlice = createSlice({
                 state.user = null;
                 state.error = action.payload;
             })
-    },
-    reducers: {
-        login: (state, action) => {
-            state.user = action.payload;
-        },
-        logout: (state) => {
-            state.user = null;
-        },
+            .addCase(getCurrentUser.pending, (state) => {
+                state.loading = true;
+                state.currentUser = null;
+            })
+            .addCase(getCurrentUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.currentUser = action.payload;
+            })
+            .addCase(getCurrentUser.rejected, (state) => {
+                state.loading = false;
+                state.currentUser = null;
+            })
+            .addCase(logout.fulfilled, (state) => {
+                state.loading = false;
+                state.currentUser = null;
+            });
     },
 });
 
-export const { login, logout } = userSlice.actions;
-
-export default userSlice.reducer; 
+export default authSlice.reducer;

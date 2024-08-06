@@ -8,12 +8,11 @@ export default function LogIn() {
   //States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [isLoggedIn, setisLoggedIn] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate()
 
   //redux states
-  const { loading, error } = useSelector((state) => state.user);
+  const { loading, error } = useSelector((state) => state.auth);
   //Login form handle with axios and redux.
   const handleLogin = (e) => {
     e.preventDefault();
@@ -23,23 +22,14 @@ export default function LogIn() {
     console.log(email);
     dispatch(loginUser(userCredentaials)).then((result) => {
       if (result.payload.status === true) {
-        setisLoggedIn(true);
+        localStorage.setItem('access_token', result.payload.access_token);
+        localStorage.setItem('role', result.payload.role);
         setEmail('');
         setPassword('');
         navigate('/');
       }
-      else {
-        setisLoggedIn(false);
-      }
     });
   };
-  useEffect(() => {
-    if (isLoggedIn) {
-      setTimeout(() => {
-        navigate('/');
-      }, 1500);
-    }
-  }, [navigate,isLoggedIn]);
 
   return (
     <div className="flex justify-center items-center min-h-screen">
