@@ -45,7 +45,7 @@ export const getCurrentUser = createAsyncThunk(
 export const logout = createAsyncThunk("auth/logout", async () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("role");
-    // localStorage.removeItem("persist:root");
+    localStorage.removeItem("persist:root");    
 });
 
 const authSlice = createSlice({

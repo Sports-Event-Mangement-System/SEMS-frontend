@@ -64,34 +64,28 @@ function Header() {
                                                             Contact Us
                                                       </NavLink>
                                                 </li>
+                                                <div className='flex gap-24'>
+                                                      <NavLink>
+                                                            Search
+                                                      </NavLink>
+                                                      {user ? (
+                                                            <NavLink>
+                                                                  <span onClick={() => dispatch(logout())}>Logout</span>
+                                                            </NavLink>
+                                                      ) : (
+                                                            <NavLink to="/LogIn"
+                                                                  className={({ isActive }) => `  ${isActive ? 'text-green-500' : 'text-black'}`
+                                                                  }
+                                                            >
+                                                                  Log In
+                                                            </NavLink>
+                                                      )}
+                                                </div>
                                           </ul>
                                     </div>
-                              <Link to= "/account">
-                                    Account
-                              </Link>
-                        </div>
-                  </div>
-            </nav>
-      </header>
-    </>
-  )
-                                    <div className='flex gap-24'>
-                                          <NavLink>
-                                                Search
-                                          </NavLink>
-                                          {user ? (
-                                                <NavLink>
-                                                      <span onClick={() => dispatch(logout())}>Logout</span>
-                                                </NavLink>
-                                          ) : (
-                                                <NavLink to="/LogIn"
-                                                      className={({ isActive }) => `  ${isActive ? 'text-green-500' : 'text-black'}`
-                                                      }
-                                                >
-                                                      Log In
-                                                </NavLink>
-                                          )}
-                                    </div>
+                                    <Link to="/account">
+                                          Account
+                                    </Link>
                               </div>
                         </nav>
                   </header>
