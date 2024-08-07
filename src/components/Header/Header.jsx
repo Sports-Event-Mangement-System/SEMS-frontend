@@ -66,7 +66,15 @@ function Header() {
                                                 </li>
                                           </ul>
                                     </div>
-
+                              <Link to= "/account">
+                                    Account
+                              </Link>
+                        </div>
+                  </div>
+            </nav>
+      </header>
+    </>
+  )
                                     <div className='flex gap-24'>
                                           <NavLink>
                                                 Search

@@ -9,11 +9,11 @@ import About from './components/About Us/About';
 import Tournaments from './components/Tournaments/Tournaments';
 import Gallery from './components/Gallery/Gallery'
 import Contact from './components/Contact Us/Contact';
+import Account from './components/Account/Account';
 import LogIn from './components/Account/LogIn';
 import { Provider } from 'react-redux';
 import store, { persistor } from './store';
 import { PersistGate } from 'redux-persist/integration/react';
-
 
 const router = createBrowserRouter([
   {
@@ -41,6 +41,8 @@ const router = createBrowserRouter([
         element: <Contact />
       },
       {
+        path: '/account',
+        element: <Account />
         path: '/LogIn',
         element: <LogIn />
       }
