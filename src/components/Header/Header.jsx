@@ -1,11 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom'
 import { logout } from '../../store/UserSlice';
+import ProfileDropdown from '../Account/ProfileDropdown';
 
 function Header() {
       const dispatch = useDispatch();
       const { user } = useSelector(state => state.auth);
+
+      const [profileDropdown, setProfileDropdown] = useState(false);
+
       return (
             <>
                   <header className='flex justify-center'>
@@ -73,7 +77,7 @@ function Header() {
                                                                   <span onClick={() => dispatch(logout())}>Logout</span>
                                                             </NavLink>
                                                       ) : (
-                                                            <NavLink to="/LogIn"
+                                                            <NavLink to="/logIn"
                                                                   className={({ isActive }) => `  ${isActive ? 'text-green-500' : 'text-black'}`
                                                                   }
                                                             >
@@ -83,9 +87,16 @@ function Header() {
                                                 </div>
                                           </ul>
                                     </div>
-                                    <Link to="/account">
+                                    <div className='cursor-pointer rounded-md py-2 px-4 bg-slate-100 relative' onClick={() => setProfileDropdown(prev => !prev)}>
                                           Account
-                                    </Link>
+
+                                          {
+                                                profileDropdown && <ProfileDropdown />
+                                          }
+                                    </div>
+
+                                     
+
                               </div>
                         </nav>
                   </header>

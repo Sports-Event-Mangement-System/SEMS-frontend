@@ -2,7 +2,7 @@ import { React, useEffect, useState } from 'react'
 import './LogIn.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../store/UserSlice';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function LogIn() {
   //States
@@ -83,7 +83,7 @@ export default function LogIn() {
           </button>
         </form>
         <div className="text-sm font-semibold mb-2">Or</div>
-        <a href="#" className="font-semibold">Sign Up!</a>
+        <Link to='/signup' href="#" className="font-semibold">Sign Up!</Link>
       </div>
     </div>
   );
