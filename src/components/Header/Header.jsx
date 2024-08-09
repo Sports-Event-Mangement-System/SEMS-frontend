@@ -1,11 +1,10 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom'
-import { logout } from '../../store/UserSlice';
 import ProfileDropdown from '../Account/ProfileDropdown';
+import { FaUser, FaUserPlus } from 'react-icons/fa6';
 
 function Header() {
-      const dispatch = useDispatch();
       const { user } = useSelector(state => state.auth);
 
       const [profileDropdown, setProfileDropdown] = useState(false);
@@ -72,30 +71,28 @@ function Header() {
                                                       <NavLink>
                                                             Search
                                                       </NavLink>
-                                                      {user ? (
-                                                            <NavLink>
-                                                                  <span onClick={() => dispatch(logout())}>Logout</span>
-                                                            </NavLink>
-                                                      ) : (
-                                                            <NavLink to="/logIn"
-                                                                  className={({ isActive }) => `  ${isActive ? 'text-green-500' : 'text-black'}`
-                                                                  }
-                                                            >
-                                                                  Log In
-                                                            </NavLink>
-                                                      )}
+
                                                 </div>
                                           </ul>
                                     </div>
-                                    <div className='cursor-pointer rounded-md py-2 px-4 bg-slate-100 relative' onClick={() => setProfileDropdown(prev => !prev)}>
-                                          Account
+                                    {user ? (
+                                          <div className='cursor-pointer rounded-md py-2 px-4 bg-slate-100 relative' onClick={() => setProfileDropdown(prev => !prev)}>
+                                                Account
+                                                {profileDropdown && <ProfileDropdown />}
+                                          </div>
+                                    ) : (
+                                          <div className='flex gap-24'>
+                                                <NavLink to="/logIn" className="text-black">
+                                                      <FaUser />
+                                                      Log In
+                                                </NavLink>
+                                                <NavLink to="/signup" className="text-black">
+                                                      <FaUserPlus />
+                                                      SignUp
+                                                </NavLink>
 
-                                          {
-                                                profileDropdown && <ProfileDropdown />
-                                          }
-                                    </div>
-
-                                     
+                                          </div>
+                                    )}
 
                               </div>
                         </nav>

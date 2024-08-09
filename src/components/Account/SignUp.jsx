@@ -1,5 +1,5 @@
 import React from 'react'
-import SignupInput from './SignupInput'
+import Input from './Input'
 import { NavLink } from 'react-router-dom'
 
 function SignUp() {
@@ -10,15 +10,15 @@ function SignUp() {
                         <form action="" className='flex flex-col items-center px-10 py-4 gap-8'>
                               <div className='flex flex-col gap-2 w-full'>
                                     
-                                    <SignupInput label="Name" type="text" placeholder= "Name" name="name" />
+                                    <Input label="Name" type="text" placeholder= "Name" name="name" required={true}/>
 
-                                    <SignupInput label="Email" type="email" placeholder= "Email" name="email" />
+                                    <Input label="Email" type="email" placeholder= "Email" name="email" required={true}/>
 
-                                    <SignupInput label="Username" type="text" placeholder= "Username" name="username" />
+                                    <Input label="Username" type="text" placeholder= "Username" name="username" required={true}/>
 
-                                    <SignupInput label="Password" type="password" placeholder= "Password" name="password" />
+                                    <Input label="Password" type="password" placeholder= "Password" name="password" required={true}/>
 
-                                    <SignupInput label="Confirm Password" type="password" placeholder= "Confirm password" name="confirmPasswrod" /> 
+                                    <Input label="Confirm Password" type="password" placeholder= "Confirm password" name="confirmPasswrod" required={true}/> 
                               </div>
 
                               <div className='flex justify-center w-full'>

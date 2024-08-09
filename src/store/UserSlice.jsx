@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
-import { persistStore } from 'redux-persist';
 
 export const loginUser = createAsyncThunk(
     'auth/login',
@@ -43,9 +42,9 @@ export const getCurrentUser = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("auth/logout", async () => {
+    console.log('clicked');
     localStorage.removeItem("access_token");
     localStorage.removeItem("role");
-    localStorage.removeItem("persist:root");    
 });
 
 const authSlice = createSlice({
@@ -86,7 +85,7 @@ const authSlice = createSlice({
             })
             .addCase(logout.fulfilled, (state) => {
                 state.loading = false;
-                state.currentUser = null;
+                state.user = null;
             });
     },
 });
