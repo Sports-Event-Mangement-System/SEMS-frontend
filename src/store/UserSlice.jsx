@@ -42,7 +42,6 @@ export const getCurrentUser = createAsyncThunk(
 );
 
 export const logout = createAsyncThunk("auth/logout", async () => {
-    console.log('clicked');
     localStorage.removeItem("access_token");
     localStorage.removeItem("role");
 });
@@ -52,26 +51,23 @@ const authSlice = createSlice({
     initialState: {
         user: null,
         loading: false,
-        error: {},
     },
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
                 state.user = null;
-                state.error = {};
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
-                state.error = {};
             })
-            .addCase(loginUser.rejected, (state, action) => {
+            .addCase(loginUser.rejected, (state) => {
                 state.loading = false;
                 state.user = null;
-                state.error = action.payload;
             })
             .addCase(getCurrentUser.pending, (state) => {
+                state.loading = true;
                 state.loading = true;
                 state.currentUser = null;
             })
