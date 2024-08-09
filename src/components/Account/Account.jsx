@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 function Account() {
   return (
             <div className='h-screen flex items-center justify-center w-screen'>
-                  <div className='shadow-2xl rounded-2xl w-5/12'>
+                  <div className='shadow-2xl rounded-2xl w-5/12 bg-slate-200'>
                         <p className='text-center pt-8 text-blue-700 font-semibold text-lg'>Create a New Account</p>
                         <form action="" className='flex flex-col items-center px-10 py-4 gap-8'>
                               <div className='flex flex-col gap-2 w-full'>
