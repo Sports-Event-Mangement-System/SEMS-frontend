@@ -1,4 +1,4 @@
-import { React } from 'react'
+import { React, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../store/UserSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
@@ -6,11 +6,12 @@ import Input from './Input';
 
 export default function LogIn() {
   //States
+  const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   //redux states
-  const { loading, error } = useSelector((state) => state.auth);
+  const { loading } = useSelector((state) => state.auth);
 
   //Login form handle with axios and redux.
   const handleLogin = (e) => {
@@ -28,6 +29,10 @@ export default function LogIn() {
         localStorage.setItem('access_token', result.payload.access_token);
         localStorage.setItem('role', result.payload.role);
         navigate('/');
+      }
+      else{
+        console.log(result.payload);
+        setError(result.payload);
       }
     });
   };
