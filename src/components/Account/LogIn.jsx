@@ -42,7 +42,7 @@ export default function LogIn() {
   return (
     <div className='h-screen flex items-center justify-center w-screen'>
       <div className='shadow-2xl rounded-2xl w-5/12 bg-slate-200'>
-        <p className='text-center pt-8 text-blue-700 font-semibold text-lg'>Log In Your Account</p>
+        <p className='text-center pt-8 text-orange-600 font-semibold text-lg'>Log In Your Account</p>
         <form action="" className='flex flex-col items-center px-10 py-4 gap-8' onSubmit={handleLogin}>
           <div className='flex flex-col gap-2 w-full'>
             <Input
@@ -74,11 +74,11 @@ export default function LogIn() {
           </div>
           {error.message && <span className="text-red-500 text-md">{error.message}</span>}
           <a href="#" className="mb-4 underline text-sm">Forgot password?</a>
-          <button type="submit" className="w-32 h-10 bg-blue-500 text-white rounded-md mb-4 hover:bg-blue-700 focus:outline-none">
+          <button type="submit" className="w-32 h-10 bg-orange-600 text-white rounded-md mb-4 hover:bg-blue-700 focus:outline-none">
             {loading ? 'Loading...' : 'LOGIN'}
           </button>
         </form>
-        <p className='text-center pb-5'>Don't have an account ? <NavLink to='/logIn' className={() => `text-blue-600`}>Sign Up</NavLink> </p>
+        <p className='text-center pb-5'>Don't have an account ? <NavLink to='/logIn' className={() => `text-orange-600`}>Sign Up</NavLink> </p>
       </div>
     </div>
   );

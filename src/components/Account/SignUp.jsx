@@ -43,7 +43,7 @@ function SignUp() {
   return (
     <div className="h-screen flex items-center justify-center w-screen">
       <div className="shadow-2xl rounded-2xl w-5/12 bg-slate-200">
-        <p className="text-center pt-8 text-blue-700 font-semibold text-lg">
+        <p className="text-center pt-8  text-orange-600 font-semibold text-lg">
           Create a New Account
         </p>
         
@@ -127,7 +127,7 @@ function SignUp() {
           <div className="flex justify-center w-full">
             <button
               type="submit"
-              className="bg-sky-500 text-white py-2 font-semibold rounded-lg w-full"
+              className=" bg-orange-600 text-white py-2 font-semibold rounded-lg w-full"
             >
               Sign up
             </button>
@@ -136,7 +136,7 @@ function SignUp() {
 
         <p className="text-center pb-5">
           Already have an account?{" "}
-          <NavLink to="/logIn" className={() => `text-blue-600`}>
+          <NavLink to="/logIn" className={() => `text-orange-600`}>
             Sign in
           </NavLink>{" "}
         </p>
