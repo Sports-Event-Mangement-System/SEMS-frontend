@@ -13,7 +13,7 @@ function SignUp() {
   const handleSignUp = (e) => {
     e.preventDefault();
     axios
-      .post(`${import.meta.env.VITE_API_URL}/api/register`, {
+      .post(`${import.meta.env.VITE_API_URL}api/register`, {
         name: e.target.elements.name.value,
         email: e.target.elements.email.value,
         username: e.target.elements.username.value,
@@ -92,7 +92,7 @@ function SignUp() {
               name="phone_number"
               required={true}
             />
-            {error.phone_numer && (
+            {error.phone_number && (
               <span className="text-red-500 text-md">{error.phone_number}</span>
             )}
             <Input

@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import Input from '../Account/Input'
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 
 function Contact() {
 
   const [error, setError] = useState({});
+  const navigate = useNavigate();
 
   const handleContact = async (e) => {
     e.preventDefault();
@@ -28,10 +31,11 @@ function Contact() {
       contactValues
     ).then((response) => {
 
-      console.log(response)
       console.log(response.data);
       if (response.data.status === true) {
         setError('');
+        toast.success(response.data.message);
+        navigate('/');
 
       }
     }).catch((error) => {
