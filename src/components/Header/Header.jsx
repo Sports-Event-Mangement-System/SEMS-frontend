@@ -81,12 +81,13 @@ function Header() {
                                                 {profileDropdown && <ProfileDropdown />}
                                           </div>
                                     ) : (
-                                          <div className='flex gap-24'>
-                                                <NavLink to="/logIn" className="text-black">
+                                          <div className='flex gap-2 items-center'>
+                                                <NavLink to="/logIn" className="text-black flex items-center gap-1 hover:underline">
                                                       <FaUser />
                                                       Log In
                                                 </NavLink>
-                                                <NavLink to="/signup" className="text-black">
+                                                <span className='font-bold text-2xl'>/</span>
+                                                <NavLink to="/signup" className="text-black flex items-center gap-1 hover:underline">
                                                       <FaUserPlus />
                                                       SignUp
                                                 </NavLink>
