@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom'
 import ProfileDropdown from '../Account/ProfileDropdown';
 import { FaUser, FaUserPlus } from 'react-icons/fa6';
+import { BiSolidUserAccount } from "react-icons/bi";
 
 function Header() {
       const { user } = useSelector(state => state.auth);
@@ -11,7 +12,7 @@ function Header() {
 
       return (
             <>
-                  <header className='flex justify-center'>
+                  <header className='sticky top-0 left-0 z-50 h-16 bg-white drop-shadow-lg flex justify- w-full'>
                         <nav className='w-full p-4'>
                               <div className='flex justify-between items-center'>
                                     <div className='font-extrabold text-2xl'>
@@ -25,7 +26,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-green-500' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-black'}
                                                 `}
                                                       >
                                                             Home
@@ -34,7 +35,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/about"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-green-500' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-black'}
                                                 `}
                                                       >
                                                             About Us
@@ -43,7 +44,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/tournaments"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-green-500' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-black'}
                                                 `}
                                                       >
                                                             Tournaments
@@ -52,7 +53,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/gallery"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-green-500' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-black'}
                                                 `}
                                                       >
                                                             Gallery
@@ -61,7 +62,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/contact"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-green-500' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-black'}
                                                 `}
                                                       >
                                                             Contact Us
@@ -76,8 +77,8 @@ function Header() {
                                           </ul>
                                     </div>
                                     {user ? (
-                                          <div className='cursor-pointer rounded-md py-2 px-4 bg-slate-100 relative' onClick={() => setProfileDropdown(prev => !prev)}>
-                                                Account
+                                          <div className='flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-orange-500 relative text-white' onClick={() => setProfileDropdown(prev => !prev)}>
+                                                <BiSolidUserAccount /> Account
                                                 {profileDropdown && <ProfileDropdown />}
                                           </div>
                                     ) : (

@@ -10,8 +10,8 @@ function Home() {
   return (
     <>
       <div className='h-screen'>
-        <img src="images/file.jpg" alt="" className='w-[191vh] h-[86vh] my-[7px] mx-[9vh] rounded-[33px]' />
-        <div className="absolute top-[63px] w-[191vh] h-[86vh] my-[7px] mx-[9vh] rounded-[33px] bg-[rgb(73,73,73)] opacity-[40%]"></div>
+        <img src="images/file.jpg" alt="" className='w-[191vh] h-[86vh] my-[7px] mx-[9vh] rounded-[33px] mt-0' />
+        <div className="absolute top-[63px] mt-0 w-[191vh] h-[86vh] mx-[9vh] rounded-[33px] bg-black bg-opacity-40"></div>
         <div className='absolute top-[36vh] left-[34vh] w-[29%] '>
           <h1 className='text-[5vh] text-white leading-[1] font-bold'><span className='text-orange-600'>Organize</span> or Participate in <span className='text-orange-600'>Tournament</span></h1>
           <br />
