@@ -1,12 +1,20 @@
 import { useState } from 'react'
 import React from 'react'
 import DatePicker from './DatePicker';
-import DropdownWithSearch from './DropdownWithSearch';
+import SelectField from './SelectField';
 import { IoSearchOutline } from "react-icons/io5";
 
 function Tournaments() {
 
   const [searchTerm, setSearchTerm] = useState('');
+  const options1 = [
+    { value: 'option1', label: 'Option 1' },
+    { value: 'option2', label: 'Option 2' },
+    { value: 'option3', label: 'Option 3' },
+    { value: 'option4', label: 'Option 4' },
+    { value: 'option5', label: 'Option 5' },
+    { value: 'option6', label: 'Option 6' }
+];
   return (
     <>
       <div className='h-screen'>
@@ -30,7 +38,7 @@ function Tournaments() {
             </div>
 
             <div className='w-full md:w-[25%] relative'>
-              <DropdownWithSearch title="Where" placeholder="Any Where" buttonClassName="border-b-2" />
+              <SelectField required={true} label="Where" placeholder="Any Where" id="where_search" name="where_search" Searchable={true} options={options1} />
             </div>
 
             <div className='w-full md:w-[25%]'>
@@ -44,15 +52,15 @@ function Tournaments() {
           <h1 className="text-md font-medium text-gray-700 mb-0">Advanced Search</h1>
           <div className='flex items-end justify-between mt-7'>
             <div className='w-full md:w-[15%] relative'>
-              <DropdownWithSearch title="Sort by" placeholder="Event Date" buttonClassName="border rounded-lg" />
+            <SelectField label="Sort by" placeholder="Event Date" id="sort_by" name="sort_by"  />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <DropdownWithSearch title="Status" placeholder="Any Status" buttonClassName="border rounded-lg" />
+              <SelectField label="Status" id="status" name="status" placeholder="Any Status"  />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <DropdownWithSearch title="Event Type" placeholder=" Any Type" buttonClassName="border rounded-lg" />
-            </div>  <div className='w-full md:w-[15%] relative z-10'>
-              <DropdownWithSearch title="Price" placeholder="Any Price" buttonClassName="border rounded-lg" />
+              <SelectField label="Event Type" id="event_type" name="event_type" placeholder=" Any Type"  />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <DropdownWithSearch title="Category" placeholder="All" buttonClassName="border rounded-lg" />
+              <SelectField label="Price" id="Price" name="Price" placeholder="Any Price"  />
+            </div>  <div className='w-full md:w-[15%] relative'>
+              <SelectField label="Category" id="category" name="category" placeholder="All"  />
             </div>
             <button className='bg-orange-600 w-40 h-12 rounded-lg flex-shrink-0 text-white font-medium'>Filter</button>
           </div>
