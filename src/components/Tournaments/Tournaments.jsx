@@ -3,6 +3,7 @@ import React from 'react'
 import DatePicker from './DatePicker';
 import SelectField from './SelectField';
 import { IoSearchOutline } from "react-icons/io5";
+import TournamentCard from './TournamentCard';
 
 function Tournaments() {
 
@@ -14,10 +15,10 @@ function Tournaments() {
     { value: 'option4', label: 'Option 4' },
     { value: 'option5', label: 'Option 5' },
     { value: 'option6', label: 'Option 6' }
-];
+  ];
   return (
     <>
-      <div className='h-screen'>
+      <div >
         <div className='flex justify-center  '>
           <img src="images/tournament.jpg" alt="" className='w-full h-[52vh]' />
           <div className="absolute w-full h-[52vh] bg-black bg-opacity-40"></div>
@@ -33,7 +34,7 @@ function Tournaments() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Event title..."
-                className="w-full px-4 py-3 border-b-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-[5px] border border-gray-300 rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700"
               />
             </div>
 
@@ -44,7 +45,7 @@ function Tournaments() {
             <div className='w-full md:w-[25%]'>
               <DatePicker />
             </div>
-            <div className='flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white'><IoSearchOutline size={25} /></div>
+            <button className='flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white'><IoSearchOutline size={25} /></button>
           </div>
         </div>
 
@@ -52,19 +53,29 @@ function Tournaments() {
           <h1 className="text-md font-medium text-gray-700 mb-0">Advanced Search</h1>
           <div className='flex items-end justify-between mt-7'>
             <div className='w-full md:w-[15%] relative'>
-            <SelectField label="Sort by" placeholder="Event Date" id="sort_by" name="sort_by"  />
+              <SelectField label="Sort by" placeholder="Event Date" id="sort_by" name="sort_by" />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <SelectField label="Status" id="status" name="status" placeholder="Any Status"  />
+              <SelectField label="Status" id="status" name="status" placeholder="Any Status" />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <SelectField label="Event Type" id="event_type" name="event_type" placeholder=" Any Type"  />
+              <SelectField label="Event Type" id="event_type" name="event_type" placeholder=" Any Type" />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <SelectField label="Price" id="Price" name="Price" placeholder="Any Price"  />
+              <SelectField label="Price" id="Price" name="Price" placeholder="Any Price" />
             </div>  <div className='w-full md:w-[15%] relative'>
-              <SelectField label="Category" id="category" name="category" placeholder="All"  />
+              <SelectField label="Category" id="category" name="category" placeholder="All" />
             </div>
             <button className='bg-orange-600 w-40 h-12 rounded-lg flex-shrink-0 text-white font-medium'>Filter</button>
           </div>
+          <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12'>
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
+            <TournamentCard />
 
+          </div>
         </div>
 
 

@@ -11,7 +11,8 @@ function DatePicker() {
                 type="date"
                 id="date"
                 placeholder='Any date'
-                className=" px-4 py-3 border-b-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700"
+                className="px-4 py-[5px] border border-gray-300 rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700"
+
             />
         </div >
     );
