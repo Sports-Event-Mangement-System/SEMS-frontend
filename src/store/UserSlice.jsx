@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
+// Thunks
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (userCredentials, { rejectWithValue }) => {
@@ -11,9 +12,9 @@ export const loginUser = createAsyncThunk(
             if (error.response && error.response.data.errors) {
                 return rejectWithValue(error.response.data.errors);
             } else if (error.response && error.response.data.message) {
-                return rejectWithValue(error.response.data);
+                return rejectWithValue(error.response.data.message);
             } else {
-                return rejectWithValue(error);
+                return rejectWithValue('An unknown error occurred');
             }
         }
     }
@@ -25,65 +26,64 @@ export const getCurrentUser = createAsyncThunk(
         try {
             const token = localStorage.getItem('access_token') ?? '';
 
-            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/user`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            localStorage.setItem('access_token', response.data.access_token);
-            localStorage.setItem('role', response.data.role);
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/user`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
             return response.data;
         } catch (error) {
-            return rejectWithValue(error.response.data);
+            return rejectWithValue(error.response?.data || 'An unknown error occurred');
         }
     }
 );
 
-export const logout = createAsyncThunk("auth/logout", async () => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("role");
+export const logout = createAsyncThunk('auth/logout', async () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('role');
 });
 
+// Slice
 const authSlice = createSlice({
     name: 'auth',
     initialState: {
         user: null,
         loading: false,
+        error: null,
     },
     extraReducers: (builder) => {
         builder
             .addCase(loginUser.pending, (state) => {
                 state.loading = true;
                 state.user = null;
+                state.error = null;
             })
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.loading = false;
                 state.user = action.payload;
             })
-            .addCase(loginUser.rejected, (state) => {
+            .addCase(loginUser.rejected, (state, action) => {
                 state.loading = false;
                 state.user = null;
+                state.error = action.payload;
             })
             .addCase(getCurrentUser.pending, (state) => {
                 state.loading = true;
-                state.loading = true;
-                state.currentUser = null;
             })
             .addCase(getCurrentUser.fulfilled, (state, action) => {
                 state.loading = false;
-                state.currentUser = action.payload;
+                state.user = action.payload; // Assuming `user` is the current user
             })
-            .addCase(getCurrentUser.rejected, (state) => {
+            .addCase(getCurrentUser.rejected, (state, action) => {
                 state.loading = false;
-                state.currentUser = null;
+                state.error = action.payload;
             })
             .addCase(logout.fulfilled, (state) => {
-                state.loading = false;
                 state.user = null;
+                state.error = null;
             });
     },
+    reducers: {},
 });
 
 export default authSlice.reducer;
