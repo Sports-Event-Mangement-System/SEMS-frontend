@@ -14,7 +14,8 @@ export default function AdminSidebar() {
                                     <ul>
                                           {item?.menuItems?.map((innerItem, index) => (
                                                 <li key={index}>
-                                                      <NavLink to={innerItem.link} >{innerItem.itemName}</NavLink>
+                                                      <NavLink to={innerItem?.link} >{innerItem.itemName}</NavLink>
+                                                      {/* {console.log(innerItem?.link)} */}
                                                 </li>
                                           ))}
                                     </ul>

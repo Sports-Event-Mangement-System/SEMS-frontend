@@ -6,15 +6,15 @@ export const AdminSideBarData = [
         menuItems: [
             {
                 itemName: 'Dashboard',
-                link: '/dashboard'
+                link: 'dashboard'
             },
             {
                 itemName: 'Apps',
-                link: '/apps'
+                link: 'apps'
             },
             {
                 itemName: 'Layouts',
-                link: '/layouts'
+                link: 'layouts'
             }
         ]
     },
@@ -23,15 +23,15 @@ export const AdminSideBarData = [
         pagesItems: [
             {
                 itemName: 'Authentication',
-                link: '/authentication'
+                link: 'authentication'
             },
             {
                 itemName: 'Pages',
-                link: '/pages'
+                link: 'pages'
             },
             {
                 itemName: 'Landing',
-                link: '/landing'
+                link: 'landing'
             }
         ]
     }
