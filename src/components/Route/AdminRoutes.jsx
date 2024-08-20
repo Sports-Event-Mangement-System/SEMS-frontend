@@ -1,24 +1,10 @@
-// import PrivateRoute from './PrivateRoute';
-// import Account from '../components/Account';
-// import Profile from '../components/Profile';
+import AdminWrapper from "../Admin/AdminWrapper";
 
 const adminRoutes = [
-//   {
-//     path: '/account',
-//     element: (
-//       <PrivateRoute requiredRole="admin">
-//         <Account />
-//       </PrivateRoute>
-//     ),
-//   },
-//   {
-//     path: '/profile',
-//     element: (
-//       <PrivateRoute requiredRole="admin">
-//         <Profile />
-//       </PrivateRoute>
-//     ),
-//   },
+  {
+    path: '/admin',
+    element: <AdminWrapper />
+  }
 ];
 
 export default adminRoutes;
