@@ -1,38 +1,42 @@
 import React from 'react';
+import { faTrophy, faPeopleGroup, faAddressBook } from '@fortawesome/free-solid-svg-icons'
 
 export const AdminSideBarData = [
     {
-        title1: 'MENU',
+        title: 'DASHBOARD',
         menuItems: [
             {
-                itemName: 'Dashboard',
-                link: 'dashboard'
+                itemName: 'Tournament',
+                link: 'tournamentManagement',
+                icon: faTrophy
             },
             {
-                itemName: 'Apps',
-                link: 'apps'
+                itemName: 'Team',
+                link: 'teamManagement',
+                icon: faPeopleGroup
             },
             {
-                itemName: 'Layouts',
-                link: 'layouts'
+                itemName: 'Contact',
+                link: 'adminContact',
+                icon: faAddressBook
             }
         ]
     },
-    {
-        title2: 'PAGES',
-        pagesItems: [
-            {
-                itemName: 'Authentication',
-                link: 'authentication'
-            },
-            {
-                itemName: 'Pages',
-                link: 'pages'
-            },
-            {
-                itemName: 'Landing',
-                link: 'landing'
-            }
-        ]
-    }
+//     {
+//         title2: 'PAGES',
+//         pagesItems: [
+//             {
+//                 itemName: 'Authentication',
+//                 link: 'authentication'
+//             },
+//             {
+//                 itemName: 'Pages',
+//                 link: 'pages'
+//             },
+//             {
+//                 itemName: 'Landing',
+//                 link: 'landing'
+//             }
+//         ]
+//     }
 ];

@@ -1,12 +1,11 @@
   import { createBrowserRouter } from 'react-router-dom';
   import App from '../../App';
   import publicRoutes from './PublicRoutes';
-  import adminRoutes from './AdminRoutes';
   import userRoutes from './UserRoutes';
-import AdminPage from '../Admin/AdminPage';
-import { element } from 'prop-types';
-import Dashboard from '../Admin/Items/Dashboard';
-import Apps from '../Admin/Items/Apps';
+  import AdminPage from '../Admin/AdminPage';
+  import TournamentManagement from '../Admin/Items/TournamentManagement'
+  import TeamManagement from '../Admin/Items/TeamManagement'
+  import AdminContact from '../Admin/Items/AdminContact';
 
   const router = createBrowserRouter([
     {
@@ -22,12 +21,16 @@ import Apps from '../Admin/Items/Apps';
       element: <AdminPage />,
       children: [
         {
-          path: 'dashboard',
-          element: <Dashboard />
+          path: 'tournamentManagement',
+          element: <TournamentManagement />
         },
         {
-          path: 'apps',
-          element: <Apps />
+          path: 'teamManagement',
+          element: <TeamManagement />
+        },
+        {
+          path: 'adminContact',
+          element: <AdminContact />
         }
       ]
     }
