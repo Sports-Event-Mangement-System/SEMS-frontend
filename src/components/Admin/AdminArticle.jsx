@@ -4,7 +4,7 @@ export default function AdminArticle() {
   return (
     <>
       <div>
-            Article
+            AdminArticle
       </div>
     </>
   )

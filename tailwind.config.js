@@ -5,7 +5,11 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      gridTemplateColumns: {
+        '1fr-5fr': '1fr 5fr', // Define custom fraction column layout
+      },
+    },
   },
   plugins: [],
 }

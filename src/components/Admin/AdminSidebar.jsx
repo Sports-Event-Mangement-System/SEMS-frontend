@@ -1,31 +1,28 @@
 import React from 'react'
-import AdminSidebarItems from './AdminSidebarItems'
-import { faGauge, faAdn, } from '@fortawesome/free-solid-svg-icons/faGauge'
+import { AdminSideBarData } from './AdminSidebarData'
+import { NavLink } from 'react-router-dom'
 
 export default function AdminSidebar() {
   return (
     <>
-      <div className='bg-orange-500 text-white flex flex-col gap-10 px-4 py-4'>
-            <h1 className='text-2xl font-bold text-center'>Admin</h1> 
-            
-            <AdminSidebarItems
-                  section_name="MENU"
-                  iconName1={faGauge}
-                  iconName2={faAdn}
-                  item1="Dashboards"
-                  item2="Apps"
-                  item3="Layouts"
-            />
-
-            <AdminSidebarItems 
-                  section_name="PAGES"
-                  item1="Authentication"
-                  item2="Pages"
-                  item3="Landing"
-            />
-
-
-      </div>      
+      <div className='bg-orange-500 h-screen text-white'>
+            <div>
+                  {AdminSideBarData.map((item, index) => (
+                        <div key={index}>
+                              <p>{item.title1}</p>
+                              <div>
+                                    <ul>
+                                          {item?.menuItems?.map((innerItem, index) => (
+                                                <li key={index}>
+                                                      <NavLink to={innerItem.link} >{innerItem.itemName}</NavLink>
+                                                </li>
+                                          ))}
+                                    </ul>
+                              </div>
+                        </div>
+                  ))}
+            </div>
+      </div>
     </>
   )
 }
