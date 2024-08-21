@@ -15,10 +15,6 @@ function SelectField({ label, placeholder, required, id, name, Searchable, optio
                 borderColor: 'rgb(255, 140, 0)',
             },
         }),
-        menuPortal: (provided) => ({
-            ...provided,
-            zIndex: 9999,
-        }),
     };
 
     return (

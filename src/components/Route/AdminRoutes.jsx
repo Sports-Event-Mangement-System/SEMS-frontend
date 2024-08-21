@@ -1,22 +1,36 @@
-import AdminPage from "../Admin/AdminPage";
-import Dashboard from "../Admin/Items/Dashboard";
-import Apps from "../Admin/Items/Apps";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import AdminSidebar from "../Admin/AdminSidebar";
+import TournamentManagement from "../Admin/Items/TournamentManagement";
+import TeamManagement from "../Admin/Items/TeamManagement";
+import AdminContact from "../Admin/Items/AdminContact";;
 
-const adminRoutes = () => {
-     return (
-          <BrowserRouter>
-          <AdminSidebar>
-               {/* <Routes>
-                    <Route path="/admin" element={<AdminPage />}>
-                         <Route path="/dashboard" element={<Dashboard />} />
-                         <Route path="/apps" element={<Apps />} />  
-                    </Route>
-               </Routes> */}
-          </AdminSidebar>
-          </BrowserRouter>
-     )
-}
+const adminRoutes = [
+     {
+          path: 'tournamentManagement',
+          element: <TournamentManagement />,
+     },
+     {
+          path: 'teamManagement',
+          element: <TeamManagement />,
+     },
+     {
+          path: 'adminContact',
+          element: <AdminContact />,
+     },
+
+];
+
+// const adminRoutes = () => {
+//      return (
+//           <BrowserRouter>
+//           <AdminSidebar>
+//                {/* <Routes>
+//                     <Route path="/admin" element={<AdminPage />}>
+//                          <Route path="/dashboard" element={<Dashboard />} />
+//                          <Route path="/apps" element={<Apps />} />  
+//                     </Route>
+//                </Routes> */}
+//           </AdminSidebar>
+//           </BrowserRouter>
+//      )
+// }
 
 export default adminRoutes;
