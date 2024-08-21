@@ -4,10 +4,11 @@ import { Link, NavLink } from 'react-router-dom'
 import ProfileDropdown from '../Account/ProfileDropdown';
 import { FaUser, FaUserPlus } from 'react-icons/fa6';
 import { BiSolidUserAccount } from "react-icons/bi";
+import { MdDashboard } from 'react-icons/md';
 
 function Header() {
       const { user } = useSelector(state => state.auth);
-
+      const isAdmin = user?.role === 'admin';
       const [profileDropdown, setProfileDropdown] = useState(false);
 
       return (
@@ -76,26 +77,39 @@ function Header() {
                                                 </div>
                                           </ul>
                                     </div>
-                                    {user ? (
-                                          <div className='flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-orange-500 relative text-white' onClick={() => setProfileDropdown(prev => !prev)}>
-                                                <BiSolidUserAccount /> Account
-                                                {profileDropdown && <ProfileDropdown />}
-                                          </div>
-                                    ) : (
-                                          <div className='flex gap-2 items-center'>
-                                                <NavLink to="/logIn" className="text-black flex items-center gap-1 hover:underline">
-                                                      <FaUser />
-                                                      Log In
-                                                </NavLink>
-                                                <span className='font-bold text-2xl'>/</span>
-                                                <NavLink to="/signup" className="text-black flex items-center gap-1 hover:underline">
-                                                      <FaUserPlus />
-                                                      SignUp
-                                                </NavLink>
+                                    <div className="flex items-center gap-4">
+                                          {isAdmin && (
+                                                <div className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-blue-500 text-white">
+                                                      <NavLink to="/admin" className="flex items-center gap-2">
+                                                      <MdDashboard />
+                                                      <span>Dashboard</span>
+                                                      </NavLink>
+                                                </div>
+                                          )}
 
-                                          </div>
-                                    )}
+                                          {user ? (
+                                                <div
+                                                      className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-orange-500 relative text-white"
+                                                      onClick={() => setProfileDropdown(prev => !prev)}
+                                                >
+                                                      <BiSolidUserAccount /> Account
+                                                      {profileDropdown && <ProfileDropdown />}
+                                                </div>
+                                          ) : (
+                                                <div className="flex gap-2 items-center">
+                                                      <NavLink to="/logIn" className="text-black flex items-center gap-1 hover:underline">
+                                                            <FaUser />
+                                                            Log In
+                                                      </NavLink>
+                                                      <span className="font-bold text-2xl">/</span>
+                                                      <NavLink to="/signup" className="text-black flex items-center gap-1 hover:underline">
+                                                            <FaUserPlus />
+                                                            SignUp
+                                                      </NavLink>
+                                                </div>
+                                          )}
 
+                                    </div>
                               </div>
                         </nav>
                   </header>

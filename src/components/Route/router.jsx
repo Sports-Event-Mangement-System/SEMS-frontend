@@ -2,10 +2,9 @@
   import App from '../../App';
   import publicRoutes from './PublicRoutes';
   import userRoutes from './UserRoutes';
+  import adminRoutes from './AdminRoutes';
   import AdminPage from '../Admin/AdminPage';
-  import TournamentManagement from '../Admin/Items/TournamentManagement'
-  import TeamManagement from '../Admin/Items/TeamManagement'
-  import AdminContact from '../Admin/Items/AdminContact';
+  import PrivateRoute from './PrivateRoute';
 
   const router = createBrowserRouter([
     {
@@ -14,24 +13,18 @@
       children: [
         ...publicRoutes,
         ...userRoutes,
+        
       ],
     },
     {
       path: '/admin',
-      element: <AdminPage />,
+      element: (
+        <PrivateRoute requiredRole="admin">
+             <AdminPage />
+        </PrivateRoute>
+      ),
       children: [
-        {
-          path: 'tournamentManagement',
-          element: <TournamentManagement />
-        },
-        {
-          path: 'teamManagement',
-          element: <TeamManagement />
-        },
-        {
-          path: 'adminContact',
-          element: <AdminContact />
-        }
+        ...adminRoutes,
       ]
     }
   ]);
