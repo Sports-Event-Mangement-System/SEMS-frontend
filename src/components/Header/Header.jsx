@@ -89,10 +89,10 @@ function Header() {
 
                                           {user ? (
                                                 <div
-                                                      className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-orange-500 relative text-white"
+                                                      className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-yellow-600 relative text-white"
                                                       onClick={() => setProfileDropdown(prev => !prev)}
                                                 >
-                                                      <BiSolidUserAccount /> Account
+                                                      <BiSolidUserAccount /> {user.user_details.username}
                                                       {profileDropdown && <ProfileDropdown />}
                                                 </div>
                                           ) : (
