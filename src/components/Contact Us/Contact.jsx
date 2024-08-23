@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import Input from '../Account/Input'
 import axios from 'axios';
@@ -86,7 +87,7 @@ function Contact() {
               )}
               <div>
                 <label htmlFor="message" >Message <span className="text-red-500 text-md">*</span></label>
-                <textarea placeholder="Message" name="message" className="h-24 w-full border border-black rounded-lg px-3 py-2 "></textarea>
+                <textarea placeholder="Message" name="message" className="h-24 w-full border rounded-lg px-3 py-2 focus:outline-orange-400 "></textarea>
                 {error.message && (
                   <span className="text-red-500 text-md">
                     {error.message}

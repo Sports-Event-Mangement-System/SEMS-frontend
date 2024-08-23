@@ -11,23 +11,24 @@ function Header() {
       const isAdmin = user?.role === 'admin';
       const [profileDropdown, setProfileDropdown] = useState(false);
 
+
       return (
             <>
-                  <header className='sticky top-0 left-0 z-50 h-16 bg-white drop-shadow-lg flex justify- w-full'>
+                  <header className='sticky top-0 left-0 z-50 h-[10vh] bg-white drop-shadow-lg flex justify-center items-center w-full'>
                         <nav className='w-full p-4'>
                               <div className='flex justify-between items-center'>
                                     <div className='font-extrabold text-2xl'>
                                           <Link to="/">
-                                                Logo
+                                                <img src="images/Logo.png" alt="" className='h-14 w-15 ml-7' />
                                           </Link>
                                     </div>
 
                                     <div>
-                                          <ul className='flex gap-12'>
+                                          <ul className='flex gap-12 font-bold text-[18px]'>
                                                 <li>
                                                       <NavLink to="/"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-orange-600' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-gray-700 hover:text-orange-600'}
                                                 `}
                                                       >
                                                             Home
@@ -36,7 +37,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/about"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-orange-600' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-gray-700 hover:text-orange-600'}
                                                 `}
                                                       >
                                                             About Us
@@ -45,7 +46,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/tournaments"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-orange-600' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-gray-700 hover:text-orange-600'}
                                                 `}
                                                       >
                                                             Tournaments
@@ -54,7 +55,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/gallery"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-orange-600' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-gray-700 hover:text-orange-600'}
                                                 `}
                                                       >
                                                             Gallery
@@ -63,7 +64,7 @@ function Header() {
                                                 <li>
                                                       <NavLink to="/contact"
                                                             className={({ isActive }) => `
-                                                      ${isActive ? 'text-orange-600' : 'text-black'}
+                                                      ${isActive ? 'text-orange-600' : 'text-gray-700 hover:text-orange-600'}
                                                 `}
                                                       >
                                                             Contact Us
@@ -79,31 +80,38 @@ function Header() {
                                     </div>
                                     <div className="flex items-center gap-4">
                                           {isAdmin && (
-                                                <div className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-blue-500 text-white">
+                                                <div className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-12 py-2 px-4 border border-blue-600 bg-blue-600 text-white hover:bg-blue-700">
                                                       <NavLink to="/admin" className="flex items-center gap-2">
-                                                      <MdDashboard />
-                                                      <span>Dashboard</span>
+                                                            <MdDashboard size={21} />
+                                                            <span className='text-[16px] font-semibold'>Dashboard</span>
                                                       </NavLink>
                                                 </div>
                                           )}
 
                                           {user ? (
                                                 <div
-                                                      className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-10 py-2 px-4 bg-yellow-600 relative text-white"
+                                                      className={`group flex justify-start items-center gap-4 cursor-pointer border border-[rgb(255,156,72,1)] rounded-lg w-36 h-12 py-2 pl-6 relative bg-[rgb(255,156,72,1)] text-white text-[16px] font-semibold ${profileDropdown ? '' : 'hover:bg-orange-400 '}`}
                                                       onClick={() => setProfileDropdown(prev => !prev)}
+
+
                                                 >
-                                                      <BiSolidUserAccount /> {user.user_details.username}
+                                                      <BiSolidUserAccount
+                                                            size={21}
+
+                                                      />
+                                                      {user.user_details.username}
                                                       {profileDropdown && <ProfileDropdown />}
                                                 </div>
+
                                           ) : (
-                                                <div className="flex gap-2 items-center">
+                                                <div className="flex gap-2 items-center text-md font-semibold">
                                                       <NavLink to="/logIn" className="text-black flex items-center gap-1 hover:underline">
-                                                            <FaUser />
+                                                            <FaUser size={21} />
                                                             Log In
                                                       </NavLink>
                                                       <span className="font-bold text-2xl">/</span>
                                                       <NavLink to="/signup" className="text-black flex items-center gap-1 hover:underline">
-                                                            <FaUserPlus />
+                                                            <FaUserPlus size={21} />
                                                             SignUp
                                                       </NavLink>
                                                 </div>
@@ -112,7 +120,7 @@ function Header() {
                                     </div>
                               </div>
                         </nav>
-                  </header>
+                  </header >
             </>
       )
 }
