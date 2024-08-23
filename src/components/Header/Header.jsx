@@ -99,7 +99,7 @@ function Header() {
                                                             size={21}
 
                                                       />
-                                                      {user.user_details.username}
+                                                      {user.user_details.username.charAt(0).toUpperCase() + user.user_details.username.slice(1)}
                                                       {profileDropdown && <ProfileDropdown />}
                                                 </div>
 
