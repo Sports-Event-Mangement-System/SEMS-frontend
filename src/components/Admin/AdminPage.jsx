@@ -7,7 +7,7 @@ export default function AdminPage() {
       <>
             <div className='grid grid-cols-1fr-5fr'>
                   <AdminSidebar />
-                  <div className='w-full'>
+                  <div className='w-full p-4'>
                         <Outlet />
                   </div>
             </div>

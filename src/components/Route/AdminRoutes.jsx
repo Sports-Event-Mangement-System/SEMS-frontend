@@ -1,6 +1,6 @@
-import TournamentManagement from "../Admin/Items/TournamentManagement";
+import TournamentManagement from "../Admin/Items/Tournament/TournamentManagement";
 import TeamManagement from "../Admin/Items/TeamManagement";
-import AdminContact from "../Admin/Items/AdminContact";;
+import AdminContact from "../Admin/Items/AdminContact";
 
 const adminRoutes = [
      {
