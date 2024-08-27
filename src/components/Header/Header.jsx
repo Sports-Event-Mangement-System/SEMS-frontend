@@ -74,7 +74,6 @@ function Header() {
                                                       <NavLink>
                                                             Search
                                                       </NavLink>
-<<<<<<< HEAD
 
                                                 </div>
                                           </ul>
@@ -119,26 +118,6 @@ function Header() {
                                           )}
 
                                     </div>
-=======
-                                                      {user ? (
-                                                            <NavLink>
-                                                                  <span onClick={() => dispatch(logout())}>Logout</span>
-                                                            </NavLink>
-                                                      ) : (
-                                                            <NavLink to="/LogIn"
-                                                                  className={({ isActive }) => `  ${isActive ? 'text-green-500' : 'text-black'}`
-                                                                  }
-                                                            >
-                                                                  Log In
-                                                            </NavLink>
-                                                      )}
-                                                </div>
-                                          </ul>
-                                    </div>
-                                    <Link to="/account">
-                                          Account
-                                    </Link>
->>>>>>> 79a998f (code merge fix)
                               </div>
                         </nav>
                   </header >
