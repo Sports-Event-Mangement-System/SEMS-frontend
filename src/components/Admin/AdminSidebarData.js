@@ -19,7 +19,7 @@ export const AdminSideBarData = [
                 itemName: 'Contact',
                 link: 'adminContact',
                 icon: faAddressBook
-            }
+            },
         ]
     },
 //     {

@@ -1,6 +1,7 @@
 import TournamentManagement from "../Admin/Items/Tournament/TournamentManagement";
 import TeamManagement from "../Admin/Items/TeamManagement";
 import AdminContact from "../Admin/Items/AdminContact";
+import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
 
 const adminRoutes = [
      {
@@ -15,6 +16,10 @@ const adminRoutes = [
           path: 'adminContact',
           element: <AdminContact />,
      },
+     {
+          path: 'addTournamentForm',
+          element: <TournamentForm />
+     }
 
 ];
 
