@@ -5,6 +5,7 @@ import Gallery from '../Gallery/Gallery';
 import Contact from '../Contact Us/Contact';
 import LogIn from '../Account/LogIn'; 
 import SignUp from '../Account/SignUp';
+import PrivateRoute from './PrivateRoute';
 
 const publicRoutes = [
   {
@@ -29,11 +30,19 @@ const publicRoutes = [
   },
   {
     path: '/logIn',
-    element: <LogIn />,
+    element: (
+      <PrivateRoute redirectAuthenticated={true}>
+        <LogIn />
+      </PrivateRoute>
+    ),
   },
   {
     path: '/signup',
-    element: <SignUp />,
+    element: (
+      <PrivateRoute redirectAuthenticated={true}>
+        <SignUp />
+      </PrivateRoute>
+    ),
   },
 ];
 
