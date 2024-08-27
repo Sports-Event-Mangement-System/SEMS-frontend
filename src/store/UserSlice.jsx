@@ -38,9 +38,16 @@ export const getCurrentUser = createAsyncThunk(
     }
 );
 
+<<<<<<< HEAD
 export const logout = createAsyncThunk('auth/logout', async () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('role');
+=======
+export const logout = createAsyncThunk("auth/logout", async () => {
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("persist:root");    
+>>>>>>> 79a998f (code merge fix)
 });
 
 // Slice
