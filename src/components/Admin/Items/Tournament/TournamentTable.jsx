@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { MdDelete, MdEdit } from "react-icons/md";
 
 export default function TournamentTable({ tournaments, onToggleStatusButton }) {
 
@@ -41,8 +42,8 @@ export default function TournamentTable({ tournaments, onToggleStatusButton }) {
                 <td className="px-6 py-3">{tournament.numberOfTeams}</td>
                 <td className="px-6 py-3">
                   <button
-                    className={`bg-blue-600 text-white rounded-xl w-20 py-2 
-                  ${tournament.status ? "bg-red-600" : ""}`}
+                    className={`bg-green-600 text-white rounded-xl w-20 py-2 
+                  ${tournament.status ? "bg-red-500" : ""}`}
                     onClick={() => onToggleStatusButton(tournament.id)}
                   >
                         {tournament.status ? "InActive" : "Active"}
@@ -50,14 +51,14 @@ export default function TournamentTable({ tournaments, onToggleStatusButton }) {
                 </td>
                 <td>
                   <div className="flex gap-2">
-                    <button className="bg-green-600 text-white rounded-xl w-14 py-2">
-                      Edit
+                    <button className="bg-blue-500 text-white rounded-xl w-14 py-2">
+                    <MdEdit />
                     </button>
                     <button
-                      className="bg-red-600 text-white rounded-xl w-16 py-2"
+                      className="bg-red-500 text-white rounded-xl w-16 py-2"
                       onClick={handleDelete}
                     >
-                      Delete
+                      <MdDelete />
                     </button>
                   </div>
                 </td>
