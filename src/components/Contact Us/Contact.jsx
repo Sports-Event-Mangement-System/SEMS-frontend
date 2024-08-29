@@ -48,8 +48,8 @@ function Contact() {
   };
   return (
     <>
-      <div className='h-screen flex items-center justify-center'>
-        <div className='shadow-2xl rounded-2xl'>
+      <div className='h-screen flex mt-14 justify-center'>
+        <div className='shadow-2xl rounded-2xl h-fit bg-slate-200'>
           <h1 className='text-3xl text-center text-orange-600 font-semibold mt-10 '>Contact Us</h1>
           <p className='text-md text-center text-orange-600 font-normal'>We will get back to you asap!</p>
           <form onSubmit={handleContact} action="" className='flex flex-col items-center p-10 gap-6'>
