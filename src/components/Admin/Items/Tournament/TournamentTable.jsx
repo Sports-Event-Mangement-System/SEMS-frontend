@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
+import TournamentContext from "./context/TounamentContext";
 
-export default function TournamentTable({ tournaments, onToggleStatusButton }) {
+export default function TournamentTable({ tournaments }) {
 
-  const handleDelete = () => {
-    console.log("Btn clicked");
+  const {deleteTournament, onToggleStatusButton} = useContext(TournamentContext);
+
+  const handleDelete = (id) => {
+    deleteTournament(id)
   };
+
+
+  const handleStatus = (id) => {
+    onToggleStatusButton(id)
+  }
+
 
   return (
     <>
@@ -27,14 +36,14 @@ export default function TournamentTable({ tournaments, onToggleStatusButton }) {
               className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               
             >
-          {tournaments.map((tournament) => (
+          {tournaments.map((tournament, index) => (
             
               <tr
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-start"
                 key={tournament.id}
               >
-                <td className="px-6 py-3">{tournament.id + 1}</td>
+                <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{tournament.tournamentName}</td>
                 <td className="px-6 py-3">{tournament.startingDate}</td>
                 <td className="px-6 py-3">{tournament.endingDate}</td>
@@ -44,7 +53,7 @@ export default function TournamentTable({ tournaments, onToggleStatusButton }) {
                   <button
                     className={`bg-green-600 text-white rounded-xl w-20 py-2 
                   ${tournament.status ? "bg-red-500" : ""}`}
-                    onClick={() => onToggleStatusButton(tournament.id)}
+                    onClick={() => handleStatus(tournament.id)}
                   >
                         {tournament.status ? "InActive" : "Active"}
                   </button>
@@ -56,7 +65,7 @@ export default function TournamentTable({ tournaments, onToggleStatusButton }) {
                     </button>
                     <button
                       className="bg-red-500 text-white rounded-xl w-16 py-2"
-                      onClick={handleDelete}
+                      onClick={() => handleDelete(tournament.id)}
                     >
                       <MdDelete />
                     </button>
