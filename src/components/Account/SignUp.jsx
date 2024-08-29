@@ -22,31 +22,31 @@ function SignUp() {
         password_confirmation: e.target.elements.password_confirmation.value,
       })
       .then((res) => {
-            console.log(res);
-            if (res.data.status === true) {
-                  navigate('/')
-                  toast.success(res.data.message);
-            }
+        console.log(res);
+        if (res.data.status === true) {
+          navigate('/')
+          toast.success(res.data.message);
+        }
       })
       .catch((err) => {
-            
-            if(err.message === "Network Error"){
-                  setError({ message: err.message })
-                  console.log(err)
-            }
-            else{
-                  setError(err.response.data.errors);
-            }    
+
+        if (err.message === "Network Error") {
+          setError({ message: err.message })
+          console.log(err)
+        }
+        else {
+          setError(err.response.data.errors);
+        }
       });
   };
 
   return (
-    <div className="h-screen flex items-center justify-center w-screen">
-      <div className="shadow-2xl rounded-2xl w-5/12 bg-slate-200">
+    <div className="h-screen flex m-14 justify-center w-screen">
+      <div className="shadow-2xl rounded-2xl w-5/12 h-fit bg-slate-200">
         <p className="text-center pt-8  text-orange-600 font-semibold text-lg">
           Create a New Account
         </p>
-        
+
         <form
           onSubmit={handleSignUp}
           action=""
@@ -119,10 +119,10 @@ function SignUp() {
             )}
           </div>
           {error.message && (
-              <span className="text-red-500 text-md">
-                {error.message}
-              </span>
-            )}
+            <span className="text-red-500 text-md">
+              {error.message}
+            </span>
+          )}
 
           <div className="flex justify-center w-full">
             <button

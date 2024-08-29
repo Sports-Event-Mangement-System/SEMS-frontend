@@ -1,6 +1,6 @@
 import PrivateRoute from './PrivateRoute';
 import Account from '../Account/Account';
-import Profile from '../Account/Account';
+import Profile from '../User/Profile';
 
 const userRoutes = [
   {

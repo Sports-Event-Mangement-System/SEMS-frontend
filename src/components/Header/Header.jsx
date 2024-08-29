@@ -14,7 +14,7 @@ function Header() {
 
       return (
             <>
-                  <header className='sticky top-0 left-0 z-50 h-[10vh] bg-white drop-shadow-lg flex justify-center items-center w-full'>
+                  <header className='sticky top-0 left-0 z-50 h-[10vh] bg-white drop-shadow-md flex justify-center items-center w-full'>
                         <nav className='w-full p-4'>
                               <div className='flex justify-between items-center'>
                                     <div className='font-extrabold text-2xl'>

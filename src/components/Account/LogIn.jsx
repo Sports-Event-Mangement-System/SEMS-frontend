@@ -32,7 +32,7 @@ export default function LogIn() {
         navigate('/');
         toast.success(result.payload.message);
       }
-      else{
+      else {
         console.log(result.payload);
         setError(result.payload);
       }
@@ -40,8 +40,8 @@ export default function LogIn() {
   };
 
   return (
-    <div className='h-screen flex items-center justify-center w-screen'>
-      <div className='shadow-2xl rounded-2xl w-5/12 bg-slate-200'>
+    <div className='h-screen flex mt-14 justify-center w-screen'>
+      <div className='shadow-2xl rounded-2xl w-5/12 h-fit bg-slate-200'>
         <p className='text-center pt-8 text-orange-600 font-semibold text-lg'>Log In Your Account</p>
         <form action="" className='flex flex-col items-center px-10 py-4 gap-8' onSubmit={handleLogin}>
           <div className='flex flex-col gap-2 w-full'>
