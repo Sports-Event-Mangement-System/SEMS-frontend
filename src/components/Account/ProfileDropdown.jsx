@@ -53,7 +53,7 @@ function ProfileDropdown() {
 
                                     <div className="flex items-center gap-4 ">
                                           <RiLogoutBoxLine className={({ isActive }) => `
-                                                      ${isActive ? 'text-gray-600' : 'text-white hover:text-gray-600'}`} size={21} />
+                                                      ${isActive ? 'text-white' : 'text-white hover:text-gray-600'}`} size={21} />
                                           <span>Logout</span>
                                     </div>
                                     {/* </NavLink>
