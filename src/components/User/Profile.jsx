@@ -1,18 +1,23 @@
 import Input from '../Account/Input';
+import { Link } from 'react-router-dom'
+import { useSelector } from 'react-redux';
+import axios from 'axios';
 import React, { useRef, useState } from 'react';
+import { toast } from 'react-toastify';
 
 function Profile() {
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
+  const [error, setError] = useState({});
   const [isEditing, setIsEditing] = useState(false);
-  const [initialValues, setInitialValues] = useState({
-    name: 'Subash',
-    email: 'subashtmg217@gmail.com',
-    username: 'subash217',
-    phone_number: '123456789',
+  const { user } = useSelector(state => state.auth);
+  const [formValues, setFormValues] = useState({
+    name: user.user_details.name,
+    email: user.user_details.email,
+    username: user.user_details.username,
+    phone_number: user.user_details.phone_number,
   });
 
-  const [formValues, setFormValues] = useState({ ...initialValues });
   const defaultImage = 'images/profile.jpg';
 
   const handleImageClick = () => {
@@ -37,14 +42,46 @@ function Profile() {
     setIsEditing(true);
   };
 
-  const handleSaveDetails = () => {
-    setIsEditing(false);
-    setInitialValues({ ...formValues });
+
+  const handleSaveDetails = async () => {
+    console.log(formValues)
+    const name = formValues.name;
+    const email = formValues.email;
+    const username = formValues.username;
+    const phone_number = formValues.phone_number;
+
+    const userValues = {
+      name,
+      username,
+      email,
+      phone_number,
+    };
+
+    console.log(user.access_token)
+    axios.post(`${import.meta.env.VITE_API_URL}api/update/user/${user.user_details.id}`,
+      userValues,
+      {
+        headers: {
+          Authorization: `Bearer ${user.access_token}`,
+        }
+      }
+    ).then((response) => {
+
+      console.log(response.data);
+      if (response.data.status === true) {
+        setError('');
+        toast.success(response.data.message);
+      }
+    }).catch((error) => {
+      const errorMessage = error?.response?.data?.errors;
+      setError(errorMessage ? errorMessage : {});
+      console.log(error)
+    }
+    )
   };
 
   const handleCancelEditing = () => {
     setIsEditing(false);
-    setFormValues({ ...initialValues });
   };
 
   const handleChange = (e) => {
@@ -56,13 +93,6 @@ function Profile() {
   };
 
   const imageSrc = image || defaultImage;
-
-  const inputFields = [
-    { label: "Name", type: "text", name: "name" },
-    { label: "Email", type: "email", name: "email" },
-    { label: "Username", type: "text", name: "username" },
-    { label: "Phone number", type: "text", name: "phone_number" },
-  ];
 
   return (
     <div className='h-screen flex justify-center mt-4'>
@@ -98,18 +128,64 @@ function Profile() {
         </div>
         <div className='flex justify-evenly'>
           <form className='flex flex-col w-[95%] gap-y-4'>
-            {inputFields.map((field) => (
-              <Input
-                key={field.name}
-                label={field.label}
-                type={field.type}
-                name={field.name}
-                required={true}
-                value={formValues[field.name]}
-                readOnly={!isEditing}
-                onChange={handleChange}
-              />
-            ))}
+
+            <Input
+              label="Name"
+              type="text"
+              name="name"
+              required={true}
+              value={formValues.name}
+              readOnly={!isEditing}
+              onChange={handleChange}
+            />{error.name && (
+              <span className="text-red-500 text-md">
+                {error.name}
+              </span>
+            )}
+
+            <Input
+              label="Email"
+              type="text"
+              name="email"
+              required={true}
+              value={formValues.email}
+              readOnly={!isEditing}
+              onChange={handleChange}
+            />{error.email && (
+              <span className="text-red-500 text-md">
+                {error.email}
+              </span>
+            )}
+
+            <Input
+              label="Username"
+              type="text"
+              name="username"
+              required={true}
+              value={formValues.username}
+              readOnly={!isEditing}
+              onChange={handleChange}
+            />{error.username && (
+              <span className="text-red-500 text-md">
+                {error.username}
+              </span>
+            )}
+
+            <Input
+              label="Phone Number"
+              type="text"
+              name="phone_number"
+              required={true}
+              value={formValues.phone_number}
+              readOnly={!isEditing}
+              onChange={handleChange}
+            />{error.phone_number && (
+              <span className="text-red-500 text-md">
+                {error.phone_number}
+              </span>
+            )}
+
+
             <div className='flex gap-4'>
               <button
                 type="button"
@@ -126,6 +202,11 @@ function Profile() {
                 >
                   Cancel
                 </button>
+              )}
+              {!isEditing && (
+                <ul className='flex items-center mx-7'>
+                  <li><Link to="/changepassword" className='font-semibold text-[16px] underline text-gray-700 hover:text-orange-600'>Change Password ?</Link></li>
+                </ul>
               )}
             </div>
           </form>

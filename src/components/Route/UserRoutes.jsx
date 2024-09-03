@@ -1,6 +1,7 @@
 import PrivateRoute from './PrivateRoute';
 import Account from '../Account/Account';
 import Profile from '../User/Profile';
+import ChangePassword from '../User/ChangePassword'; // Import the ChangePassword component
 
 const userRoutes = [
   {
@@ -16,6 +17,14 @@ const userRoutes = [
     element: (
       <PrivateRoute requiredRole="user">
         <Profile />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/changepassword',
+    element: (
+      <PrivateRoute requiredRole="user">
+        <ChangePassword />
       </PrivateRoute>
     ),
   },
