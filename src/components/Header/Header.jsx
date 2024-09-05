@@ -92,14 +92,12 @@ function Header() {
                                                 <div
                                                       className={`group flex justify-start items-center gap-4 cursor-pointer border border-[rgb(255,156,72,1)] rounded-lg w-36 h-12 py-2 pl-6 relative bg-[rgb(255,156,72,1)] text-white text-[16px] font-semibold ${profileDropdown ? '' : 'hover:bg-orange-400 '}`}
                                                       onClick={() => setProfileDropdown(prev => !prev)}
-
-
                                                 >
                                                       <BiSolidUserAccount
                                                             size={21}
 
                                                       />
-                                                      {user.user_details.username.charAt(0).toUpperCase() + user.user_details.username.slice(1)}
+                                                      {user.user_details?.username?.charAt(0).toUpperCase() + user.user_details?.username?.slice(1)}
                                                       {profileDropdown && <ProfileDropdown />}
                                                 </div>
 

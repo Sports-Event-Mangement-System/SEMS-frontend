@@ -7,7 +7,7 @@ const userRoutes = [
   {
     path: '/account',
     element: (
-      <PrivateRoute requiredRole="user">
+      <PrivateRoute requiredRole={['user', 'admin']}>
         <Account />
       </PrivateRoute>
     ),
@@ -15,7 +15,7 @@ const userRoutes = [
   {
     path: '/profile',
     element: (
-      <PrivateRoute requiredRole="user">
+      <PrivateRoute requiredRole={['user', 'admin']}>
         <Profile />
       </PrivateRoute>
     ),
@@ -23,7 +23,7 @@ const userRoutes = [
   {
     path: '/changepassword',
     element: (
-      <PrivateRoute requiredRole="user">
+      <PrivateRoute requiredRole={['user', 'admin']}>
         <ChangePassword />
       </PrivateRoute>
     ),

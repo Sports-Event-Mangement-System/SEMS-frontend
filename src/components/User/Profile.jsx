@@ -1,17 +1,21 @@
 import Input from '../Account/Input';
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
+import { updateUser } from '../../store/UserSlice';
 
 function Profile() {
+  const dispatch = useDispatch();
   const inputRef = useRef(null);
   const [image, setImage] = useState(null);
   const [error, setError] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useSelector(state => state.auth);
   const [formValues, setFormValues] = useState({
+    access_token: user.access_token,
+    id: user.user_details.id,
     name: user.user_details.name,
     email: user.user_details.email,
     username: user.user_details.username,
@@ -44,42 +48,32 @@ function Profile() {
 
 
   const handleSaveDetails = async () => {
-    console.log(formValues)
+    const access_token = formValues.access_token;
+    const id = formValues.id;
     const name = formValues.name;
     const email = formValues.email;
     const username = formValues.username;
     const phone_number = formValues.phone_number;
 
     const userValues = {
+      access_token,
+      id,
       name,
       username,
       email,
       phone_number,
     };
-
-    console.log(user.access_token)
-    axios.post(`${import.meta.env.VITE_API_URL}api/update/user/${user.user_details.id}`,
-      userValues,
-      {
-        headers: {
-          Authorization: `Bearer ${user.access_token}`,
-        }
+    dispatch(updateUser(userValues)).then((result) => {
+      if (result.payload.status === true) {
+        console.log(result.payload);
+        toast.success(result.payload.message);
       }
-    ).then((response) => {
-
-      console.log(response.data);
-      if (response.data.status === true) {
-        setError('');
-        toast.success(response.data.message);
+      else {
+        console.log(result.payload);
+        setError(result.payload);
       }
-    }).catch((error) => {
-      const errorMessage = error?.response?.data?.errors;
-      setError(errorMessage ? errorMessage : {});
-      console.log(error)
-    }
-    )
+    });
   };
-
   const handleCancelEditing = () => {
     setIsEditing(false);
   };
