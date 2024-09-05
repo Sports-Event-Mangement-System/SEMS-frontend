@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
-// Thunks
+// Login Thunks
 export const loginUser = createAsyncThunk(
     'auth/login',
     async (userCredentials, { rejectWithValue }) => {
@@ -14,7 +16,7 @@ export const loginUser = createAsyncThunk(
             } else if (error.response && error.response.data.message) {
                 return rejectWithValue(error.response.data.message);
             } else {
-                return rejectWithValue('An unknown error occurred');
+                return rejectWithValue(error);
             }
         }
     }
@@ -42,6 +44,60 @@ export const logout = createAsyncThunk('auth/logout', async () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('role');
 });
+
+// Profile Change Thunk
+export const updateUser = createAsyncThunk(
+    'auth/updateUser',
+    async (userCredentials, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}api/update/user/${userCredentials.id}`, userCredentials,
+                {
+                    headers: {
+                      Authorization: `Bearer ${userCredentials.access_token}`,
+                    }
+                }
+            );
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+                return rejectWithValue(error.response.data.errors);
+            } else if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.data.message);
+            } else {
+                return rejectWithValue(error);
+            }
+        }
+    }
+);
+
+
+
+export const useInactivityLogout = (onLogout, timeout = 2500) => {
+    const rememberMe = useSelector(state => state.auth?.user?.user_details?.remember_me);
+    
+    useEffect(() => {
+      if(rememberMe ===1 ) return;
+      let timer;
+  
+      const resetTimer = () => {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          onLogout();
+        }, timeout);
+      };
+  
+      window.addEventListener('mousemove', resetTimer);
+      window.addEventListener('keypress', resetTimer);
+  
+      resetTimer(); // Initialize the timer
+  
+      return () => {
+        if (timer) clearTimeout(timer);
+        window.removeEventListener('mousemove', resetTimer);
+        window.removeEventListener('keypress', resetTimer);
+      };
+    }, [onLogout, timeout, rememberMe]);
+  };
 
 // Slice
 const authSlice = createSlice({
@@ -81,6 +137,14 @@ const authSlice = createSlice({
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
                 state.error = null;
+            })
+            .addCase(updateUser.fulfilled, (state, action) => {
+                state.user.user_details = action.payload.user_details;
+                state.error = null;
+            })
+            .addCase(updateUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
             });
     },
     reducers: {},

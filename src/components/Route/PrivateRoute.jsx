@@ -13,8 +13,8 @@ const PrivateRoute = ({ children, requiredRole, redirectAuthenticated = false })
     return <Navigate to="/logIn" replace />;
   }
 
-  if (requiredRole && user.role !== requiredRole) {
-    return <Forbidden></Forbidden>;
+  if (requiredRole && ![requiredRole].flat().includes(user.role)) {
+    return <Forbidden />;
   }
 
   return children;

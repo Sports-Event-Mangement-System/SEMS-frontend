@@ -10,7 +10,10 @@ export default function LogIn() {
   const [error, setError] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const [isChecked, setIsChecked] = useState(false);
+  const handleCheckboxChange = (event) => {
+    setIsChecked(event.target.checked);
+  };
   //redux states
   const { loading } = useSelector((state) => state.auth);
 
@@ -19,10 +22,11 @@ export default function LogIn() {
     e.preventDefault();
     const email = e.target.elements.email.value;
     const password = e.target.elements.password.value;
-
+    const remember_me = isChecked ? 1 : 0;
     const userCredentaials = {
       email,
-      password
+      password,
+      remember_me
     };
     console.log(email);
     dispatch(loginUser(userCredentaials)).then((result) => {
@@ -71,6 +75,19 @@ export default function LogIn() {
                 {error.password}
               </span>
             )}
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                id="remember_me"
+                name="remember_me"
+                checked={isChecked}
+                onChange={handleCheckboxChange}
+                className="w-4 h-5 mr-2"
+              />
+              <label htmlFor="remember_me" className="text-gray-700 text-l">
+                Remember me
+              </label>
+            </div>
           </div>
           {error.message && <span className="text-red-500 text-md">{error.message}</span>}
           <a href="#" className="mb-4 underline text-sm">Forgot password?</a>
