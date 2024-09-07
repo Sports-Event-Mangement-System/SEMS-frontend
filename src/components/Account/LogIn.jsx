@@ -28,7 +28,6 @@ export default function LogIn() {
       password,
       remember_me
     };
-    console.log(email);
     dispatch(loginUser(userCredentaials)).then((result) => {
       if (result.payload.status === true) {
         localStorage.setItem('access_token', result.payload.access_token);

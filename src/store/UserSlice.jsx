@@ -22,6 +22,7 @@ export const loginUser = createAsyncThunk(
     }
 );
 
+// Get Current User Thunk
 export const getCurrentUser = createAsyncThunk(
     'auth/getCurrentUser',
     async (_, { rejectWithValue }) => {
@@ -71,12 +72,11 @@ export const updateUser = createAsyncThunk(
 );
 
 
-
-export const useInactivityLogout = (onLogout, timeout = 2500) => {
-    const rememberMe = useSelector(state => state.auth?.user?.user_details?.remember_me);
-    
+//Function for UserInactivitoLogout if remember me is not checked.
+export const useInactivityLogout = (onLogout, timeout = 3600000) => {
+    const rememberMe = useSelector(state => state.auth?.user?.user_details?.remember_me) || 0;
     useEffect(() => {
-      if(rememberMe ===1 ) return;
+      if( rememberMe === 1 ) return;
       let timer;
   
       const resetTimer = () => {
