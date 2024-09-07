@@ -1,7 +1,6 @@
 import Input from '../Account/Input';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { updateUser } from '../../store/UserSlice';
@@ -65,7 +64,6 @@ function Profile() {
     };
     dispatch(updateUser(userValues)).then((result) => {
       if (result.payload.status === true) {
-        console.log(result.payload);
         toast.success(result.payload.message);
       }
       else {
