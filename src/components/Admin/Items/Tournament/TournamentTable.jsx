@@ -1,19 +1,7 @@
 import React, { useContext, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
-import TournamentContext from "./context/TounamentContext";
 
-export default function TournamentTable({ tournaments }) {
-
-  const {deleteTournament, onToggleStatusButton} = useContext(TournamentContext);
-
-  const handleDelete = (id) => {
-    deleteTournament(id)
-  };
-
-
-  const handleStatus = (id) => {
-    onToggleStatusButton(id)
-  }
+export default function TournamentTable() {
 
 
   return (
@@ -36,26 +24,21 @@ export default function TournamentTable({ tournaments }) {
               className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
               
             >
-          {tournaments.map((tournament, index) => (
             
               <tr
                 scope="row"
                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-start"
-                key={tournament.id}
               >
-                <td className="px-6 py-3">{index + 1}</td>
-                <td className="px-6 py-3">{tournament.tournamentName}</td>
-                <td className="px-6 py-3">{tournament.startingDate}</td>
-                <td className="px-6 py-3">{tournament.endingDate}</td>
-                <td className="px-6 py-3"><img src={tournament.logo} alt={tournament.logo} /></td>
-                <td className="px-6 py-3">{tournament.numberOfTeams}</td>
+                <td className="px-6 py-3"></td>
+                <td className="px-6 py-3"></td>
+                <td className="px-6 py-3"></td>
+                <td className="px-6 py-3"></td>
+                <td className="px-6 py-3"><img src='' alt='' /></td>
+                <td className="px-6 py-3"></td>
                 <td className="px-6 py-3">
                   <button
-                    className={`bg-green-600 text-white rounded-xl w-20 py-2 
-                  ${tournament.status ? "bg-red-500" : ""}`}
-                    onClick={() => handleStatus(tournament.id)}
+                    className={`bg-green-600 text-white rounded-xl w-20 py-2`}
                   >
-                        {tournament.status ? "InActive" : "Active"}
                   </button>
                 </td>
                 <td>
@@ -65,7 +48,6 @@ export default function TournamentTable({ tournaments }) {
                     </button>
                     <button
                       className="bg-red-500 text-white rounded-xl w-16 py-2"
-                      onClick={() => handleDelete(tournament.id)}
                     >
                       <MdDelete />
                     </button>
@@ -73,7 +55,6 @@ export default function TournamentTable({ tournaments }) {
                 </td>
               </tr>
             
-          ))}
           </tbody>
         </table>
       </div>
