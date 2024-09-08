@@ -34,7 +34,7 @@ export default function TournamentForm() {
         te_date: e.target.elements.te_date.value,
         rs_date: e.target.elements.rs_date.value,
         re_date: e.target.elements.re_date.value,
-        t_logo: e.target.elements.t_logo.value,
+        t_logo: e.target.elements.t_logo.files[0],
         team_number: e.target.elements.team_number.value,
         prize_pool: e.target.elements.prize_pool.value,
         email: e.target.elements.email.value,
@@ -42,9 +42,14 @@ export default function TournamentForm() {
         status: e.target.elements.status.value,
         featured: e.target.elements.featured.value,
         address: e.target.elements.address.value,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.access_token}`,
+          "Content-Type": "multipart/form-data", 
+        },
       })
       .then((res) => {
-        console.log(res);
         if (res.data.status === true) {
           navigate('/admin/tournamentManagement')
           toast.success(res.data.message);
@@ -261,7 +266,7 @@ export default function TournamentForm() {
                 <SelectField
                   required={true}
                   label="Status"
-                  placeholder="Status"
+                  placeholder="Select Status"
                   id="status"
                   name="status"
                   Searchable={false}
@@ -276,7 +281,7 @@ export default function TournamentForm() {
                 <SelectField
                   required={true}
                   label="Featured"
-                  placeholder="Featured"
+                  placeholder="Selct Featured"
                   id="featured"
                   name="featured"
                   Searchable={false}
