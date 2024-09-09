@@ -45,7 +45,7 @@ function Tournaments() {
             <div className='w-full md:w-[25%]'>
               <DatePicker />
             </div>
-            <button className='flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white'><IoSearchOutline size={25} /></button>
+            <button className='flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white hover:bg-orange-500'><IoSearchOutline size={25} /></button>
           </div>
         </div>
 
@@ -63,7 +63,7 @@ function Tournaments() {
             </div>  <div className='w-full md:w-[15%] relative'>
               <SelectField label="Category" id="category" name="category" placeholder="All" />
             </div>
-            <button className='bg-orange-600 w-40 h-12 rounded-lg flex-shrink-0 text-white font-medium'>Filter</button>
+            <button className='bg-orange-600 w-40 h-12 rounded-lg flex-shrink-0 text-white font-medium hover:bg-orange-500'>Filter</button>
           </div>
           <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12'>
             <TournamentCard />

@@ -11,9 +11,10 @@ function Home() {
   return (
     <>
       <div className='h-screen flex flex-col items-center'>
-        <img src="images/file.jpg" alt="" className='w-[199vh] h-[86vh] my-[7px] rounded-[33px] mt-0' />
-        <div className="absolute mt-0 w-[199vh] h-[86vh] rounded-[33px] bg-black bg-opacity-40"></div>
+        <img src="images/file.jpg" alt="" className='w-full h-[86vh] my-[7px] mt-0' />
+        <div className="absolute mt-0 w-full h-[86vh] bg-black bg-opacity-40"></div>
         <div className='flex absolute top-[10vh] justify-evenly items-center h-[86vh]'>
+
           <div className='w-[45%]'>
             <h1 className='text-[5vh] text-white font-bold'><span className='text-orange-600'>Organize</span> or Participate</h1>
             <h1 className='text-[5vh] text-white font-bold'>in <span className='text-orange-600'>Tournament</span></h1>
