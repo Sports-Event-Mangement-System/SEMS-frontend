@@ -1,11 +1,50 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import React from 'react'
 import DatePicker from './DatePicker';
 import SelectField from './SelectField';
 import { IoSearchOutline } from "react-icons/io5";
 import TournamentCard from './TournamentCard';
+import axios from 'axios';
 
 function Tournaments() {
+  const [tournaments, setTournaments] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const tournamentsPerPage = 4;
+
+  const indexOfLastTournament = currentPage * tournamentsPerPage;
+  const indexOfFirstTournament = indexOfLastTournament - tournamentsPerPage;
+  const currentTournaments = tournaments.slice(indexOfFirstTournament, indexOfLastTournament);
+
+  const handleNext = () => {
+    if (indexOfLastTournament < tournaments.length) {
+      setCurrentPage(prevPage => prevPage + 1);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(prevPage => prevPage - 1);
+    }
+  };
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}api/tournaments`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.access_token}`,
+          },
+        });
+        console.log(response);
+        setTournaments(response.data.tournaments);
+      } catch (error) {
+        console.log("Error in fetching", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const [searchTerm, setSearchTerm] = useState('');
   const options1 = [
@@ -34,7 +73,7 @@ function Tournaments() {
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Event title..."
-                className="w-full px-4 py-[5px] border border-gray-300 rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700"
+                className="w-full px-4 py-[5px] border border-gray-300 rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
               />
             </div>
 
@@ -66,15 +105,37 @@ function Tournaments() {
             <button className='bg-orange-600 w-40 h-12 rounded-lg flex-shrink-0 text-white font-medium hover:bg-orange-500'>Filter</button>
           </div>
           <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12'>
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-            <TournamentCard />
-
+            {currentTournaments.map((details, index) => (
+              <TournamentCard
+                key={index}
+                tLogo={details.t_logo}
+                image={details.image_url}
+                tournamentName={details.t_name}
+                teamNum={details.team_number}
+                address={details.address}
+                sDate={details.ts_date}
+                eDate={details.te_date}
+                regStart={details.rs_date}
+                regEnd={details.re_date}
+                price={details.prize_pool}
+              />
+            ))}
+          </div>
+          <div className='flex justify-between mt-8'>
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className='px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              Previous
+            </button>
+            <button
+              onClick={handleNext}
+              disabled={indexOfLastTournament >= tournaments.length}
+              className='px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed'
+            >
+              Next
+            </button>
           </div>
         </div>
 

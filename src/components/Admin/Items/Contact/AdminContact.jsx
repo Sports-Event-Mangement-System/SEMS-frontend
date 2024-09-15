@@ -73,10 +73,24 @@ export default function AdminContact() {
     }
   };
 
+  const propsContactDetails = (contact) => {
+    return [
+      { label: 'Full Name', value: contact.first_name + ' ' + contact.last_name },
+      { label: 'Email', value: contact.email },
+      { label: 'Phone', value: contact.phone_number },
+      { label: 'Message', value: contact.message },
+    ];
+  };
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
-        {showModal && <FullDetailsModal closeModal={closeModal} contactDetails={selectedContact} />}
+
+        {showModal && (
+          <FullDetailsModal
+            closeModal={closeModal}
+            details={selectedContact ? propsContactDetails(selectedContact) : []}
+          />
+        )}
 
         {showDeleteModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

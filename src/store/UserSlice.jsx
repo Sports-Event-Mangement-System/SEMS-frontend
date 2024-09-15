@@ -54,7 +54,7 @@ export const updateUser = createAsyncThunk(
             const response = await axios.post(`${import.meta.env.VITE_API_URL}api/update/user/${userCredentials.id}`, userCredentials,
                 {
                     headers: {
-                      Authorization: `Bearer ${userCredentials.access_token}`,
+                        Authorization: `Bearer ${userCredentials.access_token}`,
                     }
                 }
             );
@@ -72,32 +72,63 @@ export const updateUser = createAsyncThunk(
 );
 
 
+//Function for updating user profile
+export const updateProfileImage = createAsyncThunk(
+    'auth/updateProfileImage',
+    async ({ formData, access_token, id }, { rejectWithValue }) => {
+        try {
+            const response = await axios.post(
+                `${import.meta.env.VITE_API_URL}api/update/profile_image/${id}`,
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${access_token}`,
+                        'Content-Type': 'multipart/form-data', // Ensure multipart/form-data is set
+                    },
+                }
+            );
+            console.log(response.data);
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+                return rejectWithValue(error.response.data.errors);
+            } else if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.data.message);
+            } else {
+                return rejectWithValue(error);
+            }
+        }
+    }
+);
+
+
+
 //Function for UserInactivitoLogout if remember me is not checked.
 export const useInactivityLogout = (onLogout, timeout = 3600000) => {
     const rememberMe = useSelector(state => state.auth?.user?.user_details?.remember_me) || 0;
     useEffect(() => {
-      if( rememberMe === 1 ) return;
-      let timer;
-  
-      const resetTimer = () => {
-        if (timer) clearTimeout(timer);
-        timer = setTimeout(() => {
-          onLogout();
-        }, timeout);
-      };
-  
-      window.addEventListener('mousemove', resetTimer);
-      window.addEventListener('keypress', resetTimer);
-  
-      resetTimer(); // Initialize the timer
-  
-      return () => {
-        if (timer) clearTimeout(timer);
-        window.removeEventListener('mousemove', resetTimer);
-        window.removeEventListener('keypress', resetTimer);
-      };
+        if (rememberMe === 1) return;
+        let timer;
+
+        const resetTimer = () => {
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                onLogout();
+            }, timeout);
+        };
+
+        window.addEventListener('mousemove', resetTimer);
+        window.addEventListener('keypress', resetTimer);
+
+        resetTimer(); // Initialize the timer
+
+        return () => {
+            if (timer) clearTimeout(timer);
+            window.removeEventListener('mousemove', resetTimer);
+            window.removeEventListener('keypress', resetTimer);
+        };
     }, [onLogout, timeout, rememberMe]);
-  };
+};
 
 // Slice
 const authSlice = createSlice({
@@ -143,6 +174,14 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateUser.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(updateProfileImage.fulfilled, (state, action) => {
+                state.user.user_details.profile_image = action.payload.profile_image;
+                state.error = null;
+            })
+            .addCase(updateProfileImage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });
