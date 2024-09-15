@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { updateUser } from '../../store/UserSlice';
+import { updateProfileImage, updateUser } from '../../store/UserSlice';
 
 function Profile() {
   const dispatch = useDispatch();
@@ -23,23 +23,37 @@ function Profile() {
 
   const defaultImage = 'images/profile.jpg';
 
-  const handleImageClick = () => {
+  const handleImageClick = (event) => {
+    event.preventDefault();
+    const profile_image = event.target.profile_image.files[0];
+    const id = formValues.id;
+    const access_token = formValues.access_token;
+
+    // Create a FormData object
+    const formData = new FormData();
+    formData.append('profile_image', profile_image);
+    formData.append('id', id);
+    formData.append('access_token', access_token);
+
+    dispatch(updateProfileImage({ formData, access_token, id })).then((result) => {
+      if (result.payload.status === true) {
+        toast.success(result.payload.message);
+      } else {
+        console.log(result.payload);
+        setError(result.payload);
+      }
+    });
+  };
+
+
+  const handleImageChange = () => {
     inputRef.current.value = null;
     inputRef.current.click();
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      console.log(file);
-      setImage(imageUrl);
-    }
-  };
-
-  const handleDeleteImage = () => {
-    setImage(null);
-  };
+  // const handleDeleteImage = () => {
+  //   setImage(null);
+  // };
 
   const handleEditDetails = () => {
     setIsEditing(true);
@@ -93,31 +107,33 @@ function Profile() {
           <h1 className='text-xl font-bold text-orange-600'>Personal Info</h1>
           <p>You can update your profile photo and personal details here.</p>
         </div>
-        <div className='flex items-center gap-8 ml-9'>
-          <img
-            src={imageSrc}
-            alt="Profile"
-            className='w-[90px] h-[90px] rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer'
-          />
-          <div className='flex flex-col gap-y-1'>
-            <button
-              type='button'
-              onClick={handleImageClick}
-              className='border-2 border-blue-500 h-10 w-28 rounded-lg text-blue-500 text-sm font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50'
-            >
-              Change Profile
-            </button>
-            {image && (
-              <button type='button'
-                onClick={handleDeleteImage}
-                className='border-2 border-red-500 h-10 w-28 rounded-lg text-red-500 text-sm font-medium hover:border-red-600 hover:text-red-600 hover:bg-red-50'
+        <form onSubmit={handleImageClick} action="">
+          <div className='flex items-center gap-8 ml-9'>
+            <img
+              src={imageSrc}
+              onClick={handleImageChange}
+              alt="Profile"
+              className='w-[90px] h-[90px] rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer'
+            />
+            <div className='flex flex-col gap-y-1'>
+              <button
+                type='submit'
+                className='border-2 border-blue-500 h-10 w-28 rounded-lg text-blue-500 text-sm font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50'
               >
-                Delete Profile
+                Change Profile
               </button>
-            )}
-            <input type="file" ref={inputRef} onChange={handleImageChange} className='hidden' />
+              {/* {image && (
+                <button type='button'
+                  onClick={handleDeleteImage}
+                  className='border-2 border-red-500 h-10 w-28 rounded-lg text-red-500 text-sm font-medium hover:border-red-600 hover:text-red-600 hover:bg-red-50'
+                >
+                  Delete Profile
+                </button>
+              )} */}
+              <input type="file" name='profile_image' ref={inputRef} />
+            </div>
           </div>
-        </div>
+        </form>
         <div className='flex justify-evenly'>
           <form className='flex flex-col w-[95%] gap-y-4'>
 
