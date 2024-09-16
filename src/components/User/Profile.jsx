@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
 import { updateProfileImage, updateUser } from '../../store/UserSlice';
+import axios from 'axios';
 
 function Profile() {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const [image, setImage] = useState(null);
+  const [imageSrc, setImageSrc] = useState(''); // State to hold the image preview URL
   const [error, setError] = useState({});
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useSelector(state => state.auth);
@@ -19,9 +20,8 @@ function Profile() {
     email: user.user_details.email,
     username: user.user_details.username,
     phone_number: user.user_details.phone_number,
+    profile_image: user.user_details.profile_image,
   });
-
-  const defaultImage = 'images/profile.jpg';
 
   const handleImageClick = (event) => {
     event.preventDefault();
@@ -29,26 +29,30 @@ function Profile() {
     const id = formValues.id;
     const access_token = formValues.access_token;
 
-    // Create a FormData object
-    const formData = new FormData();
-    formData.append('profile_image', profile_image);
-    formData.append('id', id);
-    formData.append('access_token', access_token);
-
-    dispatch(updateProfileImage({ formData, access_token, id })).then((result) => {
+    // // Create a FormData object
+    const userProfileImage = {
+      profile_image,
+      id,
+      access_token,
+    };
+    dispatch(updateProfileImage({ userProfileImage })).then((result) => {
       if (result.payload.status === true) {
         toast.success(result.payload.message);
       } else {
-        console.log(result.payload);
         setError(result.payload);
       }
     });
   };
 
-
-  const handleImageChange = () => {
-    inputRef.current.value = null;
-    inputRef.current.click();
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const previewUrl = URL.createObjectURL(file);
+      setImageSrc(previewUrl); 
+    }
+  };
+  const triggerFileInput = () => {
+    inputRef.current.click(); 
   };
 
   // const handleDeleteImage = () => {
@@ -98,8 +102,6 @@ function Profile() {
     }));
   };
 
-  const imageSrc = image || defaultImage;
-
   return (
     <div className='h-screen flex justify-center mt-4'>
       <div className='w-[95%] h-fit pt-7 pb-7 bg-white drop-shadow-[0_2px_2px_rgba(0,0,0,0.15)] space-y-8'>
@@ -109,15 +111,14 @@ function Profile() {
         </div>
         <form onSubmit={handleImageClick} action="">
           <div className='flex items-center gap-8 ml-9'>
-            <img
-              src={imageSrc}
-              onClick={handleImageChange}
-              alt="Profile"
-              className='w-[90px] h-[90px] rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer'
-            />
+          <img
+            src={ imageSrc || ( formValues.profile_image? formValues.profile_image : 'images/profile.jpg' )}
+            alt="Profile"
+            className='w-[90px] h-[90px] rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer'
+            onClick={triggerFileInput} // Click on image to trigger file selection
+          />
             <div className='flex flex-col gap-y-1'>
               <button
-                type='submit'
                 className='border-2 border-blue-500 h-10 w-28 rounded-lg text-blue-500 text-sm font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50'
               >
                 Change Profile
@@ -130,7 +131,12 @@ function Profile() {
                   Delete Profile
                 </button>
               )} */}
-              <input type="file" name='profile_image' ref={inputRef} />
+              <input type="file" name='profile_image' onChange={handleImageChange} ref={inputRef}  className='hidden'/>
+              {error.profile_image?.[0] && (
+              <span className="text-red-500 text-md">
+                {error.profile_image?.[0]}
+              </span>
+            )}
             </div>
           </div>
         </form>

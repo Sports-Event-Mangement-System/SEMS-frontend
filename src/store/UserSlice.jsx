@@ -75,15 +75,19 @@ export const updateUser = createAsyncThunk(
 //Function for updating user profile
 export const updateProfileImage = createAsyncThunk(
     'auth/updateProfileImage',
-    async ({ formData, access_token, id }, { rejectWithValue }) => {
+    async ({ userProfileImage }, { rejectWithValue }) => {
         try {
+            const formData = new FormData();
+            formData.append('profile_image', userProfileImage.profile_image);
+            formData.append('id', userProfileImage.id);
+            console.log(userProfileImage);
             const response = await axios.post(
-                `${import.meta.env.VITE_API_URL}api/update/profile_image/${id}`,
+                `${import.meta.env.VITE_API_URL}api/update/profile_image/${userProfileImage.id}`,
                 formData,
                 {
                     headers: {
-                        Authorization: `Bearer ${access_token}`,
-                        'Content-Type': 'multipart/form-data', // Ensure multipart/form-data is set
+                        Authorization: `Bearer ${userProfileImage.access_token}`,
+                        "Content-Type": "multipart/form-data",                     
                     },
                 }
             );
@@ -178,7 +182,7 @@ const authSlice = createSlice({
                 state.error = action.payload;
             })
             .addCase(updateProfileImage.fulfilled, (state, action) => {
-                state.user.user_details.profile_image = action.payload.profile_image;
+                state.user.user_details.profile_image = action.payload.profile_img_url;
                 state.error = null;
             })
             .addCase(updateProfileImage.rejected, (state, action) => {
