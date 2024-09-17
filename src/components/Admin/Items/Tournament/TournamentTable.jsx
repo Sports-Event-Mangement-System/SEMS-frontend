@@ -3,6 +3,7 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import EditForm from "./EditForm";
+import { toast } from "react-toastify";
 
 export default function TournamentTable() {
 
@@ -19,6 +20,7 @@ export default function TournamentTable() {
       try {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}api/tournaments`);
         const data = response.data.tournaments;
+        console.log(data);
         if (Array.isArray(data)) {
           setTournaments(data);
         } else {
@@ -39,12 +41,15 @@ export default function TournamentTable() {
 
   const handleDelete = useCallback(async (id) => {
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}api/delete/tournament/${id}`, {
+     const response = await axios.delete(`${import.meta.env.VITE_API_URL}api/delete/tournament/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       });
-      setTournaments(prevTournaments => prevTournaments.filter(tournament => tournament.id !== id));
+      if( response.data.status === true){
+        toast.success(response.data.message);
+        setTournaments(prevTournaments => prevTournaments.filter(tournament => tournament.id !== id));
+      }
     } catch (error) {
       setError(`Error deleting tournament: ${error.message}`);
       console.error("Error deleting tournament", error);
@@ -105,7 +110,7 @@ export default function TournamentTable() {
               <th className="px-6 py-3 text-start">Starting Date</th>
               <th className="px-6 py-3 text-start">Ending Date</th>
               <th className="px-6 py-3 text-start">Logo</th>
-              <th className="px-6 py-3 text-start">Number of Teams</th>
+              <th className="px-6 py-3 text-start">No. of Teams</th>
               <th className="px-6 py-3 text-start">Status</th>
               <th className="px-6 py-3 text-start">Action</th>
             </tr>
@@ -118,14 +123,18 @@ export default function TournamentTable() {
                 <td className="px-6 py-3">{new Date(tournament.ts_date).toLocaleDateString()}</td>
                 <td className="px-6 py-3">{new Date(tournament.te_date).toLocaleDateString()}</td>
                 <td className="px-6 py-3">
-                  <img src={tournament.logoUrl} alt={`${tournament.t_name} logo`} className="w-12 h-12 object-cover" />
+                  {tournament.t_logo ? (
+                    <img src={tournament.image_url} className="w-12 h-12 object-cover" />
+                  ) : (
+                    <span>No image</span>
+                  )}
                 </td>
                 <td className="px-6 py-3">{tournament.team_number}</td>
                 <td className="px-6 py-3">
                   <button
-                    className={`bg-${tournament.status === 'Active' ? 'green' : 'red'}-600 text-white rounded-xl w-20 py-1`}
+                    className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? 'bg-green-600' : 'bg-red-600'}`}
                   >
-                    {tournament.status}
+                    {tournament.status === 1 ? 'Active' : 'Inactive'}
                   </button>
                 </td>
                 <td className="px-6 py-3">
