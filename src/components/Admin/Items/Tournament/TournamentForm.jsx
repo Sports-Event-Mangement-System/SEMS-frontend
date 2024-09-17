@@ -1,3 +1,4 @@
+// TournamentForm.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FormInput from "./FormInput";
@@ -22,8 +23,6 @@ export default function TournamentForm() {
   const [registrationEndingDate, setRegistrationEndingDate] = useState("");
   const [status, setStatus] = useState(1); // default to Active
   const [featured, setFeatured] = useState(1); // default to Featured
-  
-
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,16 +42,15 @@ export default function TournamentForm() {
 
   useEffect(() => {
     if (tournamentId) {
-      // Fetch tournament data
+      // Fetch tournament data for editing
       const fetchTournamentData = async () => {
         try {
           const response = await axios.get(`${import.meta.env.VITE_API_URL}api/edit/tournament/${tournamentId}`, {
             headers: {
-              Authorization: `Bearer ${localStorage.access_token}`,
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
             },
           });
           const data = response.data;
-          console.log(data)
           if (data && data.tournament) {
             setTournamentName(data.tournament.t_name || "");
             setTournamentDescription(data.tournament.t_description || "");
@@ -67,7 +65,6 @@ export default function TournamentForm() {
             setRegistrationEndingDate(data.tournament.re_date || "");
             setStatus(data.tournament.status || 1); // assuming default is Active
             setFeatured(data.tournament.featured || 1);
-
           } else {
             console.error("Tournament data not found");
           }
@@ -79,18 +76,21 @@ export default function TournamentForm() {
       };
 
       fetchTournamentData();
+    } else {
+      // Reset state for adding new tournament
+      setLoading(false);
     }
   }, [tournamentId]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('t_name', tournamentName || "");
     formData.append('t_description', tournamentDescription || "");
     formData.append('ts_date', startingDate || "");
     formData.append('te_date', endingDate || "");
-    formData.append('t_logo', logo || "");
+    if (logo) formData.append('t_logo', logo);
     formData.append('team_number', numberOfTeams || 0);
     formData.append('prize_pool', prizePool || 0);
     formData.append('phone_number', phoneNumber || "");
@@ -101,35 +101,31 @@ export default function TournamentForm() {
     formData.append('status', status);
     formData.append('featured', featured);
 
-  
+    const url = tournamentId
+      ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
+      : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
+
     axios
-      .post(`${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`, formData, {
+      .post(url, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
       })
       .then((res) => {
-        if (res.data.status === true) {
+        if (res.data.status) {
           navigate('/admin/tournamentManagement');
           toast.success(res.data.message);
         }
       })
       .catch((err) => {
         console.error(err);
-        if (err.message === "Network Error") {
-          setError({ message: err.message });
-        } else {
-          setError(err.response.data.errors || {});
-        }
+        setError(err.response?.data?.errors || { message: err.message });
       });
   };
 
-
-
-
   return (
     <div>
-      <h2>Add/Edit Tournament</h2>
+      <h2>{tournamentId ? 'Edit Tournament' : 'Add Tournament'}</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 p-8 shadow-2xl">
           <div className="flex flex-col gap-4">
@@ -214,7 +210,7 @@ export default function TournamentForm() {
             </div>
 
             <FormInput
-              required={true}
+              required={false}
               name="t_logo"
               id="logo"
               type="file"
@@ -295,6 +291,8 @@ export default function TournamentForm() {
                   name="status"
                   searchable={false}
                   options={statusOption}
+                  value={status}
+                  onChange={(e) => setStatus(Number(e.target.value))}
                 />
                 {error.status && <span className="text-red-500 text-md">{error.status}</span>}
               </div>
@@ -308,6 +306,8 @@ export default function TournamentForm() {
                   name="featured"
                   searchable={false}
                   options={featureOption}
+                  value={featured}
+                  onChange={(e) => setFeatured(Number(e.target.value))}
                 />
                 {error.featured && <span className="text-red-500 text-md">{error.featured}</span>}
               </div>
