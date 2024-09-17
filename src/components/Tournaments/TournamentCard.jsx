@@ -1,41 +1,42 @@
-import React, { useState } from 'react'
+import React from 'react';
+import { FaUsers, FaTrophy } from "react-icons/fa";
+import { IoLocationSharp } from "react-icons/io5";
+import { GiNotebook } from "react-icons/gi";
+import { Link } from 'react-router-dom';
 
-export default function TournamentCard({ tournamentName, teamNum, address, sDate, eDate, regStart, regEnd, price, image, tLogo }) {
-
+export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_logo }) {
 
     return (
-        <div className="flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl ">
-
-            <img src={tLogo ? image : "images/tournament.jpg"} alt="" className='rounded-t-2xl w-full h-40' />
-            <div className='flex flex-col items-center m-5'>
-                <div className='text-xl font-bold'>{tournamentName}</div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>No of Teams:</span> {teamNum}
+        <Link to="/tournamentDetails" >
+            <div className="relative flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl pb-5 group">
+                <div className="absolute inset-0 bg-gray-700 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-2xl"></div>
+                <div className="absolute inset-0 flex items-center justify-center z-20">
+                    <span className="text-white font-semibold border-2 px-4 py-2 rounded-2xl bg-gray-400 opacity-0 group-hover:opacity-80 transition-opacity duration-300">
+                        View Details
+                    </span>
                 </div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>Location:</span> {address}
+                <img src={t_logo ? image : "images/tournament.jpg"} alt="" className='rounded-t-2xl w-full h-48 object-cover object-top' />
+                <div className='flex flex-col items-center m-5 space-y-3'>
+                    <div className='text-xl font-bold'>{tournament_name}</div>
+                    <div className='flex flex-col justify-start space-y-1'>
+                        <div className='text-sm font-normal flex items-center gap-2'>
+                            <span className='font-bold flex items-center gap-2'>
+                                <FaUsers size={18} /> Teams:
+                            </span>
+                            <span className='font-semibold text-sm text-gray-600'>{team_num}</span>
+                        </div>
+                        <div className='text-sm font-normal flex items-center gap-2'>
+                            <span className='font-bold flex items-center justify-start gap-2'><IoLocationSharp size={18} />Address:</span> <span className='font-semibold text-sm text-gray-600'>{address}</span>
+                        </div>
+                        <div className='text-sm font-normal flex items-center gap-2'>
+                            <span className='font-bold flex items-center gap-2'><GiNotebook size={18} />Registration:</span> <span className='font-semibold text-sm text-gray-600'>{reg_start} to {reg_end}</span>
+                        </div>
+                        <div className='text-sm font-normal flex items-center gap-2'>
+                            <span className='font-bold flex items-center gap-2'><FaTrophy size={18} /> Price:</span><span className='font-semibold text-sm text-gray-600'>Rs {price}</span>
+                        </div>
+                    </div>
                 </div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>Start Date:</span> {sDate}
-                </div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>Ending Date:</span> {eDate}
-                </div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>Registration Start:</span> {regStart}
-                </div>
-                <div className='text-sm font-normal'>
-                    <span className='font-semibold'>Reg Ending Date:</span> {regEnd}
-                </div>
-                <div className='flex justify-end text-sm font-normal'>
-                    <span className='font-semibold'>Price:</span> {price}
-                </div>
-                <button className='border-none underline w-fit h-9 px-3 rounded-lg text-orange-600 font-medium'>
-                    More details...
-                </button>
             </div>
-
-        </div>
-
-    )
+        </Link>
+    );
 }

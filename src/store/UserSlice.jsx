@@ -87,13 +87,39 @@ export const updateProfileImage = createAsyncThunk(
                 {
                     headers: {
                         Authorization: `Bearer ${userProfileImage.access_token}`,
-                        "Content-Type": "multipart/form-data",                     
+                        "Content-Type": "multipart/form-data",
+                    },
+                }
+            );
+            return response.data;
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+                return rejectWithValue(error.response.data.errors);
+            } else if (error.response && error.response.data.message) {
+                return rejectWithValue(error.response.data.message);
+            } else {
+                return rejectWithValue(error);
+            }
+        }
+    }
+);
+export const deleteProfileImage = createAsyncThunk(
+    'auth/deleteProfileImage',
+    async ({ data }, { rejectWithValue }) => {
+        try {
+            console.log(data);
+            const response = await axios.delete(
+                `${import.meta.env.VITE_API_URL}api/delete/profile_image/${data.id}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${data.access_token}`,
                     },
                 }
             );
             console.log(response.data);
             return response.data;
         } catch (error) {
+            console.log(error)
             if (error.response && error.response.data.errors) {
                 return rejectWithValue(error.response.data.errors);
             } else if (error.response && error.response.data.message) {
@@ -186,6 +212,14 @@ const authSlice = createSlice({
                 state.error = null;
             })
             .addCase(updateProfileImage.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
+            .addCase(deleteProfileImage.fulfilled, (state, action) => {
+                state.user.user_details.profile_image = null;
+                state.error = null;
+            })
+            .addCase(deleteProfileImage.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
             });

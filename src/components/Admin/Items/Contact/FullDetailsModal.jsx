@@ -22,7 +22,7 @@ export default function FullDetailsModal({ closeModal, details }) {
                         details.map((detail, index) => (
                             <div key={index} className='flex items-start'>
                                 <h1 className='font-bold text-lg flex-shrink-0 w-32 flex justify-start'>{index + 1}. {detail.label} :</h1>
-                                <div className='ml-5 font-medium text-gray-800 underline'>{detail.value}</div>
+                                <div className='ml-5 font-medium text-gray-800'>{detail.value}</div>
                             </div>
                         ))
                     ) : (
