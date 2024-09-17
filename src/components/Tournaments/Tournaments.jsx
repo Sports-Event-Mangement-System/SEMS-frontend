@@ -5,6 +5,7 @@ import SelectField from './SelectField';
 import { IoSearchOutline } from "react-icons/io5";
 import TournamentCard from './TournamentCard';
 import axios from 'axios';
+import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 
 function Tournaments() {
   const [tournaments, setTournaments] = useState([]);
@@ -25,6 +26,12 @@ function Tournaments() {
     if (currentPage > 1) {
       setCurrentPage(prevPage => prevPage - 1);
     }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { month: 'short', day: 'numeric' };
+    const date = new Date(dateString);
+    return !isNaN(date) ? date.toLocaleDateString(undefined, options) : "Invalid date";
   };
 
 
@@ -58,12 +65,12 @@ function Tournaments() {
   return (
     <>
       <div >
-        <div className='flex justify-center  '>
+        <div className='relative flex justify-center mb-24'>
           <img src="images/tournament.jpg" alt="" className='w-full h-[52vh]' />
           <div className="absolute w-full h-[52vh] bg-black bg-opacity-40"></div>
-          <h1 className='absolute top-[27vh] text-[5vh] text-white font-bold'>Tournaments</h1>
-          <div className='absolute top-[54vh] w-[93%] h-28 flex flex-row justify-evenly items-center gap-14 bg-white drop-shadow-lg rounded-lg'>
-            <div className='flex flex-col w-full md:w-[25%]'>
+          <h1 className='absolute top-0 transform translate-y-[20vh] text-[5vh] text-white font-bold'>Tournaments</h1>
+          <span className="absolute top-0 w-[93%] transform translate-y-[44vh] bg-white h-28 flex flex-wrap justify-evenly items-center gap-4 md:gap-14 drop-shadow-lg rounded-lg">
+            <div className="flex flex-col w-full md:w-[25%]">
               <label htmlFor="search" className="text-md font-medium text-gray-700 mb-1">
                 Search for
               </label>
@@ -77,18 +84,22 @@ function Tournaments() {
               />
             </div>
 
-            <div className='w-full md:w-[25%] relative'>
+            <div className="w-full md:w-[25%] relative">
               <SelectField required={true} label="Where" placeholder="Any Where" id="where_search" name="where_search" Searchable={true} options={options1} />
             </div>
 
-            <div className='w-full md:w-[25%]'>
+            <div className="w-full md:w-[25%]">
               <DatePicker />
             </div>
-            <button className='flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white hover:bg-orange-500'><IoSearchOutline size={25} /></button>
-          </div>
+
+            <button className="flex items-center justify-center w-14 h-14 rounded-lg bg-orange-600 text-white hover:bg-orange-500">
+              <IoSearchOutline size={25} />
+            </button>
+          </span>
+
         </div>
 
-        <div className='mt-24 mx-14'>
+        <div className='mx-14'>
           <h1 className="text-md font-medium text-gray-700 mb-0">Advanced Search</h1>
           <div className='flex items-end justify-between mt-7'>
             <div className='w-full md:w-[15%] relative'>
@@ -108,15 +119,13 @@ function Tournaments() {
             {currentTournaments.map((details, index) => (
               <TournamentCard
                 key={index}
-                tLogo={details.t_logo}
+                t_logo={details.t_logo}
                 image={details.image_url}
-                tournamentName={details.t_name}
-                teamNum={details.team_number}
+                tournament_name={details.t_name}
+                team_num={details.team_number}
                 address={details.address}
-                sDate={details.ts_date}
-                eDate={details.te_date}
-                regStart={details.rs_date}
-                regEnd={details.re_date}
+                reg_start={formatDate(details.rs_date)}
+                reg_end={formatDate(details.re_date)}
                 price={details.prize_pool}
               />
             ))}
@@ -125,16 +134,16 @@ function Tournaments() {
             <button
               onClick={handlePrevious}
               disabled={currentPage === 1}
-              className='px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='px-3 py-2 flex items-center gap-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed'
             >
-              Previous
+              <IoMdArrowRoundBack /> Previous
             </button>
             <button
               onClick={handleNext}
               disabled={indexOfLastTournament >= tournaments.length}
-              className='px-4 py-2 bg-orange-600 text-white rounded-md hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed'
+              className='px-3 py-2 flex items-center gap-2 bg-orange-600 text-white rounded-lg hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed'
             >
-              Next
+              Next <IoMdArrowRoundForward />
             </button>
           </div>
         </div>
