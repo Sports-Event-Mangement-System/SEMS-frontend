@@ -19,7 +19,11 @@ const adminRoutes = [
      {
           path: 'addTournamentForm',
           element: <TournamentForm />
-     }
+     },
+     {
+          path: 'editTournamentForm/:id',
+          element: <TournamentForm />, // For editing tournaments
+      }
 
 ];
 
