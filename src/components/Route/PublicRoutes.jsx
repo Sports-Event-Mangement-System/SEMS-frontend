@@ -3,9 +3,10 @@ import About from '../About Us/About';
 import Tournaments from '../Tournaments/Tournaments';
 import Gallery from '../Gallery/Gallery';
 import Contact from '../Contact Us/Contact';
-import LogIn from '../Account/LogIn'; 
+import LogIn from '../Account/LogIn';
 import SignUp from '../Account/SignUp';
 import PrivateRoute from './PrivateRoute';
+import TournamentCardDetails from '../Tournaments/TournamentCardDetails';
 
 const publicRoutes = [
   {
@@ -18,7 +19,11 @@ const publicRoutes = [
   },
   {
     path: '/tournaments',
-    element: <Tournaments />, 
+    element: <Tournaments />,
+  },
+  {
+    path: '/tournamentDetails',
+    element: <TournamentCardDetails />,
   },
   {
     path: '/gallery',

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import FullDetailsModal from './FullDetailsModal';
 import { toast } from 'react-toastify';
 
@@ -94,20 +95,22 @@ export default function AdminContact() {
 
         {showDeleteModal && (
           <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white p-5 rounded-lg shadow-lg">
-              <h2 className="text-lg font-semibold">Are you sure want to delete?</h2>
-              <div className="flex justify-end mt-4">
-                <button
-                  className="bg-red-600 text-white px-4 py-2 rounded-md mr-2 hover:bg-red-500"
-                  onClick={deleteContact}
-                >
-                  Yes
-                </button>
+            <div className="bg-slate-100 h-fit w-fit px-32 py-10 rounded-lg shadow-lg">
+              <div className='flex justify-center mb-12 mt-5'><RiDeleteBin6Line size={80} color='rgb(255,140,0)' /></div>
+              <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
+              <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">Are you sure you want to delete this row from the table?</div>
+              <div className="flex justify-center mt-4 gap-3">
                 <button
                   className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
                   onClick={closeDeleteModal}
                 >
                   Cancel
+                </button>
+                <button
+                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                  onClick={deleteContact}
+                >
+                  Yes, Delete it!
                 </button>
               </div>
             </div>

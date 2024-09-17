@@ -3,14 +3,15 @@ import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState } from 'react';
 import { toast } from 'react-toastify';
-import { updateProfileImage, updateUser } from '../../store/UserSlice';
-import axios from 'axios';
+import { deleteProfileImage, updateProfileImage, updateUser } from '../../store/UserSlice';
+import { IoCameraOutline } from "react-icons/io5";
 
 function Profile() {
   const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const [imageSrc, setImageSrc] = useState(''); // State to hold the image preview URL
+  const [imageSrc, setImageSrc] = useState('');
   const [error, setError] = useState({});
+  const [selectedFile, setSelectedFile] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const { user } = useSelector(state => state.auth);
   const [formValues, setFormValues] = useState({
@@ -25,9 +26,10 @@ function Profile() {
 
   const handleImageClick = (event) => {
     event.preventDefault();
-    const profile_image = event.target.profile_image.files[0];
+    const profile_image = selectedFile;
     const id = formValues.id;
     const access_token = formValues.access_token;
+
 
     // // Create a FormData object
     const userProfileImage = {
@@ -38,6 +40,7 @@ function Profile() {
     dispatch(updateProfileImage({ userProfileImage })).then((result) => {
       if (result.payload.status === true) {
         toast.success(result.payload.message);
+        setSelectedFile(null);
       } else {
         setError(result.payload);
       }
@@ -48,16 +51,42 @@ function Profile() {
     const file = event.target.files[0];
     if (file) {
       const previewUrl = URL.createObjectURL(file);
-      setImageSrc(previewUrl); 
+      setImageSrc(previewUrl);
+      setSelectedFile(file);
     }
   };
+
+
   const triggerFileInput = () => {
-    inputRef.current.click(); 
+    inputRef.current.click();
   };
 
-  // const handleDeleteImage = () => {
-  //   setImage(null);
-  // };
+  const handleDeleteImage = () => {
+    const id = formValues.id;
+    const access_token = formValues.access_token;
+
+    const data = {
+      id,
+      access_token,
+    }
+
+    dispatch(deleteProfileImage({ data })).then((result) => {
+      if (result.payload.status === true) {
+        toast.success(result.payload.message);
+        setFormValues((prev) => ({
+          ...prev,
+          profile_image: null,
+        }));
+        setSelectedFile(null);
+        setImageSrc('');
+
+        inputRef.current.value = '';
+      } else {
+        setError(result.payload);
+      }
+    });
+  };
+
 
   const handleEditDetails = () => {
     setIsEditing(true);
@@ -111,32 +140,41 @@ function Profile() {
         </div>
         <form onSubmit={handleImageClick} action="">
           <div className='flex items-center gap-8 ml-9'>
-          <img
-            src={ imageSrc || ( formValues.profile_image? formValues.profile_image : 'images/profile.jpg' )}
-            alt="Profile"
-            className='w-[90px] h-[90px] rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer'
-            onClick={triggerFileInput} // Click on image to trigger file selection
-          />
+            <div className="relative w-[90px] h-[90px] group cursor-pointer" onClick={triggerFileInput}>
+              <img
+                src={imageSrc || (formValues.profile_image ? formValues.profile_image : 'images/profile.jpg')}
+                alt="Profile"
+                className="w-full h-full rounded-md object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] cursor-pointer"
+              />
+              <div className="absolute inset-0 bg-gray-800 opacity-0 group-hover:opacity-30 transition-opacity duration-300 rounded-md"></div>
+              <div className='absolute inset-0 flex items-center justify-center'>
+                <span className='text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300'><IoCameraOutline size={30} /></span>
+              </div>
+            </div>
+
+
             <div className='flex flex-col gap-y-1'>
-              <button
+              {selectedFile && <button
                 className='border-2 border-blue-500 h-10 w-28 rounded-lg text-blue-500 text-sm font-medium hover:border-blue-600 hover:text-blue-600 hover:bg-blue-50'
               >
                 Change Profile
-              </button>
-              {/* {image && (
-                <button type='button'
+              </button>}
+
+              {formValues.profile_image && (
+                <button
+                  type="button"
                   onClick={handleDeleteImage}
                   className='border-2 border-red-500 h-10 w-28 rounded-lg text-red-500 text-sm font-medium hover:border-red-600 hover:text-red-600 hover:bg-red-50'
                 >
                   Delete Profile
                 </button>
-              )} */}
-              <input type="file" name='profile_image' onChange={handleImageChange} ref={inputRef}  className='hidden'/>
+              )}
+              <input type="file" name='profile_image' onChange={handleImageChange} ref={inputRef} className='hidden' />
               {error.profile_image?.[0] && (
-              <span className="text-red-500 text-md">
-                {error.profile_image?.[0]}
-              </span>
-            )}
+                <span className="text-red-500 text-md">
+                  {error.profile_image?.[0]}
+                </span>
+              )}
             </div>
           </div>
         </form>
