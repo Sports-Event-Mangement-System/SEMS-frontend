@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import FormInput from "./FormInput";
 import SelectField from "../../../Tournaments/SelectField";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
@@ -16,57 +15,21 @@ export default function TournamentForm() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [tournamentDescription, setTournamentDescription] = useState('')
+  const [tournamentDescription, setTournamentDescription] = useState("");
+  const [error, setError] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [registrationStartingDate, setRegistrationStartingDate] = useState("");
+  const [registrationEndingDate, setRegistrationEndingDate] = useState("");
+  const [status, setStatus] = useState(1); // default to Active
+  const [featured, setFeatured] = useState(1); // default to Featured
+  
 
-  const [error, setError] = useState('')
 
   const navigate = useNavigate();
+  const location = useLocation();
 
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    axios
-      .post(`${import.meta.env.VITE_API_URL}api/store/tournaments`, {
-        t_name: e.target.elements.t_name.value,
-        t_description: e.target.elements.t_description.value,
-        ts_date: e.target.elements.ts_date.value,
-        te_date: e.target.elements.te_date.value,
-        rs_date: e.target.elements.rs_date.value,
-        re_date: e.target.elements.re_date.value,
-        t_logo: e.target.elements.t_logo.files[0],
-        team_number: e.target.elements.team_number.value,
-        prize_pool: e.target.elements.prize_pool.value,
-        email: e.target.elements.email.value,
-        phone_number: e.target.elements.phone_number.value,
-        status: e.target.elements.status.value,
-        featured: e.target.elements.featured.value,
-        address: e.target.elements.address.value,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.access_token}`,
-          "Content-Type": "multipart/form-data", 
-        },
-      })
-      .then((res) => {
-        if (res.data.status === true) {
-          navigate('/admin/tournamentManagement')
-          toast.success(res.data.message);
-        }
-      })
-      .catch((err) => {
-         console.log(err)
-        if (err.message === "Network Error") {
-          setError({ message: err.message })
-          console.log(err)
-        }
-        else {
-          setError(err.response.data.errors);
-        }
-      });
-
-  };
+  const queryParams = new URLSearchParams(location.search);
+  const tournamentId = queryParams.get('tournamentId');
 
   const statusOption = [
     { value: 1, label: "Active" },
@@ -78,10 +41,96 @@ export default function TournamentForm() {
     { value: 0, label: "Not Featured" },
   ];
 
+  useEffect(() => {
+    if (tournamentId) {
+      // Fetch tournament data
+      const fetchTournamentData = async () => {
+        try {
+          const response = await axios.get(`${import.meta.env.VITE_API_URL}api/edit/tournament/${tournamentId}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.access_token}`,
+            },
+          });
+          const data = response.data;
+          console.log(data)
+          if (data && data.tournament) {
+            setTournamentName(data.tournament.t_name || "");
+            setTournamentDescription(data.tournament.t_description || "");
+            setStartingDate(data.tournament.ts_date || "");
+            setEndingDate(data.tournament.te_date || "");
+            setNumberOfTeams(data.tournament.team_number || "");
+            setPrizePool(data.tournament.prize_pool || 0);
+            setPhoneNumber(data.tournament.phone_number || "");
+            setEmail(data.tournament.email || "");
+            setAddress(data.tournament.address || "");
+            setRegistrationStartingDate(data.tournament.rs_date || "");
+            setRegistrationEndingDate(data.tournament.re_date || "");
+            setStatus(data.tournament.status || 1); // assuming default is Active
+            setFeatured(data.tournament.featured || 1);
+
+          } else {
+            console.error("Tournament data not found");
+          }
+        } catch (error) {
+          console.error("Error fetching tournament data", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchTournamentData();
+    }
+  }, [tournamentId]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    const formData = new FormData();
+    formData.append('t_name', tournamentName || "");
+    formData.append('t_description', tournamentDescription || "");
+    formData.append('ts_date', startingDate || "");
+    formData.append('te_date', endingDate || "");
+    formData.append('t_logo', logo || "");
+    formData.append('team_number', numberOfTeams || 0);
+    formData.append('prize_pool', prizePool || 0);
+    formData.append('phone_number', phoneNumber || "");
+    formData.append('email', email || "");
+    formData.append('address', address || "");
+    formData.append('rs_date', registrationStartingDate || "");
+    formData.append('re_date', registrationEndingDate || "");
+    formData.append('status', status);
+    formData.append('featured', featured);
+
+  
+    axios
+      .post(`${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
+      .then((res) => {
+        if (res.data.status === true) {
+          navigate('/admin/tournamentManagement');
+          toast.success(res.data.message);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        if (err.message === "Network Error") {
+          setError({ message: err.message });
+        } else {
+          setError(err.response.data.errors || {});
+        }
+      });
+  };
+
+
+
+
   return (
-    <>
-      <div>Add form</div>
-      <form action="" onSubmit={handleSubmit}>
+    <div>
+      <h2>Add/Edit Tournament</h2>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 p-8 shadow-2xl">
           <div className="flex flex-col gap-4">
             <FormInput
@@ -94,9 +143,7 @@ export default function TournamentForm() {
               value={tournamentName}
               onChange={(e) => setTournamentName(e.target.value)}
             />
-            {error.t_name && (
-              <span className="text-red-500 text-md">{error.t_name}</span>
-            )}
+            {error.t_name && <span className="text-red-500 text-md">{error.t_name}</span>}
 
             <FormInput
               required={true}
@@ -108,9 +155,7 @@ export default function TournamentForm() {
               value={tournamentDescription}
               onChange={(e) => setTournamentDescription(e.target.value)}
             />
-            {error.t_description && (
-              <span className="text-red-500 text-md">{error.t_description}</span>
-            )}
+            {error.t_description && <span className="text-red-500 text-md">{error.t_description}</span>}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
@@ -123,9 +168,7 @@ export default function TournamentForm() {
                   value={startingDate}
                   onChange={(e) => setStartingDate(e.target.value)}
                 />
-                {error.ts_date && (
-              <span className="text-red-500 text-md">{error.ts_date}</span>
-            )}
+                {error.ts_date && <span className="text-red-500 text-md">{error.ts_date}</span>}
               </div>
 
               <div className="w-6/12">
@@ -138,9 +181,7 @@ export default function TournamentForm() {
                   value={endingDate}
                   onChange={(e) => setEndingDate(e.target.value)}
                 />
-                {error.te_date && (
-              <span className="text-red-500 text-md">{error.te_date}</span>
-            )}
+                {error.te_date && <span className="text-red-500 text-md">{error.te_date}</span>}
               </div>
             </div>
 
@@ -149,30 +190,26 @@ export default function TournamentForm() {
                 <FormInput
                   required={true}
                   name="rs_date"
-                  id="registration starting"
+                  id="registration-starting"
                   type="date"
                   label="Registration Starting Date"
-                  value={startingDate}
-                  onChange={(e) => setStartingDate(e.target.value)}
+                  value={registrationStartingDate}
+                  onChange={(e) => setRegistrationStartingDate(e.target.value)}
                 />
-                {error.rs_date && (
-              <span className="text-red-500 text-md">{error.rs_date}</span>
-            )}
+                {error.rs_date && <span className="text-red-500 text-md">{error.rs_date}</span>}
               </div>
 
               <div className="w-6/12">
                 <FormInput
                   required={true}
                   name="re_date"
-                  id="ending"
+                  id="registration-ending"
                   type="date"
                   label="Registration Ending Date"
-                  value={endingDate}
-                  onChange={(e) => setEndingDate(e.target.value)}
+                  value={registrationEndingDate}
+                  onChange={(e) => setRegistrationEndingDate(e.target.value)}
                 />
-                {error.re_date && (
-              <span className="text-red-500 text-md">{error.re_date}</span>
-            )}
+                {error.re_date && <span className="text-red-500 text-md">{error.re_date}</span>}
               </div>
             </div>
 
@@ -183,12 +220,9 @@ export default function TournamentForm() {
               type="file"
               accept="image/*"
               label="Logo"
-              value={logo}
-              onChange={(e) => setLogo(e.target.value)}
+              onChange={(e) => setLogo(e.target.files[0])}
             />
-            {error.t_logo && (
-              <span className="text-red-500 text-md">{error.t_logo}</span>
-            )}
+            {error.t_logo && <span className="text-red-500 text-md">{error.t_logo}</span>}
 
             <FormInput
               required={true}
@@ -201,9 +235,7 @@ export default function TournamentForm() {
               min='0'
               onChange={(e) => setNumberOfTeams(e.target.value)}
             />
-            {error.team_number && (
-              <span className="text-red-500 text-md">{error.team_number}</span>
-            )}
+            {error.team_number && <span className="text-red-500 text-md">{error.team_number}</span>}
 
             <FormInput
               required={true}
@@ -215,9 +247,7 @@ export default function TournamentForm() {
               value={prizePool}
               onChange={(e) => setPrizePool(e.target.value)}
             />
-            {error.prize_pool && (
-              <span className="text-red-500 text-md">{error.prize_pool}</span>
-            )}
+            {error.prize_pool && <span className="text-red-500 text-md">{error.prize_pool}</span>}
 
             <FormInput
               required={true}
@@ -229,9 +259,7 @@ export default function TournamentForm() {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            {error.phone_number && (
-              <span className="text-red-500 text-md">{error.phone_number}</span>
-            )}
+            {error.phone_number && <span className="text-red-500 text-md">{error.phone_number}</span>}
 
             <FormInput
               required={false}
@@ -243,9 +271,7 @@ export default function TournamentForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {error.email && (
-              <span className="text-red-500 text-md">{error.email}</span>
-            )}
+            {error.email && <span className="text-red-500 text-md">{error.email}</span>}
 
             <FormInput
               required={true}
@@ -257,9 +283,7 @@ export default function TournamentForm() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
-            {error.address && (
-              <span className="text-red-500 text-md">{error.address}</span>
-            )}
+            {error.address && <span className="text-red-500 text-md">{error.address}</span>}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
@@ -269,27 +293,23 @@ export default function TournamentForm() {
                   placeholder="Select Status"
                   id="status"
                   name="status"
-                  Searchable={false}
+                  searchable={false}
                   options={statusOption}
                 />
-                {error.status && (
-              <span className="text-red-500 text-md">{error.status}</span>
-            )}
+                {error.status && <span className="text-red-500 text-md">{error.status}</span>}
               </div>
 
               <div className="w-6/12">
                 <SelectField
                   required={true}
                   label="Featured"
-                  placeholder="Selct Featured"
+                  placeholder="Select Featured"
                   id="featured"
                   name="featured"
-                  Searchable={false}
+                  searchable={false}
                   options={featureOption}
                 />
-                {error.featured && (
-              <span className="text-red-500 text-md">{error.featured}</span>
-            )}
+                {error.featured && <span className="text-red-500 text-md">{error.featured}</span>}
               </div>
             </div>
           </div>
@@ -298,6 +318,6 @@ export default function TournamentForm() {
           </button>
         </div>
       </form>
-    </>
+    </div>
   );
 }
