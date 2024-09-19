@@ -53,6 +53,7 @@ export default function TournamentTable() {
   const handleEdit = (id) => {
     navigate(`/admin/addTournamentForm?tournamentId=${id}`);
   };
+  
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
@@ -60,7 +61,7 @@ export default function TournamentTable() {
 
   return (
     <div className="p-4 w-full shadow-2xl">
-      <table className="table-auto w-full border-separate border-spacing-2 border border-gray-200">
+      <table className="table-auto w-full border-spacing-1 border border-gray-200">
         <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
           <tr>
             <th className="px-6 py-3 text-start">S.N.</th>
@@ -89,7 +90,8 @@ export default function TournamentTable() {
               </td>
               <td className="px-6 py-3">{tournament.team_number}</td>
               <td className="px-6 py-3">
-                <button className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? 'bg-green-600' : 'bg-red-600'}`}>
+                <button className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? 'bg-green-600' : 'bg-red-600'}`}
+                >
                   {tournament.status === 1 ? 'Active' : 'Inactive'}
                 </button>
               </td>
