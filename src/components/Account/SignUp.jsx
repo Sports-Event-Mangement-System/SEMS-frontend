@@ -41,7 +41,7 @@ function SignUp() {
   };
 
   return (
-    <div className="h-screen flex m-14 justify-center w-screen">
+    <div className="h-screen flex m-14 justify-center">
       <div className="shadow-2xl rounded-2xl w-5/12 h-fit bg-slate-200">
         <p className="text-center pt-8  text-orange-600 font-semibold text-lg">
           Create a New Account
@@ -66,7 +66,7 @@ function SignUp() {
 
             <Input
               label="Email"
-              type="email"
+              type="text"
               placeholder="Email"
               name="email"
               required={true}
