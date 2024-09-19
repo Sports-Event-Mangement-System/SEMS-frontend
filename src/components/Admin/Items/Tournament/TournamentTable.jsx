@@ -25,6 +25,7 @@ export default function TournamentTable() {
             },
           }
         );
+        console.log(response)
         setTournaments(response.data.tournaments || []);
       } catch (err) {
         setError("Error fetching tournaments");
@@ -77,6 +78,34 @@ export default function TournamentTable() {
   const addNewTournament = () => {
       navigate(`/admin/addTournamentForm`);
   }
+
+
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
+        { status: newStatus }, // Assuming the API expects a JSON body
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log("status",response.data)
+      if (response.data.status) {
+        setTournaments(prevTournaments =>
+          prevTournaments.map(t =>
+            t.id === id ? { ...t, status: newStatus } : t
+          )
+        );
+        toast.success(response.data.message);
+      }
+    } catch (err) {
+      toast.error("Error updating tournament status");
+      console.error("Error updating tournament status", err);
+    }
+  };
 
   return (
     <>
@@ -181,6 +210,7 @@ export default function TournamentTable() {
                     className={`text-white rounded-xl w-20 py-1 ${
                       tournament.status === 1 ? "bg-green-600" : "bg-red-600"
                     }`}
+                    onClick={() => toggleStatus(tournament.id, tournament.status)}
                   >
                     {tournament.status === 1 ? "Active" : "Inactive"}
                   </button>

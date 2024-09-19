@@ -292,7 +292,7 @@ export default function TournamentForm() {
                   searchable={false}
                   options={statusOption}
                   value={status}
-                  onChange={(e) => setStatus(Number(e.target.value))}
+                  onChange={(selectedOption) => setStatus(selectedOption.value)}
                 />
                 {error.status && <span className="text-red-500 text-md">{error.status}</span>}
               </div>
@@ -307,7 +307,7 @@ export default function TournamentForm() {
                   searchable={false}
                   options={featureOption}
                   value={featured}
-                  onChange={(e) => setFeatured(Number(e.target.value))}
+                  onChange={(selectedOption) => setFeatured(selectedOption.value)}
                 />
                 {error.featured && <span className="text-red-500 text-md">{error.featured}</span>}
               </div>
