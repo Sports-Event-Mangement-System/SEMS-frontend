@@ -26,6 +26,12 @@ function SelectField({
     }),
   };
 
+  // Check if options is defined and is an array
+  const selectedOption =
+    Array.isArray(options) && options.length
+      ? options.find((option) => option.value === value)
+      : null;
+
   return (
     <div className="flex flex-col relative">
       <label htmlFor={id} className="mb-1 text-md font-medium text-gray-700">
@@ -39,7 +45,7 @@ function SelectField({
           id={id}
           placeholder={placeholder}
           options={options}
-          value={options.find((option) => option.value === value)} // Set the selected value
+          value={selectedOption} // Set the selected value
           onChange={onChange} // Call the onChange handler
           className="w-full"
           styles={customStyles}
