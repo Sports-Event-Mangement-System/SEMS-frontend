@@ -2,12 +2,17 @@ import React from 'react';
 import { FaUsers, FaTrophy } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { GiNotebook } from "react-icons/gi";
-import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
-export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_logo }) {
+export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_logo, id }) {
+    const navigate = useNavigate();
+
+    const gettingDetails = (id) => {
+        navigate(`/tournamentDetails/${id}`);
+    };
 
     return (
-        <Link to="/tournamentDetails" >
+        <div onClick={() => gettingDetails(id)} >
             <div className="relative flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl pb-5 group">
                 <div className="absolute inset-0 bg-gray-700 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-2xl"></div>
                 <div className="absolute inset-0 flex items-center justify-center z-20">
@@ -37,6 +42,6 @@ export default function TournamentCard({ tournament_name, team_num, address, reg
                     </div>
                 </div>
             </div>
-        </Link>
+        </div>
     );
 }
