@@ -5,12 +5,13 @@ import FormInput from "./FormInput";
 import SelectField from "../../../Tournaments/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import DragDropFile from "../../../DragDrop/DragDropFile";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
-  const [logo, setLogo] = useState(undefined);
+  const [logo, setLogo] = useState([]);
   const [numberOfTeams, setNumberOfTeams] = useState("");
   const [prizePool, setPrizePool] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -65,6 +66,8 @@ export default function TournamentForm() {
             setRegistrationEndingDate(data.tournament.re_date || "");
             setStatus(data.tournament.status || 1); // assuming default is Active
             setFeatured(data.tournament.featured || 1);
+            setLogo(data.tournament.t_logo ? [data.tournament.t_logo] : []);
+
           } else {
             console.error("Tournament data not found");
           }
@@ -90,7 +93,9 @@ export default function TournamentForm() {
     formData.append('t_description', tournamentDescription || "");
     formData.append('ts_date', startingDate || "");
     formData.append('te_date', endingDate || "");
-    if (logo) formData.append('t_logo', logo);
+    if (logo.length) {
+      logo.forEach(file => formData.append('t_logo[]', file));
+    }
     formData.append('team_number', numberOfTeams || 0);
     formData.append('prize_pool', prizePool || 0);
     formData.append('phone_number', phoneNumber || "");
@@ -122,6 +127,8 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
+  
+  console.log(logo)
 
   return (
     <div>
@@ -209,7 +216,7 @@ export default function TournamentForm() {
               </div>
             </div>
 
-            <FormInput
+            {/* <FormInput
               required={false}
               name="t_logo"
               id="logo"
@@ -217,7 +224,27 @@ export default function TournamentForm() {
               accept="image/*"
               label="Logo"
               onChange={(e) => setLogo(e.target.files[0])}
-            />
+            /> */}
+
+               <DragDropFile 
+                    name="t_logo"
+                    setFile={(files) => setLogo(Array.from(files))}
+                    accepts='image/png, image/jpeg, image/jpg'
+               />
+                {/* show image */}
+
+                {Array.isArray(logo) && logo.length > 0 && (
+                <div className="flex gap-4 flex-wrap">
+                  {logo.map((file, index) => (
+                    <img 
+                      key={index}
+                      src={URL.createObjectURL(file)}
+                      style={{ width: '100px', height: '100px', margin: '10px' }}
+                    />
+                  ))}
+                </div>
+              )}
+
             {error.t_logo && <span className="text-red-500 text-md">{error.t_logo}</span>}
 
             <FormInput
