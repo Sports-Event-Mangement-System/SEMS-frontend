@@ -6,6 +6,8 @@ import SelectField from "../../../Tournaments/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragDropFile from "../../../DragDrop/DragDropFile";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
@@ -29,7 +31,7 @@ export default function TournamentForm() {
   const location = useLocation();
 
   const queryParams = new URLSearchParams(location.search);
-  const tournamentId = queryParams.get('tournamentId');
+  const tournamentId = queryParams.get("tournamentId");
 
   const statusOption = [
     { value: 1, label: "Active" },
@@ -46,11 +48,16 @@ export default function TournamentForm() {
       // Fetch tournament data for editing
       const fetchTournamentData = async () => {
         try {
-          const response = await axios.get(`${import.meta.env.VITE_API_URL}api/edit/tournament/${tournamentId}`, {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          });
+          const response = await axios.get(
+            `${
+              import.meta.env.VITE_API_URL
+            }api/edit/tournament/${tournamentId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+              },
+            }
+          );
           const data = response.data;
           if (data && data.tournament) {
             setTournamentName(data.tournament.t_name || "");
@@ -67,7 +74,6 @@ export default function TournamentForm() {
             setStatus(data.tournament.status || 1); // assuming default is Active
             setFeatured(data.tournament.featured || 1);
             setLogo(data.tournament.t_logo ? [data.tournament.t_logo] : []);
-
           } else {
             console.error("Tournament data not found");
           }
@@ -89,22 +95,22 @@ export default function TournamentForm() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append('t_name', tournamentName || "");
-    formData.append('t_description', tournamentDescription || "");
-    formData.append('ts_date', startingDate || "");
-    formData.append('te_date', endingDate || "");
+    formData.append("t_name", tournamentName || "");
+    formData.append("t_description", tournamentDescription || "");
+    formData.append("ts_date", startingDate || "");
+    formData.append("te_date", endingDate || "");
     if (logo.length) {
-      logo.forEach(file => formData.append('t_logo[]', file));
+      logo.forEach((file) => formData.append("t_logo[]", file));
     }
-    formData.append('team_number', numberOfTeams || 0);
-    formData.append('prize_pool', prizePool || 0);
-    formData.append('phone_number', phoneNumber || "");
-    formData.append('email', email || "");
-    formData.append('address', address || "");
-    formData.append('rs_date', registrationStartingDate || "");
-    formData.append('re_date', registrationEndingDate || "");
-    formData.append('status', status);
-    formData.append('featured', featured);
+    formData.append("team_number", numberOfTeams || 0);
+    formData.append("prize_pool", prizePool || 0);
+    formData.append("phone_number", phoneNumber || "");
+    formData.append("email", email || "");
+    formData.append("address", address || "");
+    formData.append("rs_date", registrationStartingDate || "");
+    formData.append("re_date", registrationEndingDate || "");
+    formData.append("status", status);
+    formData.append("featured", featured);
 
     const url = tournamentId
       ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
@@ -118,7 +124,7 @@ export default function TournamentForm() {
       })
       .then((res) => {
         if (res.data.status) {
-          navigate('/admin/tournamentManagement');
+          navigate("/admin/tournamentManagement");
           toast.success(res.data.message);
         }
       })
@@ -127,12 +133,12 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
-  
-  console.log(logo)
+
+  console.log(logo);
 
   return (
     <div>
-      <h2>{tournamentId ? 'Edit Tournament' : 'Add Tournament'}</h2>
+      <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 p-8 shadow-2xl">
           <div className="flex flex-col gap-4">
@@ -146,7 +152,9 @@ export default function TournamentForm() {
               value={tournamentName}
               onChange={(e) => setTournamentName(e.target.value)}
             />
-            {error.t_name && <span className="text-red-500 text-md">{error.t_name}</span>}
+            {error.t_name && (
+              <span className="text-red-500 text-md">{error.t_name}</span>
+            )}
 
             <FormInput
               required={true}
@@ -158,7 +166,11 @@ export default function TournamentForm() {
               value={tournamentDescription}
               onChange={(e) => setTournamentDescription(e.target.value)}
             />
-            {error.t_description && <span className="text-red-500 text-md">{error.t_description}</span>}
+            {error.t_description && (
+              <span className="text-red-500 text-md">
+                {error.t_description}
+              </span>
+            )}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
@@ -171,7 +183,9 @@ export default function TournamentForm() {
                   value={startingDate}
                   onChange={(e) => setStartingDate(e.target.value)}
                 />
-                {error.ts_date && <span className="text-red-500 text-md">{error.ts_date}</span>}
+                {error.ts_date && (
+                  <span className="text-red-500 text-md">{error.ts_date}</span>
+                )}
               </div>
 
               <div className="w-6/12">
@@ -184,7 +198,9 @@ export default function TournamentForm() {
                   value={endingDate}
                   onChange={(e) => setEndingDate(e.target.value)}
                 />
-                {error.te_date && <span className="text-red-500 text-md">{error.te_date}</span>}
+                {error.te_date && (
+                  <span className="text-red-500 text-md">{error.te_date}</span>
+                )}
               </div>
             </div>
 
@@ -199,7 +215,9 @@ export default function TournamentForm() {
                   value={registrationStartingDate}
                   onChange={(e) => setRegistrationStartingDate(e.target.value)}
                 />
-                {error.rs_date && <span className="text-red-500 text-md">{error.rs_date}</span>}
+                {error.rs_date && (
+                  <span className="text-red-500 text-md">{error.rs_date}</span>
+                )}
               </div>
 
               <div className="w-6/12">
@@ -212,7 +230,9 @@ export default function TournamentForm() {
                   value={registrationEndingDate}
                   onChange={(e) => setRegistrationEndingDate(e.target.value)}
                 />
-                {error.re_date && <span className="text-red-500 text-md">{error.re_date}</span>}
+                {error.re_date && (
+                  <span className="text-red-500 text-md">{error.re_date}</span>
+                )}
               </div>
             </div>
 
@@ -226,26 +246,57 @@ export default function TournamentForm() {
               onChange={(e) => setLogo(e.target.files[0])}
             /> */}
 
-               <DragDropFile 
-                    name="t_logo"
-                    setFile={(files) => setLogo(Array.from(files))}
-                    accepts='image/png, image/jpeg, image/jpg'
-               />
-                {/* show image */}
+            <DragDropFile
+              name="t_logo"
+              setFile={(files) => setLogo(Array.from(files))}
+              accepts="image/png, image/jpeg, image/jpg"
+            />
+            {/* show image */}
 
-                {Array.isArray(logo) && logo.length > 0 && (
-                <div className="flex gap-4 flex-wrap">
-                  {logo.map((file, index) => (
-                    <img 
-                      key={index}
+            {Array.isArray(logo) && logo.length > 0 && (
+              <div className="flex gap-4 flex-wrap">
+                {logo.map((file, index) => (
+                  <div
+                    key={index}
+                    style={{ position: "relative", margin: "10px" , display: "flex", justifyContent: "center", alignItems: "center"}}
+                  >
+                    <img
                       src={URL.createObjectURL(file)}
-                      style={{ width: '100px', height: '100px', margin: '10px' }}
+                      style={{
+                        width: "100px",
+                        height: "100px",
+                        margin: "10px",
+                      }}
                     />
-                  ))}
-                </div>
-              )}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setLogo((prev) => prev.filter((_, i) => i !== index));
+                      }}
+                      className="absolute opacity-0 transition-opacity duration-200 ease-in-out hover:opacity-100"
+                      style={{
+                        position: "absolute",
+                        color: "black",
+                        border: "none",
+                        cursor: "pointer",
+                        borderRadius: "50%",
+                        width: "30px",
+                        height: "20px",
+                        lineHeight: "20px",
+                        textAlign: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} className="opacity-70 w-full h-full"/>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
 
-            {error.t_logo && <span className="text-red-500 text-md">{error.t_logo}</span>}
+            {error.t_logo && (
+              <span className="text-red-500 text-md">{error.t_logo}</span>
+            )}
 
             <FormInput
               required={true}
@@ -255,10 +306,12 @@ export default function TournamentForm() {
               label="Number Of Teams"
               placeholder="Number Of Teams"
               value={numberOfTeams}
-              min='0'
+              min="0"
               onChange={(e) => setNumberOfTeams(e.target.value)}
             />
-            {error.team_number && <span className="text-red-500 text-md">{error.team_number}</span>}
+            {error.team_number && (
+              <span className="text-red-500 text-md">{error.team_number}</span>
+            )}
 
             <FormInput
               required={true}
@@ -270,7 +323,9 @@ export default function TournamentForm() {
               value={prizePool}
               onChange={(e) => setPrizePool(e.target.value)}
             />
-            {error.prize_pool && <span className="text-red-500 text-md">{error.prize_pool}</span>}
+            {error.prize_pool && (
+              <span className="text-red-500 text-md">{error.prize_pool}</span>
+            )}
 
             <FormInput
               required={true}
@@ -282,7 +337,9 @@ export default function TournamentForm() {
               value={phoneNumber}
               onChange={(e) => setPhoneNumber(e.target.value)}
             />
-            {error.phone_number && <span className="text-red-500 text-md">{error.phone_number}</span>}
+            {error.phone_number && (
+              <span className="text-red-500 text-md">{error.phone_number}</span>
+            )}
 
             <FormInput
               required={false}
@@ -294,7 +351,9 @@ export default function TournamentForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {error.email && <span className="text-red-500 text-md">{error.email}</span>}
+            {error.email && (
+              <span className="text-red-500 text-md">{error.email}</span>
+            )}
 
             <FormInput
               required={true}
@@ -306,7 +365,9 @@ export default function TournamentForm() {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
-            {error.address && <span className="text-red-500 text-md">{error.address}</span>}
+            {error.address && (
+              <span className="text-red-500 text-md">{error.address}</span>
+            )}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
@@ -321,7 +382,9 @@ export default function TournamentForm() {
                   value={status}
                   onChange={(selectedOption) => setStatus(selectedOption.value)}
                 />
-                {error.status && <span className="text-red-500 text-md">{error.status}</span>}
+                {error.status && (
+                  <span className="text-red-500 text-md">{error.status}</span>
+                )}
               </div>
 
               <div className="w-6/12">
@@ -334,9 +397,13 @@ export default function TournamentForm() {
                   searchable={false}
                   options={featureOption}
                   value={featured}
-                  onChange={(selectedOption) => setFeatured(selectedOption.value)}
+                  onChange={(selectedOption) =>
+                    setFeatured(selectedOption.value)
+                  }
                 />
-                {error.featured && <span className="text-red-500 text-md">{error.featured}</span>}
+                {error.featured && (
+                  <span className="text-red-500 text-md">{error.featured}</span>
+                )}
               </div>
             </div>
           </div>
