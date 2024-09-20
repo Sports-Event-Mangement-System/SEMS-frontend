@@ -53,6 +53,10 @@ function Tournaments() {
     fetchData();
   }, []);
 
+
+
+
+
   const [searchTerm, setSearchTerm] = useState('');
   const options1 = [
     { value: 'option1', label: 'Option 1' },
@@ -127,6 +131,7 @@ function Tournaments() {
                 reg_start={formatDate(details.rs_date)}
                 reg_end={formatDate(details.re_date)}
                 price={details.prize_pool}
+                id={details.id}
               />
             ))}
           </div>

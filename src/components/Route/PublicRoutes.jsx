@@ -22,7 +22,7 @@ const publicRoutes = [
     element: <Tournaments />,
   },
   {
-    path: '/tournamentDetails',
+    path: '/tournamentDetails/:id',
     element: <TournamentCardDetails />,
   },
   {
