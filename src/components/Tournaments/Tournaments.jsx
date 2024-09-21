@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import React from 'react'
-import DatePicker from './DatePicker';
-import SelectField from './SelectField';
+import DatePicker from './../Ui/DatePicker/DatePicker';
+import SelectField from './../Ui/SelectField/SelectField';
 import { IoSearchOutline } from "react-icons/io5";
 import TournamentCard from './TournamentCard';
 import axios from 'axios';
@@ -123,8 +123,8 @@ function Tournaments() {
             {currentTournaments.map((details, index) => (
               <TournamentCard
                 key={index}
-                t_logo={details.t_logo}
-                image={details.image_url}
+                t_images={details.t_images}
+                image={details.image_urls}
                 tournament_name={details.t_name}
                 team_num={details.team_number}
                 address={details.address}

@@ -5,7 +5,7 @@ import { FaUsers, FaTrophy } from "react-icons/fa";
 import { GiWallet } from "react-icons/gi";
 import { TbTournament } from "react-icons/tb";
 
-export default function TournamentDetailsContent({ tabIndex, address, team_size, price, description }) {
+export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
     return (
         <div>
             {tabIndex == 1 && (
@@ -16,7 +16,7 @@ export default function TournamentDetailsContent({ tabIndex, address, team_size,
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><IoLocationSharp size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>LOCATION</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{address}</div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.address}</div>
                             </div>
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaBuildingCircleCheck size={45} /></div>
@@ -26,7 +26,7 @@ export default function TournamentDetailsContent({ tabIndex, address, team_size,
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaUsers size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TEAM SIZE</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{team_size}</div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.team_size}</div>
                             </div>
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><GiWallet size={45} /></div>
@@ -35,7 +35,7 @@ export default function TournamentDetailsContent({ tabIndex, address, team_size,
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaTrophy size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>PRICE POOL</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{price}</div></div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.price}</div></div>
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><TbTournament size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TOURNAMENT FORMAT</div>
