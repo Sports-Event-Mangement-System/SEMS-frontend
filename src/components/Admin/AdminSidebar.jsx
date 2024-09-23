@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { AdminSideBarData } from './AdminSidebarData'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 
@@ -33,6 +33,9 @@ export default function AdminSidebar() {
             <div>
                   {AdminSideBarData.map((item, index) => (
                         <div key={index} className='flex flex-col gap-10'>
+                              <Link to="/">
+                                    <img src="/public/images/Logo.png" alt="" className='h-14 w-15 ml-7' />
+                              </Link>
                               <p className='text-center text-3xl font-extrabold'>{item.title}</p>
                               <div>
                                     <ul className='flex flex-col gap-4'>
