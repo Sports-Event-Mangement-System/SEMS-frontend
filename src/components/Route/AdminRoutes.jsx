@@ -1,7 +1,9 @@
 import TournamentManagement from "../Admin/Items/Tournament/TournamentManagement";
-import TeamManagement from "../Admin/Items/TeamManagement";
+import TeamManagement from "../Admin/Items/Team/TeamManagement";
 import AdminContact from "../Admin/Items/Contact/AdminContact";
 import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
+import TeamTable from "../Admin/Items/Team/TeamTable";
+import { element } from "prop-types";
 
 const adminRoutes = [
      {
@@ -10,7 +12,7 @@ const adminRoutes = [
      },
      {
           path: 'teamManagement',
-          element: <TeamManagement />,
+          element: <TeamTable />,
      },
      {
           path: 'adminContact',
@@ -23,7 +25,11 @@ const adminRoutes = [
      {
           path: 'editTournamentForm/:id',
           element: <TournamentForm />, // For editing tournaments
-      }
+     },
+     {
+          path: 'addTeamForm',
+          element: <TeamManagement />
+     }
 
 ];
 

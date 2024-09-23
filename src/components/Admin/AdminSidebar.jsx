@@ -6,11 +6,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 export default function AdminSidebar() {
 
-      const [dropdown, setDropdown] = useState(false);
+      const [dropdownTournament, setDropdownTournament] = useState(false);
+      const [dropdownTeam, setDropdownTeam] = useState(false);
 
-      const handleDropdown = () => {
-            setDropdown(prevValue => !prevValue);
+
+      const handleDropdownTournament = () => {
+            setDropdownTournament(prevValue => !prevValue);
+            setDropdownTeam(false);
       }
+
+      const handleDropdownTeam = () => {
+            setDropdownTeam(prevValue => !prevValue);
+            setDropdownTournament(false);
+      }
+
+
 
       const handleClickInsideDropdown = (e) => {
             e.stopPropagation(); // Prevents the click event from propagating to parent elements
@@ -28,16 +38,22 @@ export default function AdminSidebar() {
                                     <ul className='flex flex-col gap-4'>
                                           {item?.menuItems?.map((innerItem, index) => (
                                                 <li key={index} className='px-4'
-                                                      onClick={() => innerItem.itemName === "Tournament" && handleDropdown()}
+                                                      onClick={() => {
+                                                            if(innerItem.itemName === "Tournament"){
+                                                                  handleDropdownTournament();
+                                                            }
+                                                            if(innerItem.itemName === "Team"){
+                                                                  handleDropdownTeam();
+                                                            }
+                                                      }}
                                                 >
                                                       <NavLink to={innerItem?.link} className={({isActive}) => `${isActive ? 'opacity-70' : 'opacity-100'} flex items-center gap-1`} >
                                                             <FontAwesomeIcon icon={innerItem.icon} color='white' style={{width: '20px', height: '16px'}} /> 
                                                             {innerItem.itemName}
                                                       </NavLink>
 
-
                                                       {
-                                                            innerItem.itemName === "Tournament" && dropdown ? (
+                                                            innerItem.itemName === "Tournament" && dropdownTournament ? (
                                                                   <>
                                                                        <div className='pl-6 pt-2'
                                                                               onClick={handleClickInsideDropdown}
@@ -52,8 +68,27 @@ export default function AdminSidebar() {
                                                                   <></>
                                                             )
                                                       }
+
+{
+                                                            innerItem.itemName === "Team" && dropdownTeam ? (
+                                                                  <>
+                                                                       <div className='pl-6 pt-2'
+                                                                              onClick={handleClickInsideDropdown}
+                                                                       >
+                                                                         <NavLink  className={({isActive}) => `font-medium text-sm`}
+                                                                               to="addTeamForm"
+                                                                              >Add</NavLink> 
+                                                                       </div>               
+                                                                  </>
+                                                            ):
+                                                            (
+                                                                  <></>
+                                                            )
+                                                      }
                                                       {/* {console.log(innerItem?.link)} */}
                                                 </li>
+
+                                                
                                           ))}
                                     </ul>
                               </div>
