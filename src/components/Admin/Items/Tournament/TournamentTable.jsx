@@ -92,7 +92,7 @@ export default function TournamentTable() {
           },
         }
       );
-      console.log("status",response.data)
+      console.log(response.data)
       if (response.data.status) {
         setTournaments(prevTournaments =>
           prevTournaments.map(t =>
@@ -194,9 +194,9 @@ export default function TournamentTable() {
                   {new Date(tournament.te_date).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-3">
-                  {tournament.logoUrl ? (
+                  {tournament.t_images[0] ? (
                     <img
-                      src={tournament.logoUrl}
+                      src={tournament.image_urls[0]}
                       alt={`${tournament.t_name} logo`}
                       className="w-12 h-12 object-cover"
                     />

@@ -2,18 +2,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import FormInput from "./FormInput";
-import SelectField from "../../../Tournaments/SelectField";
+import SelectField from "../../../Ui/SelectField/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import DragDropFile from "../../../DragDrop/DragDropFile";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
-  const [logo, setLogo] = useState([]);
+  const [images, setImages] = useState([]);
   const [numberOfTeams, setNumberOfTeams] = useState("");
   const [prizePool, setPrizePool] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -24,8 +22,10 @@ export default function TournamentForm() {
   const [loading, setLoading] = useState(true);
   const [registrationStartingDate, setRegistrationStartingDate] = useState("");
   const [registrationEndingDate, setRegistrationEndingDate] = useState("");
-  const [status, setStatus] = useState(1); // default to Active
-  const [featured, setFeatured] = useState(1); // default to Featured
+  const [status, setStatus] = useState(1);
+  const [featured, setFeatured] = useState(1);
+  const [existingImages, setExistingImages] = useState([]);
+  const [newImages, setNewImages] = useState([]); // New state for new images
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -42,15 +42,17 @@ export default function TournamentForm() {
     { value: 1, label: "Featured" },
     { value: 0, label: "Not Featured" },
   ];
+  const [isDataFetched, setIsDataFetched] = useState(false);
+
 
   useEffect(() => {
     if (tournamentId) {
+      if (isDataFetched) return;
       // Fetch tournament data for editing
       const fetchTournamentData = async () => {
         try {
           const response = await axios.get(
-            `${
-              import.meta.env.VITE_API_URL
+            `${import.meta.env.VITE_API_URL
             }api/edit/tournament/${tournamentId}`,
             {
               headers: {
@@ -59,6 +61,7 @@ export default function TournamentForm() {
             }
           );
           const data = response.data;
+          console.log(data);
           if (data && data.tournament) {
             setTournamentName(data.tournament.t_name || "");
             setTournamentDescription(data.tournament.t_description || "");
@@ -73,7 +76,9 @@ export default function TournamentForm() {
             setRegistrationEndingDate(data.tournament.re_date || "");
             setStatus(data.tournament.status || 1); // assuming default is Active
             setFeatured(data.tournament.featured || 1);
-            setLogo(data.tournament.t_logo ? [data.tournament.t_logo] : []);
+            setImages(data.tournament.t_images ? [data.tournament.t_images] : []);
+            setExistingImages(data.tournament.image_urls || []);
+
           } else {
             console.error("Tournament data not found");
           }
@@ -81,6 +86,7 @@ export default function TournamentForm() {
           console.error("Error fetching tournament data", error);
         } finally {
           setLoading(false);
+          setIsDataFetched(true);
         }
       };
 
@@ -89,7 +95,7 @@ export default function TournamentForm() {
       // Reset state for adding new tournament
       setLoading(false);
     }
-  }, [tournamentId]);
+  }, [tournamentId, isDataFetched]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -99,9 +105,13 @@ export default function TournamentForm() {
     formData.append("t_description", tournamentDescription || "");
     formData.append("ts_date", startingDate || "");
     formData.append("te_date", endingDate || "");
-    if (logo.length) {
-      logo.forEach((file) => formData.append("t_logo[]", file));
+    // Append new images (files selected by the user)
+    if (newImages.length) {
+      newImages.forEach((file) => formData.append("t_images[]", file));
     }
+  
+    // Append existing images as necessary
+    existingImages.forEach((image) => formData.append("existing_images[]", image));
     formData.append("team_number", numberOfTeams || 0);
     formData.append("prize_pool", prizePool || 0);
     formData.append("phone_number", phoneNumber || "");
@@ -111,15 +121,14 @@ export default function TournamentForm() {
     formData.append("re_date", registrationEndingDate || "");
     formData.append("status", status);
     formData.append("featured", featured);
-
     const url = tournamentId
       ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
       : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
-
     axios
       .post(url, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
@@ -133,9 +142,7 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
-
-  console.log(logo);
-
+  console.log(images);
   return (
     <div>
       <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
@@ -236,67 +243,22 @@ export default function TournamentForm() {
               </div>
             </div>
 
-            {/* <FormInput
-              required={false}
-              name="t_logo"
-              id="logo"
-              type="file"
-              accept="image/*"
-              label="Logo"
-              onChange={(e) => setLogo(e.target.files[0])}
-            /> */}
-
             <DragDropFile
-              name="t_logo"
-              setFile={(files) => setLogo(Array.from(files))}
+              setFile={setImages} 
+              label="Tournament Images"
               accepts="image/png, image/jpeg, image/jpg"
+              multiple={true}
+              buttonLabel="Select Images"
+              placeholder="Max file size: 5MB Supports JPG, JPEG, PNG"
+              name="t_images"
+              existingImages={existingImages}
+              setExistingImages={setExistingImages}
+              setNewImages={setNewImages}  
             />
-            {/* show image */}
-
-            {Array.isArray(logo) && logo.length > 0 && (
-              <div className="flex gap-4 flex-wrap">
-                {logo.map((file, index) => (
-                  <div
-                    key={index}
-                    style={{ position: "relative", margin: "10px" , display: "flex", justifyContent: "center", alignItems: "center"}}
-                  >
-                    <img
-                      src={URL.createObjectURL(file)}
-                      style={{
-                        width: "100px",
-                        height: "100px",
-                        margin: "10px",
-                      }}
-                    />
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setLogo((prev) => prev.filter((_, i) => i !== index));
-                      }}
-                      className="absolute opacity-0 transition-opacity duration-200 ease-in-out hover:opacity-100"
-                      style={{
-                        position: "absolute",
-                        color: "black",
-                        border: "none",
-                        cursor: "pointer",
-                        borderRadius: "50%",
-                        width: "30px",
-                        height: "20px",
-                        lineHeight: "20px",
-                        textAlign: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} className="opacity-70 w-full h-full"/>
-                    </button>
-                  </div>
-                ))}
-              </div>
+            {error.t_images && (
+              <span className="text-red-500 text-md">{error.t_images}</span>
             )}
 
-            {error.t_logo && (
-              <span className="text-red-500 text-md">{error.t_logo}</span>
-            )}
 
             <FormInput
               required={true}
