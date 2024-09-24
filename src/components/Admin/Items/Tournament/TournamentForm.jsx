@@ -109,7 +109,7 @@ export default function TournamentForm() {
     if (newImages.length) {
       newImages.forEach((file) => formData.append("t_images[]", file));
     }
-  
+
     // Append existing images as necessary
     existingImages.forEach((image) => formData.append("existing_images[]", image));
     formData.append("team_number", numberOfTeams || 0);
@@ -163,7 +163,24 @@ export default function TournamentForm() {
               <span className="text-red-500 text-md">{error.t_name}</span>
             )}
 
-            <FormInput
+            <div>
+              <label htmlFor="description" >Description<span className="text-red-500 text-md">*</span></label>
+              <textarea
+                placeholder="Description"
+                name="t_description"
+                id="description"
+                label="Description"
+                value={tournamentDescription}
+                onChange={(e) => setTournamentDescription(e.target.value)}
+                className="h-24 w-full border rounded-lg px-3 py-2 focus:outline-orange-400 "></textarea>
+              {error.t_description && (
+                <span className="text-red-500 text-md">
+                  {error.t_description}
+                </span>
+              )}
+            </div>
+
+            {/* <FormInput
               required={true}
               name="t_description"
               id="description"
@@ -177,7 +194,7 @@ export default function TournamentForm() {
               <span className="text-red-500 text-md">
                 {error.t_description}
               </span>
-            )}
+            )} */}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
@@ -244,7 +261,7 @@ export default function TournamentForm() {
             </div>
 
             <DragDropFile
-              setFile={setImages} 
+              setFile={setImages}
               label="Tournament Images"
               accepts="image/png, image/jpeg, image/jpg"
               multiple={true}
@@ -253,7 +270,7 @@ export default function TournamentForm() {
               name="t_images"
               existingImages={existingImages}
               setExistingImages={setExistingImages}
-              setNewImages={setNewImages}  
+              setNewImages={setNewImages}
             />
             {error.t_images && (
               <span className="text-red-500 text-md">{error.t_images}</span>

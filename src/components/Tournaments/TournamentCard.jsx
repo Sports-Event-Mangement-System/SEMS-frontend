@@ -5,7 +5,7 @@ import { GiNotebook } from "react-icons/gi";
 import { Link } from "react-router-dom";
 
 export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_images, id }) {
-   
+
     return (
         <Link to={`/tournamentDetails/${id}`}>
             <div className="relative flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl pb-5 group">

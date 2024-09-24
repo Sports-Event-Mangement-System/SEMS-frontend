@@ -64,7 +64,7 @@ function Home() {
         ))}
 
       </div>
-      <div className="w-full h-[4px] bg-orange-600 m-[18vh_0_0_0]"></div>
+      <div className="w-full h-[1px] bg-orange-500 m-[18vh_0_0_0] opacity-55"></div>
 
       <About />
 

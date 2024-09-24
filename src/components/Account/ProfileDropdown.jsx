@@ -47,7 +47,7 @@ function ProfileDropdown() {
                         <li className="flex items-center gap-4">
                               <NavLink to="/" onClick={() => dispatch(logout())}
                                     className={({ isActive }) => `
-                                                      ${isActive ? 'text-gray-600' : 'text-white hover:text-gray-600'}
+                                                      ${isActive ? 'text-white' : 'text-white hover:text-gray-600'}
                                                 `}
                               >
 
