@@ -194,14 +194,15 @@ export default function TournamentTable() {
                   {new Date(tournament.te_date).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-3">
-                  {tournament.logoUrl ? (
+                  {tournament.image_urls ? (
                     <img
-                      src={tournament.logoUrl}
-                      alt={`${tournament.t_name} logo`}
+                      src={tournament.image_urls}
+                      alt={`${tournament.t_images}`}
                       className="w-12 h-12 object-cover"
                     />
                   ) : (
                     <span>No logo</span>
+                    
                   )}
                 </td>
                 <td className="px-6 py-3">{tournament.team_number}</td>
