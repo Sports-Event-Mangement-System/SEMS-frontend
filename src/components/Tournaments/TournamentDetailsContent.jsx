@@ -26,7 +26,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaUsers size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TEAM SIZE</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.team_size}</div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.team_number}</div>
                             </div>
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><GiWallet size={45} /></div>
@@ -35,7 +35,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaTrophy size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>PRICE POOL</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.price}</div></div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.prize_pool}</div></div>
                             <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><TbTournament size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TOURNAMENT FORMAT</div>
@@ -70,9 +70,13 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
                 <div className='space-y-14'>
                     <div>
                         <h1 className='font-bold text-3xl mb-6'>About This Tournament</h1>
-                        <p className='font-medium text- base'>{description}</p>
+                        <div>
+                            <p className='font-medium text-base'>{tournamentData.t_description}</p>
+                        </div>
                     </div>
+
                     <div>
+
                         <h1 className='font-bold text-3xl mb-6'>Rules</h1>
                         <div>
                             <ul class="list-disc font-medium space-y-1">
