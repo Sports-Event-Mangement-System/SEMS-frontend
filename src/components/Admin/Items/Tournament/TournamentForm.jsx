@@ -121,15 +121,15 @@ export default function TournamentForm() {
     formData.append("re_date", registrationEndingDate || "");
     formData.append("status", status);
     formData.append("featured", featured);
+
     const url = tournamentId
       ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
       : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
-    axios
-      .post(url, formData, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          "Content-Type": "multipart/form-data",
-        },
+
+    axios.post(url, formData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      },
       })
       .then((res) => {
         if (res.data.status) {

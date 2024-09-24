@@ -17,6 +17,7 @@ export default function TournamentTable() {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
+        console.log("API URL:", import.meta.env.VITE_API_URL);
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}api/tournaments`,
           {
@@ -25,7 +26,7 @@ export default function TournamentTable() {
             },
           }
         );
-        console.log(response)
+        console.log(response.data)
         setTournaments(response.data.tournaments || []);
       } catch (err) {
         setError("Error fetching tournaments");
@@ -194,17 +195,10 @@ export default function TournamentTable() {
                   {new Date(tournament.te_date).toLocaleDateString()}
                 </td>
                 <td className="px-6 py-3">
-<<<<<<< HEAD
-                  {tournament.image_urls ? (
-                    <img
-                      src={tournament.image_urls}
-                      alt={`${tournament.t_images}`}
-=======
                   {tournament.t_images[0] ? (
                     <img
                       src={tournament.image_urls[0]}
                       alt={`${tournament.t_name} logo`}
->>>>>>> 9130edf97a1af86dfa5301c5971b53d20f9ca2aa
                       className="w-12 h-12 object-cover"
                     />
                   ) : (
