@@ -17,6 +17,7 @@ export default function TournamentTable() {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
+        console.log("API URL:", import.meta.env.VITE_API_URL);
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}api/tournaments`,
           {
@@ -25,7 +26,7 @@ export default function TournamentTable() {
             },
           }
         );
-        console.log(response)
+        console.log(response.data)
         setTournaments(response.data.tournaments || []);
       } catch (err) {
         setError("Error fetching tournaments");
@@ -202,6 +203,7 @@ export default function TournamentTable() {
                     />
                   ) : (
                     <span>No logo</span>
+                    
                   )}
                 </td>
                 <td className="px-6 py-3">{tournament.team_number}</td>
