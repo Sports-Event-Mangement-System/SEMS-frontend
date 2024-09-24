@@ -1,5 +1,5 @@
 import TournamentManagement from "../Admin/Items/Tournament/TournamentManagement";
-import TeamManagement from "../Admin/Items/Team/TeamManagement";
+import TeamForm from "../Admin/Items/Team/TeamForm";
 import AdminContact from "../Admin/Items/Contact/AdminContact";
 import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
 import TeamTable from "../Admin/Items/Team/TeamTable";
@@ -28,7 +28,7 @@ const adminRoutes = [
      },
      {
           path: 'addTeamForm',
-          element: <TeamManagement />
+          element: <TeamForm />
      }
 
 ];
