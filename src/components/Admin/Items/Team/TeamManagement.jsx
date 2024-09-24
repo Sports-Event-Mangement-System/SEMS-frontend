@@ -1,6 +1,6 @@
 import React from "react";
 import FormInput from "../Tournament/FormInput";
-import DragDropFile from "../../../DragDrop/DragDropFile";
+import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
 
 export default function TeamManagement() {
   return (

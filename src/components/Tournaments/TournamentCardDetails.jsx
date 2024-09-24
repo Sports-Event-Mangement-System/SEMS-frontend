@@ -3,6 +3,8 @@ import { MdCurrencyRupee } from "react-icons/md";
 import TournamentDetailsContent from './TournamentDetailsContent';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import { Splide, SplideSlide } from '@splidejs/react-splide';
+import '@splidejs/react-splide/css';
 
 export default function TournamentCardDetails() {
     const [toggle, setToggle] = useState(1);
@@ -17,13 +19,10 @@ export default function TournamentCardDetails() {
     useEffect(() => {
         const fetchTournamentData = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/edit/tournament/${id}`, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.access_token}`,
-                    },
-                });
-                console.log(response)
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${id}`);
+                console.log(response);
                 setTournamentData(response.data.tournament);
+
             } catch (error) {
                 console.log('Error in fetching:', error);
             }
@@ -44,10 +43,36 @@ export default function TournamentCardDetails() {
         const date = new Date(dateString);
         return !isNaN(date) ? date.toLocaleDateString(undefined, options) : "Invalid date";
     };
+
+
+    console.log(tournamentData);
     return (
         <div className='flex flex-col items-center'>
             <div className='w-[70%] bg-gray-200 h-fit space-y-9 pb-8'>
-                <img src={tournamentData.t_logo ? tournamentData.image_url : "images/tournament.jpg"} alt="" className='w-full h-[70vh] object-top object-cover' />
+
+                {tournamentData.image_urls.length > 1 ? (
+                    <Splide
+                        options={{
+                            type: 'loop',
+                            perPage: 1,
+                            autoplay: true,
+                            interval: 3000,
+                            pagination: true,
+                            arrows: true,
+                            pauseOnHover: false,
+                        }}
+                        aria-label="Tournament Images"
+                    >
+                        {tournamentData.image_urls.map((url, index) => (
+                            <SplideSlide key={index}>
+                                <img src={url} alt={`Image ${index + 1}`} className='w-full h-[70vh] object-top object-cover' />
+                            </SplideSlide>
+                        ))}
+                    </Splide>
+                ) : (
+                    <img src={tournamentData.image_urls[0] || "/images/tournament.jpg"} alt="Tournament" className='w-full h-[70vh] object-top object-cover' />
+                )}
+
 
                 <div className='flex justify-between px-16 items-center'>
                     <div className='space-y-1'>
@@ -58,7 +83,7 @@ export default function TournamentCardDetails() {
                     </div>
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
-                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'>Register</button>
+                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'>Register Now</button>
                     </div>
                 </div>
                 <div className='bg-gray-400 h-1 w-[95%] items-center mx-auto'></div>
@@ -81,7 +106,7 @@ export default function TournamentCardDetails() {
             </div>
 
             <div className='w-[70%] h-fit mt-16'>
-                <TournamentDetailsContent tabIndex={toggle} address={tournamentData.address} team_size={tournamentData.team_number} price={tournamentData.prize_pool} description={tournamentData.t_description} />
+                <TournamentDetailsContent tabIndex={toggle} tournamentData={tournamentData} />
             </div>
 
         </div>

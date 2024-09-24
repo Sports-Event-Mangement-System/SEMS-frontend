@@ -9,6 +9,9 @@ export default {
       gridTemplateColumns: {
         '1fr-5fr': '1fr 5fr', // Define custom fraction column layout
       },
+      colors: {
+        'theme-color': '#f1963b',
+      },
     },
   },
   plugins: [],
