@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react'
-import Input from '../Account/Input'
+import Input from '../Ui/Input';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
