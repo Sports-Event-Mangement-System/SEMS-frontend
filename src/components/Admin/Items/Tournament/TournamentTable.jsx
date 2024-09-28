@@ -156,7 +156,6 @@ export default function TournamentTable() {
               <th className="px-6 py-3 text-start">Starting Date</th>
               <th className="px-6 py-3 text-start">Ending Date</th>
               <th className="px-6 py-3 text-start">Logo</th>
-              <th className="px-6 py-3 text-start">Number of Teams</th>
               <th className="px-6 py-3 text-start">Status</th>
               <th className="px-6 py-3 text-start">Action</th>
             </tr>
@@ -206,7 +205,6 @@ export default function TournamentTable() {
                     
                   )}
                 </td>
-                <td className="px-6 py-3">{tournament.team_number}</td>
                 <td className="px-6 py-3">
                   <button
                     className={`text-white rounded-xl w-20 py-1 ${

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import FormInput from "../Tournament/FormInput";
+import FormInput from "../../../Ui/Input";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
 
 export default function TeamManagement() {

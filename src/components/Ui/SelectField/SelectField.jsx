@@ -15,7 +15,7 @@ function SelectField({
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: state.isFocused ? "rgb(255, 140, 0)" : "border-gray-300",
+      borderColor: state.isFocused ? "rgb(255, 140, 0)" : "rgb(75, 85, 99)",
       boxShadow: state.isFocused ? "0 0 0 1px rgb(255, 140, 0)" : "none",
       "&:hover": {
         borderColor: "rgb(255, 140, 0)",
