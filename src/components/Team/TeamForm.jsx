@@ -30,56 +30,76 @@ export default function TeamManagement() {
       <div className='shadow-2xl rounded-2xl h-fit bg-slate-200'>
         <h1 className='text-3xl text-center text-orange-600 font-semibold mt-10 '>Team Form</h1>
         <p className='text-md text-center text-orange-600 font-normal'>Register Your team Righ Now!</p>
-        <form action="">
+        <form action="" className="flex flex-col items-center p-10 gap-6'">
           <div className="flex flex-col gap-4">
-            <FormInput
-              name=""
-              id="team name"
-              type="text"
-              label="Team Name"
-              placeholder="Enter Team Name"
-            />
+            <div >
+              <FormInput
+                name=""
+                id="team name"
+                type="text"
+                label="Team Name"
+                placeholder="Enter Team Name"
+                className="w-[67vh]"
 
-            <FormInput
-              name=""
-              id="team coach"
-              type="text"
-              label="Team Coach"
-              placeholder="Enter Coach Name"
-            />
+              />
+            </div>
+
+            <div>
+
+              <FormInput
+                name=""
+                id="team coach"
+                type="text"
+                label="Team Coach"
+                placeholder="Enter Coach Name"
+                className="w-[67vh]"
+              />
+            </div>
 
 
+            <div>
+              <FormInput
+                name=""
+                id="team captain"
+                type="text"
+                label="Team Captain"
+                placeholder="Enter Team Captain's Name"
+                className="w-[67vh]"
+              />
+            </div>
+            <div>
+              <FormInput
+                name=""
+                id="email"
+                type="email"
+                label="Email"
+                placeholder="Enter your email"
+                className="w-[67vh]"
+              />
+            </div>
 
-            <FormInput
-              name=""
-              id="team captain"
-              type="text"
-              label="Team Captain"
-              placeholder="Enter Team Captain's Name"
-            />
-            <FormInput
-              name=""
-              id="email"
-              type="email"
-              label="Email"
-              placeholder="Enter your email"
-            />
+            <div>
+              <FormInput
+                name=""
+                id="phone number"
+                type="number"
+                label="Phone Number"
+                placeholder="Enter Your Team's Phone Number"
+                className="w-[67vh]"
+              />
+            </div>
 
-            <FormInput
-              name=""
-              id="phone number"
-              type="number"
-              label="Phone Number"
-              placeholder="Enter Your Team's Phone Number"
-            />
+            <div>
+              <DragDropFile
+                setFile={setImages}
+                label="Team Logo"
+                name=""
+                accepts="image/png, image/jpeg, image/jpg"
+                className="w-[67vh]"
+              />
+            </div>
 
-            <DragDropFile
-              setFile={setImages}
-              label="Team Logo"
-              name=""
-              accepts="image/png, image/jpeg, image/jpg"
-            />
-            <div className="flex justify-between gap-8">
+            <div className="flex justify-between items-end gap-8">
               <div className="w-6/12">
                 {playerList.map((player, index) => (
                   <div key={index}>
@@ -96,7 +116,7 @@ export default function TeamManagement() {
                   </div>
                 ))}
               </div>
-              <div className="w-6/12">
+              <div className="w-6/12 ">
                 {playerList.map((player, index) => (
                   <div key={index}>
                     <label htmlFor="">Player Email</label>
@@ -111,7 +131,7 @@ export default function TeamManagement() {
                       <button
                         type="button"
                         onClick={() => removePlayer(index)}
-                        className="bg-red-600 p-2.5 rounded-lg text-white font-medium ms-2"
+                        className="bg-red-600 px-4 py-2 rounded-lg text-white font-medium ms-2"
                       >
                         Remove
                       </button>
