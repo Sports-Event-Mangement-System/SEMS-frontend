@@ -26,8 +26,8 @@ export default function TournamentForm() {
   const [loading, setLoading] = useState(true);
   const [registrationStartingDate, setRegistrationStartingDate] = useState("");
   const [registrationEndingDate, setRegistrationEndingDate] = useState("");
-  const [status, setStatus] = useState(1);
-  const [featured, setFeatured] = useState(1);
+  const [status, setStatus] = useState('');
+  const [featured, setFeatured] = useState('');
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]); // New state for new images
 
@@ -88,11 +88,10 @@ export default function TournamentForm() {
             setAddress(data.tournament.address || "");
             setRegistrationStartingDate(data.tournament.rs_date || "");
             setRegistrationEndingDate(data.tournament.re_date || "");
-            setStatus(data.tournament.status || 1); // assuming default is Active
-            setFeatured(data.tournament.featured || 1);
+            setStatus(parseInt(data.tournament.status, 10) || 0);
+            setFeatured(parseInt(data.tournament.featured, 10) || 0);
             setImages(data.tournament.t_images ? [data.tournament.t_images] : []);
             setExistingImages(data.tournament.image_urls || []);
-
           } else {
             console.error("Tournament data not found");
           }
@@ -160,6 +159,7 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
+
   return (
     <div>
       <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
@@ -196,22 +196,6 @@ export default function TournamentForm() {
                 </span>
               )}
             </div>
-
-            {/* <Input
-              required={true}
-              name="t_description"
-              id="description"
-              type="text"
-              label="Description"
-              placeholder="Description"
-              value={tournamentDescription}
-              onChange={(e) => setTournamentDescription(e.target.value)}
-            />
-            {error.t_description && (
-              <span className="text-red-500 text-md">
-                {error.t_description}
-              </span>
-            )} */}
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
