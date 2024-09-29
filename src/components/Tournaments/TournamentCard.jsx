@@ -3,19 +3,20 @@ import { FaUsers, FaTrophy } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { GiNotebook } from "react-icons/gi";
 import { Link } from "react-router-dom"
+import { TbTournament } from "react-icons/tb";
 import Ribbon from '../Ui/Ribbon/Ribbon';
 
-export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_images, id, featured }) {
-    const ribbonText = featured === 0 ? "Not featured" : "Featured"
+
+export default function TournamentCard({ tournament_name, team_num, address, reg_start, reg_end, price, image, t_images, id, featured, format }) {
+
     return (
         <Link to={`/tournamentDetails/${id}`}>
             <div className="relative flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl pb-5 group">
 
                 <div className="absolute top-0 left-0 z-10">
-                    <Ribbon text={ribbonText}
-                    >
-
-                    </Ribbon>
+                    {featured !== 0 && (
+                        <Ribbon text={'Featured'} />
+                    )}
                 </div>
 
                 <div className="absolute inset-0 bg-gray-700 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-2xl" style={{ zIndex: 0 }}></div>
@@ -48,6 +49,9 @@ export default function TournamentCard({ tournament_name, team_num, address, reg
                         </div>
                         <div className='text-sm font-normal flex items-center gap-2'>
                             <span className='font-bold flex items-center gap-2'><FaTrophy size={18} /> Price:</span><span className='font-semibold text-sm text-gray-600'>Rs {price}</span>
+                        </div>
+                        <div className='text-sm font-normal flex items-center gap-2'>
+                            <span className='font-bold flex items-center gap-2'><TbTournament size={18} /> Format:</span><span className='font-semibold text-sm text-gray-600'>{format}</span>
                         </div>
                     </div>
                 </div>

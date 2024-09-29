@@ -132,6 +132,8 @@ function Tournaments() {
                 reg_end={formatDate(details.re_date)}
                 price={details.prize_pool}
                 id={details.id}
+                featured={details.featured}
+                format={details.tournament_type}
               />
             ))}
           </div>
