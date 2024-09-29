@@ -48,7 +48,7 @@ export default function TournamentCardDetails() {
     console.log(tournamentData);
     return (
         <div className='flex flex-col items-center'>
-            <div className='w-[70%] bg-gray-200 h-fit space-y-9 pb-8'>
+            <div className='w-[83%] bg-gray-200 h-fit space-y-9 pb-8'>
 
                 {tournamentData.image_urls.length > 1 ? (
                     <Splide
@@ -105,7 +105,7 @@ export default function TournamentCardDetails() {
 
             </div>
 
-            <div className='w-[70%] h-fit mt-16'>
+            <div className='w-[83%] h-fit mt-16'>
                 <TournamentDetailsContent tabIndex={toggle} tournamentData={tournamentData} />
             </div>
 

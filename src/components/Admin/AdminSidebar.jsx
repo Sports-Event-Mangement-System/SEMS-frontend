@@ -3,7 +3,7 @@ import { AdminSideBarData } from './AdminSidebarData'
 import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IoIosArrowDown } from "react-icons/io";
-import { MdArrowRight } from "react-icons/md";
+import { VscDash } from "react-icons/vsc";
 
 
 
@@ -32,15 +32,15 @@ export default function AdminSidebar() {
 
       return (
             <>
-                  <div className='bg-orange-500 h-screen text-white'>
+                  <div className='bg-theme-color h-full text-white'>
                         <div>
                               {AdminSideBarData.map((item, index) => (
                                     <div key={index} className='flex flex-col gap-10'>
-                                          <div className='flex bg-gray-300 items-center justify-evenly h-16'>
+                                          <div className='flex bg-theme-color items-center justify-evenly h-16 mt-4'>
                                                 <Link to="/">
-                                                      <img src="/public/images/Logo.png" alt="" className='h-12 w-13' />
+                                                      <img src="/public/images/adminlogo.png" alt="" className='h-10 w-12' />
                                                 </Link>
-                                                <p className='text-center text-2xl font-extrabold text-blue-500'>{item.title}</p>
+                                                <p className='text-center text-[27px] font-extrabold text-white'>{item.title}</p>
                                           </div>
 
                                           <div>
@@ -69,7 +69,7 @@ export default function AdminSidebar() {
                                                                                     >
                                                                                           <NavLink className={({ isActive }) => `font-medium text-sm`}
                                                                                                 to="addTournamentForm"
-                                                                                          > <div className='flex items-center gap-1'><MdArrowRight size={30} />Add</div></NavLink>
+                                                                                          > <div className='flex items-center gap-1'><VscDash size={30} />Add</div></NavLink>
                                                                                     </div>
                                                                               </>
                                                                         ) :
@@ -86,7 +86,7 @@ export default function AdminSidebar() {
                                                                                     >
                                                                                           <NavLink className={({ isActive }) => `font-medium text-sm`}
                                                                                                 to="addTeamForm"
-                                                                                          > <div className='flex items-center gap-1'><MdArrowRight size={30} />Add</div></NavLink>
+                                                                                          > <div className='flex items-center gap-1'><VscDash size={30} />Add</div></NavLink>
                                                                                     </div>
                                                                               </>
                                                                         ) :

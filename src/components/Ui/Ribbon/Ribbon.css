@@ -1,10 +1,10 @@
 .ribbon {
     position: relative;
    /* background: black; */
-   height: 135px;
-   width: 135px;
-   top:-9px;
-   left:-9px;
+   height: 133px;
+   width: 133px;
+   top:-7px;
+   left:-7px;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -14,26 +14,26 @@
   .ribbon-text {
     width: 130%;
     position: absolute;
-    height: 30px;
-    background: orangered;
-    transform: rotate(-45deg) translateY(-22px);
+    height: 28px;
+    background: #ff6228;
+    transform: rotate(-45deg) translateY(-21px);
     display: flex;
     color: aliceblue;
     justify-content: center;
     align-items: center;
     font-size: medium;
-    font-weight: bold;
+    font-weight:400;
     letter-spacing: 1px;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
  .ribbon::after{
     content: '';
     position: absolute;
-    bottom: 9px;
+    bottom: 10px;
     left: 0;
-    width: 9px;
-    height: 9px;
-    background: rgb(202, 86, 19);
+    width: 7px;
+    height: 7px;
+    background: rgb(134, 55, 10);
     z-index: -1;
-    box-shadow: 116px -116px rgb(202, 86, 19);
+    box-shadow: 116px -116px rgb(134, 55, 10);
  }
