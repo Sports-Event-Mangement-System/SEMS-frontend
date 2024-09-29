@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MdCurrencyRupee } from "react-icons/md";
 import TournamentDetailsContent from './TournamentDetailsContent';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
@@ -83,7 +83,10 @@ export default function TournamentCardDetails() {
                     </div>
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
-                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'>Register Now</button>
+                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink 
+                            to="addTeamForm"
+                        > <div className='flex items-center gap-1'>Register Now</div></NavLink>
+                        </button>
                     </div>
                 </div>
                 <div className='bg-gray-400 h-1 w-[95%] items-center mx-auto'></div>

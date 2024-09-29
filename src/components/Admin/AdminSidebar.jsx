@@ -84,9 +84,6 @@ export default function AdminSidebar() {
                                                                                     <div className='pl-6 pt-2'
                                                                                           onClick={handleClickInsideDropdown}
                                                                                     >
-                                                                                          <NavLink className={({ isActive }) => `font-medium text-sm`}
-                                                                                                to="addTeamForm"
-                                                                                          > <div className='flex items-center gap-1'><VscDash size={30} />Add</div></NavLink>
                                                                                     </div>
                                                                               </>
                                                                         ) :

@@ -14,9 +14,10 @@ export default function TournamentCard({ tournament_name, team_num, address, reg
             <div className="relative flex flex-col bg-white h-fit w-[20rem] drop-shadow-[0_7px_13px_rgba(0,0,0,0.25)] rounded-2xl pb-5 group">
 
                 <div className="absolute top-0 left-0 z-10">
-                    {featured !== 0 && (
-                        <Ribbon text={'Featured'} />
-                    )}
+                {featured === 1 ? <Ribbon text='Featured'
+                    >
+                    </Ribbon> : null} 
+                    
                 </div>
 
                 <div className="absolute inset-0 bg-gray-700 opacity-0 group-hover:opacity-70 transition-opacity duration-300 rounded-2xl" style={{ zIndex: 0 }}></div>
