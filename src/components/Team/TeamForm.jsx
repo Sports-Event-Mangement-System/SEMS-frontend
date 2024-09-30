@@ -78,8 +78,8 @@ export default function TeamManagement() {
   };
 
   return (
-    <div className='h-screen flex mt-14 justify-center'>
-      <div className='shadow-2xl rounded-2xl h-fit bg-slate-200'>
+    <div className='flex mt-14 justify-center'>
+      <div className='shadow-2xl rounded-2xl h-fit px-14 bg-slate-200'>
         <h1 className='text-3xl text-center text-orange-600 font-semibold mt-10'>
           {tournamentData?.t_name} Tournament
         </h1>
@@ -96,7 +96,7 @@ export default function TeamManagement() {
               type="text"
               label="Team Name"
               placeholder="Enter Team Name"
-              className="w-[67vh]"
+              className="w-[80vh]"
             />
             {error.team_name && (
               <span className="text-red-500 text-md">
@@ -110,7 +110,7 @@ export default function TeamManagement() {
               type="text"
               label="Team Coach"
               placeholder="Enter Coach Name"
-              className="w-[67vh]"
+              className="w-[80vh]"
             />
             {error.coach_name && (
               <span className="text-red-500 text-md">
@@ -125,7 +125,7 @@ export default function TeamManagement() {
               type="text"
               label="Email"
               placeholder="Enter your email"
-              className="w-[67vh]"
+              className="w-[80vh]"
             />
             {error.email && (
               <span className="text-red-500 text-md">
@@ -140,7 +140,7 @@ export default function TeamManagement() {
               type="text"
               label="Phone Number"
               placeholder="Enter Your Team's Phone Number"
-              className="w-[67vh]"
+              className="w-[80vh]"
             />
             {error.phone_number && (
               <span className="text-red-500 text-md">
@@ -168,26 +168,29 @@ export default function TeamManagement() {
             )}
 
             {/* Player List */}
-            <div className="flex justify-between items-end gap-8">
-              <div className="w-6/12">
+
+            <div className="flex w-full gap-8">
+              <div className="w-full">
                 {playerList.map((player, index) => (
                   <div key={index}>
-                    <Input
-                      required={true}
-                      name=""
-                      type="text"
-                      label={`Player ${index + 1} Name `}
-                      placeholder={`Player ${index + 1} Name`}
-                      value={player.playerName}
-                      className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-                    />
+                    <div className="flex items-center justify-end">
+                      <Input
+                        required={true}
+                        name=""
+                        type="text"
+                        label={`Player ${index + 1} Name `}
+                        placeholder={`Player ${index + 1} Name`}
+                        value={player.playerName}
+                        className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="w-6/12">
+              <div className="w-full">
                 {playerList.map((player, index) => (
                   <div key={index}>
-                    <div className="flex items-center">
+                    <div className="flex items-center justify-start">
                       <Input
                         required={true}
                         name=""
@@ -211,6 +214,7 @@ export default function TeamManagement() {
                 ))}
               </div>
             </div>
+
 
             {/* Add Player Button */}
             {playerList.length < tournamentData.max_players_per_team && (
