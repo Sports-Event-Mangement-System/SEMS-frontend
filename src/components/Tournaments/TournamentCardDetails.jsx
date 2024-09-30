@@ -84,7 +84,7 @@ export default function TournamentCardDetails() {
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
                         <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink 
-                            to="addTeamForm"
+                            to="addTeam" state={{ tournamentData }}
                         > <div className='flex items-center gap-1'>Register Now</div></NavLink>
                         </button>
                     </div>
