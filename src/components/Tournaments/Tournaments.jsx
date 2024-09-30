@@ -126,7 +126,8 @@ function Tournaments() {
                 t_images={details.t_images}
                 image={details.image_urls}
                 tournament_name={details.t_name}
-                team_num={details.team_number}
+                min_teams={details.min_teams}
+                max_teams={details.max_teams}
                 address={details.address}
                 reg_start={formatDate(details.rs_date)}
                 reg_end={formatDate(details.re_date)}
