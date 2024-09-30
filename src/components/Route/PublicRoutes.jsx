@@ -52,7 +52,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: '/tournamentDetails/:id/addTeamForm',
+    path: '/tournamentDetails/:id/addTeam',
     element: <TeamForm />
   },
 ];
