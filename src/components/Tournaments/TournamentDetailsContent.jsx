@@ -12,39 +12,39 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
                 <div className='space-y-14'>
                     <div>
                         <h1 className='font-bold text-3xl mb-6'>Format</h1>
-                        <div className='grid grid-cols-3 gap-6'>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                        <div className='grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><IoLocationSharp size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>LOCATION</div>
                                 <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.address}</div>
                             </div>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaBuildingCircleCheck size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>CHECK IN PERIOD</div>
                                 <div className='flex justify-center font-medium text-base text-orange-600'>45 minutes before start</div>
                             </div>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaUsers size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TEAM SIZE</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.team_number}</div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.min_teams} to {tournamentData.max_teams}</div>
                             </div>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><GiWallet size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>ENTRY FEE</div>
                                 <div className='flex justify-center font-medium text-base text-orange-600'>Sankhu</div></div>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><FaTrophy size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>PRICE POOL</div>
                                 <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.prize_pool}</div></div>
-                            <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                            <div className='bg-gray-100 h-fit w-full flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
                                 <div className='flex justify-center text-orange-600'><TbTournament size={45} /></div>
                                 <div className='flex justify-center font-bold text-base '>TOURNAMENT FORMAT</div>
-                                <div className='flex justify-center font-medium text-base text-orange-600'>Single Elimiantion</div></div>
+                                <div className='flex justify-center font-medium text-base text-orange-600'>{tournamentData.tournament_type}</div></div>
                         </div>
                     </div>
                     <div>
                         <h1 className='font-bold text-3xl mb-6'>Participants</h1>
-                        <div className='bg-gray-100 h-fit w-[48vh] flex flex-col px-20 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
+                        <div className='bg-gray-100 h-fit w-[343px] flex flex-col px-8 py-9 rounded-md drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] space-y-2'>
 
                             <div className='flex justify-between font-bold text-base '>
                                 <span>Registered</span>

@@ -2,7 +2,7 @@ import { React, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../store/UserSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
-import Input from './Input';
+import Input from '../Ui/Input';
 import { toast } from 'react-toastify';
 
 export default function LogIn() {

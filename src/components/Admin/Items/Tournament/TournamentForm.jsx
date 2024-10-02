@@ -1,7 +1,7 @@
 // TournamentForm.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import FormInput from "./FormInput";
+import Input from "../../../Ui/Input";
 import SelectField from "../../../Ui/SelectField/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,7 +12,11 @@ export default function TournamentForm() {
   const [startingDate, setStartingDate] = useState("");
   const [endingDate, setEndingDate] = useState("");
   const [images, setImages] = useState([]);
-  const [numberOfTeams, setNumberOfTeams] = useState("");
+  const [minTeams, setMinTeams] = useState("");
+  const [maxTeams, setMaxTeams] = useState("");
+  const [maxPlayers, setMaxPlayers] = useState("");
+  const [minPlayers, setMinPlayers] = useState("");
+  const [tournamentType, setTournamentType] = useState("");
   const [prizePool, setPrizePool] = useState(0);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [email, setEmail] = useState("");
@@ -22,8 +26,8 @@ export default function TournamentForm() {
   const [loading, setLoading] = useState(true);
   const [registrationStartingDate, setRegistrationStartingDate] = useState("");
   const [registrationEndingDate, setRegistrationEndingDate] = useState("");
-  const [status, setStatus] = useState(1);
-  const [featured, setFeatured] = useState(1);
+  const [status, setStatus] = useState('');
+  const [featured, setFeatured] = useState('');
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]); // New state for new images
 
@@ -42,6 +46,12 @@ export default function TournamentForm() {
     { value: 1, label: "Featured" },
     { value: 0, label: "Not Featured" },
   ];
+
+  const tournamenTypeOption  = [
+    { value: 'round-robin', label: "Round Robin" },
+    { value: 'single-elimination', label: "Single Elimination" },
+  ];
+
   const [isDataFetched, setIsDataFetched] = useState(false);
 
 
@@ -67,18 +77,21 @@ export default function TournamentForm() {
             setTournamentDescription(data.tournament.t_description || "");
             setStartingDate(data.tournament.ts_date || "");
             setEndingDate(data.tournament.te_date || "");
-            setNumberOfTeams(data.tournament.team_number || "");
+            setMaxTeams(data.tournament.max_teams || "");
+            setMinTeams(data.tournament.min_teams || "");
+            setMaxPlayers(data.tournament.max_players_per_team || "");
+            setMinPlayers(data.tournament.min_players_per_team || "");
+            setTournamentType(data.tournament.tournament_type || "");
             setPrizePool(data.tournament.prize_pool || 0);
             setPhoneNumber(data.tournament.phone_number || "");
             setEmail(data.tournament.email || "");
             setAddress(data.tournament.address || "");
             setRegistrationStartingDate(data.tournament.rs_date || "");
             setRegistrationEndingDate(data.tournament.re_date || "");
-            setStatus(data.tournament.status || 1); // assuming default is Active
-            setFeatured(data.tournament.featured || 1);
+            setStatus(parseInt(data.tournament.status, 10) || 0);
+            setFeatured(parseInt(data.tournament.featured, 10) || 0);
             setImages(data.tournament.t_images ? [data.tournament.t_images] : []);
             setExistingImages(data.tournament.image_urls || []);
-
           } else {
             console.error("Tournament data not found");
           }
@@ -112,7 +125,11 @@ export default function TournamentForm() {
 
     // Append existing images as necessary
     existingImages.forEach((image) => formData.append("existing_images[]", image));
-    formData.append("team_number", numberOfTeams || 0);
+    formData.append("max_teams", maxTeams || 0);
+    formData.append("min_teams", minTeams || 0);
+    formData.append("max_players_per_team", maxPlayers || 0);
+    formData.append("min_players_per_team", minPlayers || 0);
+    formData.append("tournament_type", tournamentType || '');
     formData.append("prize_pool", prizePool || 0);
     formData.append("phone_number", phoneNumber || "");
     formData.append("email", email || "");
@@ -130,7 +147,7 @@ export default function TournamentForm() {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
       },
-      })
+    })
       .then((res) => {
         if (res.data.status) {
           navigate("/admin/tournamentManagement");
@@ -142,14 +159,14 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
-  console.log(images);
+
   return (
     <div>
       <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 p-8 shadow-2xl">
           <div className="flex flex-col gap-4">
-            <FormInput
+            <Input
               required={true}
               name="t_name"
               id="tournamentname"
@@ -180,25 +197,9 @@ export default function TournamentForm() {
               )}
             </div>
 
-            {/* <FormInput
-              required={true}
-              name="t_description"
-              id="description"
-              type="text"
-              label="Description"
-              placeholder="Description"
-              value={tournamentDescription}
-              onChange={(e) => setTournamentDescription(e.target.value)}
-            />
-            {error.t_description && (
-              <span className="text-red-500 text-md">
-                {error.t_description}
-              </span>
-            )} */}
-
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
-                <FormInput
+                <Input
                   required={true}
                   name="ts_date"
                   id="starting"
@@ -213,7 +214,7 @@ export default function TournamentForm() {
               </div>
 
               <div className="w-6/12">
-                <FormInput
+                <Input
                   required={true}
                   name="te_date"
                   id="ending"
@@ -230,7 +231,7 @@ export default function TournamentForm() {
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
-                <FormInput
+                <Input
                   required={true}
                   name="rs_date"
                   id="registration-starting"
@@ -245,7 +246,7 @@ export default function TournamentForm() {
               </div>
 
               <div className="w-6/12">
-                <FormInput
+                <Input
                   required={true}
                   name="re_date"
                   id="registration-ending"
@@ -275,38 +276,109 @@ export default function TournamentForm() {
             {error.t_images && (
               <span className="text-red-500 text-md">{error.t_images}</span>
             )}
+            <div className="flex justify-between gap-2">
+              <div className="w-6/12">
+                <Input
+                  required={true}
+                  name="max_teams"
+                  id="max_teams"
+                  type="number"
+                  label="Maximum Teams"
+                  placeholder="Maximum Teams"
+                  value={maxTeams}
+                  onChange={(e) => setMaxTeams(e.target.value)}
+                />
+                {error.max_teams && (
+                  <span className="text-red-500 text-md">{error.max_teams}</span>
+                )}
+              </div>
+              <div className="w-6/12">
+                <Input
+                  required={true}
+                  name="min_teams"
+                  id="min_teams"
+                  type="number"
+                  label="Minimum Teams"
+                  placeholder="Minimum Teams"
+                  value={minTeams}
+                  onChange={(e) => setMinTeams(e.target.value)}
+                />
+                {error.min_teams && (
+                  <span className="text-red-500 text-md">{error.min_teams}</span>
+                )}
+              </div>
+            </div>
+            <div className="flex justify-between gap-2">
+              <div className="w-6/12">
+              <Input
+                  required={true}
+                  name="max_players_per_team"
+                  id="max_players_per_team"
+                  type="number"
+                  label="Maximum Players Per Team"
+                  placeholder="Maximum Players"
+                  value={maxPlayers}
+                  onChange={(e) => setMaxPlayers(e.target.value)}
+                />
+                {error.max_players_per_team && (
+                  <span className="text-red-500 text-md">{error.max_players_per_team}</span>
+                )}
+              </div>
+              <div className="w-6/12">
 
+                <Input
+                  required={true}
+                  name="min_players_per_team"
+                  id="min_players_per_team"
+                  type="number"
+                  label="Minimum Players Per Team"
+                  placeholder="Minimum Players"
+                  value={minPlayers}
+                  onChange={(e) => setMinPlayers(e.target.value)}
+                />
+                {error.min_players_per_team && (
+                  <span className="text-red-500 text-md">{error.min_players_per_team}</span>
+                )}
+              </div>
+            </div>
+            <div className="flex justify-between gap-2">
+              <div className="w-6/12">
+                <Input
+                  required={true}
+                  name="prize_pool"
+                  id="prize_pool"
+                  type="number"
+                  label="Prize Pool"
+                  placeholder="Prize Pool"
+                  value={prizePool}
+                  min="0"
+                  onChange={(e) => setPrizePool(e.target.value)}
+                />
+                {error.prize_pool && (
+                  <span className="text-red-500 text-md">{error.prize_pool}</span>
+                )}
+              </div>
 
-            <FormInput
-              required={true}
-              name="team_number"
-              id="numberOfTeams"
-              type="number"
-              label="Number Of Teams"
-              placeholder="Number Of Teams"
-              value={numberOfTeams}
-              min="0"
-              onChange={(e) => setNumberOfTeams(e.target.value)}
-            />
-            {error.team_number && (
-              <span className="text-red-500 text-md">{error.team_number}</span>
-            )}
-
-            <FormInput
-              required={true}
-              name="prize_pool"
-              id="prize_pool"
-              type="text"
-              label="Prize Pool"
-              placeholder="Prize Pool"
-              value={prizePool}
-              onChange={(e) => setPrizePool(e.target.value)}
-            />
-            {error.prize_pool && (
-              <span className="text-red-500 text-md">{error.prize_pool}</span>
-            )}
-
-            <FormInput
+              <div className="w-6/12">
+                <SelectField
+                  required={true}
+                  label="Tournament Type/Format"
+                  placeholder="Select Tournament Type"
+                  id="tournament_type"
+                  name="tournament_type"
+                  searchable={false}
+                  options={tournamenTypeOption}
+                  value={tournamentType}
+                  onChange={(selectedOption) =>
+                    setTournamentType(selectedOption.value)
+                  }
+                />
+                {error.tournament_type && (
+                  <span className="text-red-500 text-md">{error.tournament_type}</span>
+                )}
+              </div>
+            </div>
+            <Input
               required={true}
               name="phone_number"
               id="phoneNumber"
@@ -320,7 +392,7 @@ export default function TournamentForm() {
               <span className="text-red-500 text-md">{error.phone_number}</span>
             )}
 
-            <FormInput
+            <Input
               required={false}
               name="email"
               id="email"
@@ -334,7 +406,7 @@ export default function TournamentForm() {
               <span className="text-red-500 text-md">{error.email}</span>
             )}
 
-            <FormInput
+            <Input
               required={true}
               name="address"
               id="address"

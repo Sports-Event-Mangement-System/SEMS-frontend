@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { MdCurrencyRupee } from "react-icons/md";
 import TournamentDetailsContent from './TournamentDetailsContent';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { Splide, SplideSlide } from '@splidejs/react-splide';
 import '@splidejs/react-splide/css';
@@ -48,7 +48,7 @@ export default function TournamentCardDetails() {
     console.log(tournamentData);
     return (
         <div className='flex flex-col items-center'>
-            <div className='w-[70%] bg-gray-200 h-fit space-y-9 pb-8'>
+            <div className='w-[83%] bg-gray-200 h-fit space-y-9 pb-8'>
 
                 {tournamentData.image_urls.length > 1 ? (
                     <Splide
@@ -83,7 +83,10 @@ export default function TournamentCardDetails() {
                     </div>
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
-                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'>Register Now</button>
+                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink 
+                            to="addTeam" state={{ tournamentData }}
+                        > <div className='flex items-center gap-1'>Register Now</div></NavLink>
+                        </button>
                     </div>
                 </div>
                 <div className='bg-gray-400 h-1 w-[95%] items-center mx-auto'></div>
@@ -105,7 +108,7 @@ export default function TournamentCardDetails() {
 
             </div>
 
-            <div className='w-[70%] h-fit mt-16'>
+            <div className='w-[83%] h-fit mt-16'>
                 <TournamentDetailsContent tabIndex={toggle} tournamentData={tournamentData} />
             </div>
 

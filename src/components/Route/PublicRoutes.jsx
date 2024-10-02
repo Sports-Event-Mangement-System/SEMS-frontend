@@ -7,6 +7,8 @@ import LogIn from '../Account/LogIn';
 import SignUp from '../Account/SignUp';
 import PrivateRoute from './PrivateRoute';
 import TournamentCardDetails from '../Tournaments/TournamentCardDetails';
+import TeamForm from "../Team/TeamForm";
+
 
 const publicRoutes = [
   {
@@ -48,6 +50,10 @@ const publicRoutes = [
         <SignUp />
       </PrivateRoute>
     ),
+  },
+  {
+    path: '/tournamentDetails/:id/addTeam',
+    element: <TeamForm />
   },
 ];
 

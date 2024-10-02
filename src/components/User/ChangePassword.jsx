@@ -1,4 +1,4 @@
-import Input from '../Account/Input';
+import Input from '../Ui/FormInput/Input';
 import React from 'react'
 
 function ChangePassword() {

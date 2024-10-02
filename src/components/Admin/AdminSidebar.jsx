@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { AdminSideBarData } from './AdminSidebarData'
 import { Link, NavLink } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IoIosArrowDown } from "react-icons/io";
+import { VscDash } from "react-icons/vsc";
+
 
 
 export default function AdminSidebar() {
@@ -25,80 +28,80 @@ export default function AdminSidebar() {
       const handleClickInsideDropdown = (e) => {
             e.stopPropagation(); // Prevents the click event from propagating to parent elements
       };
-      
 
-  return (
-    <>
-      <div className='bg-orange-500 h-screen text-white'>
-            <div>
-                  {AdminSideBarData.map((item, index) => (
-                        <div key={index} className='flex flex-col gap-10'>
-                              <Link to="/">
-                                    <img src="/public/images/Logo.png" alt="" className='h-14 w-15 ml-7' />
-                              </Link>
-                              <p className='text-center text-3xl font-extrabold'>{item.title}</p>
-                              <div>
-                                    <ul className='flex flex-col gap-4'>
-                                          {item?.menuItems?.map((innerItem, index) => (
-                                                <li key={index} className='px-4'
-                                                      onClick={() => {
-                                                            if(innerItem.itemName === "Tournament"){
-                                                                  handleDropdownTournament();
-                                                            }
-                                                            if(innerItem.itemName === "Team"){
-                                                                  handleDropdownTeam();
-                                                            }
-                                                      }}
-                                                >
-                                                      <NavLink to={innerItem?.link} className={({isActive}) => `${isActive ? 'opacity-70' : 'opacity-100'} flex items-center gap-1`} >
-                                                            <FontAwesomeIcon icon={innerItem.icon} color='white' style={{width: '20px', height: '16px'}} /> 
-                                                            {innerItem.itemName}
-                                                      </NavLink>
 
-                                                      {
-                                                            innerItem.itemName === "Tournament" && dropdownTournament ? (
-                                                                  <>
-                                                                       <div className='pl-6 pt-2'
-                                                                              onClick={handleClickInsideDropdown}
-                                                                       >
-                                                                         <NavLink  className={({isActive}) => `font-medium text-sm`}
-                                                                               to="addTournamentForm"
-                                                                              >Add</NavLink> 
-                                                                       </div>               
-                                                                  </>
-                                                            ):
-                                                            (
-                                                                  <></>
-                                                            )
-                                                      }
+      return (
+            <>
+                  <div className='bg-theme-color h-full text-white'>
+                        <div>
+                              {AdminSideBarData.map((item, index) => (
+                                    <div key={index} className='flex flex-col gap-10'>
+                                          <div className='flex bg-theme-color items-center justify-evenly h-16 mt-4'>
+                                                <Link to="/">
+                                                      <img src="/public/images/adminlogo.png" alt="" className='h-10 w-12' />
+                                                </Link>
+                                                <p className='text-center text-[27px] font-extrabold text-white'>{item.title}</p>
+                                          </div>
 
-{
-                                                            innerItem.itemName === "Team" && dropdownTeam ? (
-                                                                  <>
-                                                                       <div className='pl-6 pt-2'
-                                                                              onClick={handleClickInsideDropdown}
-                                                                       >
-                                                                         <NavLink  className={({isActive}) => `font-medium text-sm`}
-                                                                               to="addTeamForm"
-                                                                              >Add</NavLink> 
-                                                                       </div>               
-                                                                  </>
-                                                            ):
-                                                            (
-                                                                  <></>
-                                                            )
-                                                      }
-                                                      {/* {console.log(innerItem?.link)} */}
-                                                </li>
+                                          <div>
+                                                <ul className='flex flex-col gap-4'>
+                                                      {item?.menuItems?.map((innerItem, index) => (
+                                                            <li key={index} className='px-4'
+                                                                  onClick={() => {
+                                                                        if (innerItem.itemName === "Tournament") {
+                                                                              handleDropdownTournament();
+                                                                        }
+                                                                        if (innerItem.itemName === "Team") {
+                                                                              handleDropdownTeam();
+                                                                        }
+                                                                  }}
+                                                            >
+                                                                  <NavLink to={innerItem?.link} className={({ isActive }) => `${isActive ? 'text-white font-bold' : 'text-gray-200'} flex items-center gap-1 hover:text-white hover:font-bold`} >
+                                                                        <div className='p-1'><FontAwesomeIcon icon={innerItem.icon} style={{ width: '20px', height: '16px' }} /></div>
+                                                                        {innerItem.itemName} <IoIosArrowDown className='ml-1' size={20} />
+                                                                  </NavLink>
 
-                                                
-                                          ))}
-                                    </ul>
-                              </div>
+                                                                  {
+                                                                        innerItem.itemName === "Tournament" && dropdownTournament ? (
+                                                                              <>
+                                                                                    <div className='pl-6 pt-2'
+                                                                                          onClick={handleClickInsideDropdown}
+                                                                                    >
+                                                                                          <NavLink className={({ isActive }) => `font-medium text-sm`}
+                                                                                                to="addTournamentForm"
+                                                                                          > <div className='flex items-center gap-1'><VscDash size={30} />Add</div></NavLink>
+                                                                                    </div>
+                                                                              </>
+                                                                        ) :
+                                                                              (
+                                                                                    <></>
+                                                                              )
+                                                                  }
+
+                                                                  {
+                                                                        innerItem.itemName === "Team" && dropdownTeam ? (
+                                                                              <>
+                                                                                    <div className='pl-6 pt-2'
+                                                                                          onClick={handleClickInsideDropdown}
+                                                                                    >
+                                                                                    </div>
+                                                                              </>
+                                                                        ) :
+                                                                              (
+                                                                                    <></>
+                                                                              )
+                                                                  }
+                                                                  {/* {console.log(innerItem?.link)} */}
+                                                            </li>
+
+
+                                                      ))}
+                                                </ul>
+                                          </div>
+                                    </div>
+                              ))}
                         </div>
-                  ))}
-            </div>
-      </div>
-    </>
-  )
+                  </div>
+            </>
+      )
 }
