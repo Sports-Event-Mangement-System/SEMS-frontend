@@ -10,16 +10,16 @@ import { VscDash } from "react-icons/vsc";
 export default function AdminSidebar() {
 
       const [dropdownTournament, setDropdownTournament] = useState(false);
-      const [dropdownTeam, setDropdownTeam] = useState(false);
+      // const [dropdownTeam, setDropdownTeam] = useState(false);
 
 
       const handleDropdownTournament = () => {
             setDropdownTournament(prevValue => !prevValue);
-            setDropdownTeam(false);
+            // setDropdownTeam(false);
       }
 
       const handleDropdownTeam = () => {
-            setDropdownTeam(prevValue => !prevValue);
+            // setDropdownTeam(prevValue => !prevValue);
             setDropdownTournament(false);
       }
 
@@ -78,7 +78,7 @@ export default function AdminSidebar() {
                                                                               )
                                                                   }
 
-                                                                  {
+                                                                  {/* {
                                                                         innerItem.itemName === "Team" && dropdownTeam ? (
                                                                               <>
                                                                                     <div className='pl-6 pt-2'
@@ -90,7 +90,7 @@ export default function AdminSidebar() {
                                                                               (
                                                                                     <></>
                                                                               )
-                                                                  }
+                                                                  } */}
                                                                   {/* {console.log(innerItem?.link)} */}
                                                             </li>
 
