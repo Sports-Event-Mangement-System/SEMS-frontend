@@ -38,7 +38,10 @@ function Tournaments() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}api/active/tournaments`, {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}api/tournaments`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.access_token}`,
+          },
         });
         console.log(response);
         setTournaments(response.data.tournaments);
