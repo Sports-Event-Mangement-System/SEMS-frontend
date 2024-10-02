@@ -2,6 +2,8 @@ import PrivateRoute from './PrivateRoute';
 import Account from '../Account/Account';
 import Profile from '../User/Profile';
 import ChangePassword from '../User/ChangePassword'; // Import the ChangePassword component
+import TeamForm from "../Team/TeamForm";
+
 
 const userRoutes = [
   {
@@ -25,6 +27,14 @@ const userRoutes = [
     element: (
       <PrivateRoute requiredRole={['user', 'admin']}>
         <ChangePassword />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/tournamentDetails/:id/addTeam',
+    element: (
+      <PrivateRoute requiredRole={['user', 'admin']}>
+        <TeamForm />
       </PrivateRoute>
     ),
   },

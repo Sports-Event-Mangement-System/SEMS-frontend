@@ -4,18 +4,23 @@ import DragDropFile from "../Ui/DragDrop/DragDropFile";
 import { ImCross } from "react-icons/im";
 import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { GiTrophy } from "react-icons/gi";
+import axios from "axios";
 
 export default function TeamManagement() {
   const location = useLocation();
   const { tournamentData } = location.state || {};
 
-  const [images, setImages] = useState([]);
+  const [image, setImages] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [playerList, setPlayerList] = useState([]);
   const navigate = useNavigate();
   const [error, setError] = useState({});
 
+  const [teamName, setTeamName] = useState("");
+  const [coachName, setCoachName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("");
 
   // Initialize player list based on min_players_per_team
   useEffect(() => {
@@ -52,13 +57,22 @@ export default function TeamManagement() {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("t_id", tournamentData?.t_id || 0);
+    formData.append("tournament_id", tournamentData?.id || 0);
     formData.append("team_name", teamName || "");
     formData.append("coach_name", coachName || "");
     formData.append("phone_number", phoneNumber || "");
     formData.append("email", email || "");
     formData.append("address", address || "");
-    formData.append("player_number", player_number || 0);
+    formData.append("team_logo", image[0]);
+    formData.append("player_number", playerList.length);
+
+    // Append players data
+    playerList.forEach((player, index) => {
+      formData.append(`players[${index}][player_name]`, player.playerName);
+      formData.append(`players[${index}][player_email]`, player.playerEmail);
+    });
+
+
 
     axios.post(`${import.meta.env.VITE_API_URL}api/store/team`, formData, {
       headers: {
@@ -67,7 +81,7 @@ export default function TeamManagement() {
     })
       .then((res) => {
         if (res.data.status) {
-          navigate(`/tournamentDetails/${tournamentData?.t_id}`);
+          navigate(`/tournamentDetails/${tournamentData?.id}`);
           toast.success(res.data.message);
         }
       })
@@ -97,6 +111,7 @@ export default function TeamManagement() {
               label="Team Name"
               placeholder="Enter Team Name"
               className="w-[80vh]"
+              onChange={(e) => setTeamName(e.target.value)}
             />
             {error.team_name && (
               <span className="text-red-500 text-md">
@@ -111,6 +126,7 @@ export default function TeamManagement() {
               label="Team Coach"
               placeholder="Enter Coach Name"
               className="w-[80vh]"
+              onChange={(e) => setCoachName(e.target.value)}
             />
             {error.coach_name && (
               <span className="text-red-500 text-md">
@@ -126,6 +142,7 @@ export default function TeamManagement() {
               label="Email"
               placeholder="Enter your email"
               className="w-[80vh]"
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
             {error.email && (
               <span className="text-red-500 text-md">
@@ -141,10 +158,27 @@ export default function TeamManagement() {
               label="Phone Number"
               placeholder="Enter Your Team's Phone Number"
               className="w-[80vh]"
+              onChange={(e) => setEmail(e.target.value)}
             />
             {error.phone_number && (
               <span className="text-red-500 text-md">
                 {error.phone_number}
+              </span>
+            )}
+
+            <Input
+              required={true}
+              name="address"
+              id="Address"
+              type="text"
+              label="Address"
+              placeholder="Enter Your Team's Address"
+              className="w-[80vh]"
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            {error.address && (
+              <span className="text-red-500 text-md">
+                {error.address}
               </span>
             )}
 
@@ -176,14 +210,20 @@ export default function TeamManagement() {
                     <div className="flex items-center justify-end">
                       <Input
                         required={true}
-                        name=""
+                        name="player_name"
                         type="text"
-                        label={`Player ${index + 1} Name `}
+                        label={`Player ${index + 1} Name`}
                         placeholder={`Player ${index + 1} Name`}
                         value={player.playerName}
+                        onChange={(e) => handlePlayerChange(index, "playerName", e.target.value)}  // Update name field
                         className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       />
                     </div>
+                    {error[`players.${index}.player_name`] && (
+                      <span className="text-red-500 text-sm">
+                        {error[`players.${index}.player_name`][0]}
+                      </span>
+                    )}
                   </div>
                 ))}
               </div>
@@ -193,11 +233,12 @@ export default function TeamManagement() {
                     <div className="flex items-center justify-start">
                       <Input
                         required={true}
-                        name=""
+                        name="player_email"
                         type="text"
-                        label={`Player ${index + 1} Email `}
+                        label={`Player ${index + 1} Email`}
                         placeholder={`Player ${index + 1} Email`}
                         value={player.playerEmail}
+                        onChange={(e) => handlePlayerChange(index, "playerEmail", e.target.value)}  // Update email field
                         className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       />
                       {playerList.length > tournamentData.min_players_per_team && (
@@ -210,8 +251,14 @@ export default function TeamManagement() {
                         </button>
                       )}
                     </div>
+                    {error[`players.${index}.player_email`] && (
+                      <span className="text-red-500 text-sm">
+                        {error[`players.${index}.player_email`][0]}
+                      </span>
+                    )}
                   </div>
                 ))}
+
               </div>
             </div>
 
