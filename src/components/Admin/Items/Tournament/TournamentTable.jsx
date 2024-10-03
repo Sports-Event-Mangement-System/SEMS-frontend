@@ -149,7 +149,7 @@ export default function TournamentTable() {
         )}
 
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
-          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
             <tr>
               <th className="px-6 py-3 text-start">S.N.</th>
               <th className="px-6 py-3 text-start">Tournament Name</th>
@@ -184,7 +184,7 @@ export default function TournamentTable() {
             )}
 
             {tournaments.map((tournament, index) => (
-              <tr key={tournament.id} className="text-start">
+              <tr key={tournament.id} className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-medium">
                 <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{tournament.t_name}</td>
                 <td className="px-6 py-3">

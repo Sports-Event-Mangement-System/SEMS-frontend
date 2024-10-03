@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdDelete, MdEdit } from "react-icons/md";
 
+
 export default function TeamTable() {
   const [teams, setTeams] = useState([]);
 
@@ -30,7 +31,7 @@ export default function TeamTable() {
     <>
       <div className="p-4 w-full shadow-2xl">
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
-          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
             <tr>
               <th className="px-6 py-3 text-start">S.N.</th>
               <th className="px-6 py-3 text-start">Team Name</th>
@@ -41,9 +42,9 @@ export default function TeamTable() {
               <th className="px-6 py-3 text-start">Action</th>
             </tr>
           </thead>
-          <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+          <tbody className="bg-white hover:bg-gray-50">
             {teams.map((team, index) => (
-              <tr key={index} className="text-start">
+              <tr key={index} className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-medium">
                 <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{team.team_name}</td>
                 <td className="px-6 py-3">{team.coach_name}</td>
@@ -56,7 +57,6 @@ export default function TeamTable() {
                 </td>
                 <td className="px-6 py-3">{team.email}</td>
                 <td className="px-6 py-3">{team.phone_number}</td>
-                <td className="px-6 py-3">
                   <td className="px-6 py-3">
                     <div className="flex gap-2">
                       <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center">
@@ -67,7 +67,6 @@ export default function TeamTable() {
                       </button>
                     </div>
                   </td>
-                </td>
               </tr>
             ))}
           </tbody>
