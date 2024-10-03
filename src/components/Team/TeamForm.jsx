@@ -142,7 +142,7 @@ export default function TeamManagement() {
               label="Email"
               placeholder="Enter your email"
               className="w-[80vh]"
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
             />
             {error.email && (
               <span className="text-red-500 text-md">
@@ -158,7 +158,7 @@ export default function TeamManagement() {
               label="Phone Number"
               placeholder="Enter Your Team's Phone Number"
               className="w-[80vh]"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => setPhoneNumber(e.target.value)}
             />
             {error.phone_number && (
               <span className="text-red-500 text-md">
