@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdDelete, MdEdit } from "react-icons/md";
+import { toast } from "react-toastify";
 
 
 export default function TeamTable() {
@@ -27,6 +28,32 @@ export default function TeamTable() {
     fetchTeam();
   }, []);
 
+  const toggleStatus = async (id, currentStatus) => {
+    try {
+      const newStatus = currentStatus === 1 ? 0 : 1;
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}api/update-status/team/${id}`,
+        { 
+          team_id: id,
+          status: newStatus,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log(response.data)
+      if (response.data.status) {
+        fetchTeam();
+        toast.success(response.data.message);
+      }
+    } catch (err) {
+      toast.error("Error updating tournament status");
+      console.error("Error updating tournament status", err);
+    }
+  };
+
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
@@ -38,7 +65,7 @@ export default function TeamTable() {
               <th className="px-6 py-3 text-start">Team Coach</th>
               <th className="px-6 py-3 text-start">Team Logo</th>
               <th className="px-6 py-3 text-start">Email</th>
-              <th className="px-6 py-3 text-start">Phone Number</th>
+              <th className="px-6 py-3 text-start">Status</th>
               <th className="px-6 py-3 text-start">Action</th>
             </tr>
           </thead>
@@ -56,7 +83,16 @@ export default function TeamTable() {
                   />
                 </td>
                 <td className="px-6 py-3">{team.email}</td>
-                <td className="px-6 py-3">{team.phone_number}</td>
+                <td className="px-6 py-3">
+                  <button
+                    className={`text-white rounded-xl w-20 py-1 ${
+                      team.status === 1 ? "bg-green-600" : "bg-red-600"
+                    }`}
+                    onClick={() => toggleStatus(team.id, team.status)}
+                  >
+                    {team.status === 1 ? "Active" : "Inactive"}
+                  </button>
+                </td>
                   <td className="px-6 py-3">
                     <div className="flex gap-2">
                       <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center">
