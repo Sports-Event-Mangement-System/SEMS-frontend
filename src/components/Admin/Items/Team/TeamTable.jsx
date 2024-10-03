@@ -1,15 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 
 export default function TeamTable() {
+
+  useEffect (() => {
+      const fetchTeam = async () => {
+          try{
+              const response = await axios.get(`${import.meta.env.VITE_API_URL}api/teams`, 
+                {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                  },
+                }
+              )
+              console.log(response.data)
+          }
+          catch(err){
+              console.log(err)
+          }
+      }
+
+      fetchTeam();
+
+  }, [])
+
+
   return (
     <>
-      <div>
-        <button
-          className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
-        >
-          Add
-        </button>
-      </div>
+      
       <div className="p-4 w-full shadow-2xl">
         
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
@@ -21,6 +39,7 @@ export default function TeamTable() {
               <th className="px-6 py-3 text-start">Team Logo</th>
               <th className="px-6 py-3 text-start">Email</th>
               <th className="px-6 py-3 text-start">Phone Number</th>
+              <th className="px-6 py-3 text-start">Action</th>
             </tr>
           </thead>
           <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
