@@ -118,7 +118,7 @@ export default function AdminContact() {
         )}
 
         <table className="table-auto w-full">
-          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-400">
+          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
             <tr>
               <th className="px-6 py-3 text-start">S.N</th>
               <th className="px-6 py-3 text-start">Full Name</th>
@@ -131,7 +131,7 @@ export default function AdminContact() {
           <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
             {contactData.length > 0 ? (
               contactData.map((contact, index) => (
-                <tr className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white text-start" key={contact.id}>
+                <tr className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-semibold" key={contact.id}>
                   <td className="px-6 py-3">{index + 1}</td>
                   <td className="px-6 py-3">{contact.first_name + ' ' + contact.last_name}</td>
                   <td className="px-6 py-3">{contact.email}</td>
