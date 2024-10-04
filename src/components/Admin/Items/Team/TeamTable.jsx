@@ -7,24 +7,24 @@ import { toast } from "react-toastify";
 export default function TeamTable() {
   const [teams, setTeams] = useState([]);
 
+  const fetchTeam = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/teams`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log(response.data.data);
+      setTeams(response.data.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
   useEffect(() => {
-    const fetchTeam = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/teams`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
-        console.log(response.data.data);
-        setTeams(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchTeam();
   }, []);
 
@@ -49,8 +49,8 @@ export default function TeamTable() {
         toast.success(response.data.message);
       }
     } catch (err) {
-      toast.error("Error updating tournament status");
-      console.error("Error updating tournament status", err);
+      console.log(err);
+      toast.error("Error updating Team status");
     }
   };
 
