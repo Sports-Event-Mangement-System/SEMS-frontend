@@ -3,8 +3,8 @@ import axios from 'axios';
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import FullDetailsModal from './FullDetailsModal';
 import { toast } from 'react-toastify';
+import Modal from '../../../Ui/Modal/Modal';
 
 export default function AdminContact() {
   const [contactData, setContactData] = useState([]);
@@ -87,35 +87,50 @@ export default function AdminContact() {
       <div className="p-4 w-full shadow-2xl">
 
         {showModal && (
-          <FullDetailsModal
-            closeModal={closeModal}
-            details={selectedContact ? propsContactDetails(selectedContact) : []}
-          />
+          <Modal closeModal={closeModal}>
+            <div className='space-y-5'>
+              <div className='font-bold text-2xl flex justify-center text-orange-600 underline'>Full Details</div>
+              {selectedContact ? (
+                propsContactDetails(selectedContact).map((detail, index) => (
+                  <div key={index} className='flex items-start'>
+                    <h1 className='font-bold text-lg flex-shrink-0 w-32 flex justify-start'>{index + 1}. {detail.label} :</h1>
+                    <div className='ml-5 font-medium text-gray-800'>{detail.value}</div>
+                  </div>
+                ))
+              ) : (
+                <p>Loading details...</p>
+              )}
+            </div>
+          </Modal>
         )}
 
+
         {showDeleteModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-slate-100 h-fit w-fit px-32 py-10 rounded-lg shadow-lg">
-              <div className='flex justify-center mb-12 mt-5'><RiDeleteBin6Line size={80} color='rgb(255,140,0)' /></div>
-              <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
-              <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">Are you sure you want to delete this row from the table?</div>
-              <div className="flex justify-center mt-4 gap-3">
-                <button
-                  className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                  onClick={closeDeleteModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                  onClick={deleteContact}
-                >
-                  Yes, Delete it!
-                </button>
-              </div>
+          <Modal closeModal={closeDeleteModal}>
+            <div className='flex justify-center mb-12 mt-5'>
+              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
             </div>
-          </div>
+            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
+            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
+              Are you sure want to delete this row from the table?
+            </div>
+            <div className="flex justify-center mt-4 gap-3">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={closeDeleteModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                onClick={deleteContact}
+              >
+                Yes, Delete it!
+              </button>
+            </div>
+          </Modal>
         )}
+
 
         <table className="table-auto w-full">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
