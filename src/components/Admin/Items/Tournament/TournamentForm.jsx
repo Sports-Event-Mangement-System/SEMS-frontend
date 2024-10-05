@@ -47,7 +47,7 @@ export default function TournamentForm() {
     { value: 0, label: "Not Featured" },
   ];
 
-  const tournamenTypeOption  = [
+  const tournamenTypeOption = [
     { value: 'round-robin', label: "Round Robin" },
     { value: 'single-elimination', label: "Single Elimination" },
   ];
@@ -310,7 +310,7 @@ export default function TournamentForm() {
             </div>
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
-              <Input
+                <Input
                   required={true}
                   name="max_players_per_team"
                   id="max_players_per_team"
@@ -368,7 +368,7 @@ export default function TournamentForm() {
                   name="tournament_type"
                   searchable={false}
                   options={tournamenTypeOption}
-                  value={tournamentType}
+                  value={tournamenTypeOption.find(option => option.value === tournamentType)}
                   onChange={(selectedOption) =>
                     setTournamentType(selectedOption.value)
                   }
@@ -430,7 +430,7 @@ export default function TournamentForm() {
                   name="status"
                   searchable={false}
                   options={statusOption}
-                  value={status}
+                  value={statusOption.find(option => option.value === status)}
                   onChange={(selectedOption) => setStatus(selectedOption.value)}
                 />
                 {error.status && (
@@ -447,7 +447,7 @@ export default function TournamentForm() {
                   name="featured"
                   searchable={false}
                   options={featureOption}
-                  value={featured}
+                  value={featureOption.find(option => option.value === featured)}
                   onChange={(selectedOption) =>
                     setFeatured(selectedOption.value)
                   }

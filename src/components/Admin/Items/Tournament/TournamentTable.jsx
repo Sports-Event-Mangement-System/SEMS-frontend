@@ -5,6 +5,7 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import Modal from "../../../Ui/Modal/Modal";
 
 export default function TournamentTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -52,8 +53,7 @@ export default function TournamentTable() {
   const deleteTournament = async () => {
     try {
       const response = await axios.delete(
-        `${
-          import.meta.env.VITE_API_URL
+        `${import.meta.env.VITE_API_URL
         }api/delete/tournament/${tournamentToDelete}`,
         {
           headers: {
@@ -77,7 +77,7 @@ export default function TournamentTable() {
   };
 
   const addNewTournament = () => {
-      navigate(`/admin/addTournamentForm`);
+    navigate(`/admin/addTournamentForm`);
   }
 
 
@@ -118,35 +118,36 @@ export default function TournamentTable() {
         </button>
       </div>
       <div className="p-4 w-full shadow-2xl">
+
+
         {showDeleteModal && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-slate-100 h-fit w-fit px-32 py-10 rounded-lg shadow-lg">
-              <div className="flex justify-center mb-12 mt-5">
-                <RiDeleteBin6Line size={80} color="rgb(255,140,0)" />
-              </div>
-              <div className="text-xl font-semibold flex justify-center">
-                Are you sure?
-              </div>
-              <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-                Are you sure you want to delete this row from the table?
-              </div>
-              <div className="flex justify-center mt-4 gap-3">
-                <button
-                  className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                  onClick={closeDeleteModal}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                  onClick={deleteTournament}
-                >
-                  Yes, Delete it!
-                </button>
-              </div>
+          <Modal closeModal={closeDeleteModal}>
+            <div className='flex justify-center mb-12 mt-5'>
+              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
             </div>
-          </div>
+            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
+            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
+              Are you sure want to delete this row from the table?
+            </div>
+            <div className="flex justify-center mt-4 gap-3">
+              <button
+                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
+                onClick={closeDeleteModal}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
+                onClick={deleteTournament}
+              >
+                Yes, Delete it!
+              </button>
+            </div>
+          </Modal>
         )}
+
+
+
 
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
@@ -202,14 +203,13 @@ export default function TournamentTable() {
                     />
                   ) : (
                     <span>No logo</span>
-                    
+
                   )}
                 </td>
                 <td className="px-6 py-3">
                   <button
-                    className={`text-white rounded-xl w-20 py-1 ${
-                      tournament.status === 1 ? "bg-green-600" : "bg-red-600"
-                    }`}
+                    className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? "bg-green-600" : "bg-red-600"
+                      }`}
                     onClick={() => toggleStatus(tournament.id, tournament.status)}
                   >
                     {tournament.status === 1 ? "Active" : "Inactive"}

@@ -26,7 +26,7 @@ function SelectField({
     }),
   };
 
-  // Check if options is defined and is an array
+
   const selectedOption =
     Array.isArray(options) && options.length
       ? options.find((option) => option.value === value)
@@ -45,8 +45,8 @@ function SelectField({
           id={id}
           placeholder={placeholder}
           options={options}
-          value={selectedOption} // Set the selected value
-          onChange={onChange} // Call the onChange handler
+          value={value ? value : selectedOption}
+          onChange={onChange}
           className="w-full"
           styles={customStyles}
           classNamePrefix="custom-select"

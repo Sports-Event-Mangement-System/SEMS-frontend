@@ -56,7 +56,7 @@ export default function AdminSidebar() {
                                                                         }
                                                                   }}
                                                             >
-                                                                  <NavLink to={innerItem?.link} className={({ isActive }) => `${isActive ? 'text-white font-bold' : 'text-gray-200'} flex items-center gap-1 hover:text-white hover:font-bold`} >
+                                                                  <NavLink to={innerItem?.link} className={({ isActive }) => `${isActive ? 'text-white font-bold border border-white rounded-xl' : 'text-gray-200'} flex items-center gap-1 hover:text-white hover:font-bold`} >
                                                                         <div className='p-1'><FontAwesomeIcon icon={innerItem.icon} style={{ width: '20px', height: '16px' }} /></div>
                                                                         {innerItem.itemName} <IoIosArrowDown className='ml-1' size={20} />
                                                                   </NavLink>
@@ -67,7 +67,7 @@ export default function AdminSidebar() {
                                                                                     <div className='pl-6 pt-2'
                                                                                           onClick={handleClickInsideDropdown}
                                                                                     >
-                                                                                          <NavLink className={({ isActive }) => `font-medium text-sm`}
+                                                                                          <NavLink className={({ isActive }) => `${isActive ? 'text-white font-bold border border-white rounded-xl' : 'text-gray-200'} flex items-center gap-1 hover:text-white hover:font-bold`}
                                                                                                 to="addTournamentForm"
                                                                                           > <div className='flex items-center gap-1'><VscDash size={30} />Add</div></NavLink>
                                                                                     </div>
