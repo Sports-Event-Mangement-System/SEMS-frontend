@@ -48,15 +48,15 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
 
                             <div className='flex justify-between font-bold text-base '>
                                 <span>Registered</span>
-                                <span className='text-orange-600'>12</span>
+                                <span className='text-orange-600'>{tournamentData.team_register ?? 0}</span>
                             </div>
                             <div className='flex justify-between font-bold text-base '>
                                 <span>Confirmed</span>
-                                <span className='text-orange-600'>12</span>
+                                <span className='text-orange-600'>{tournamentData.team_confirmed ?? 0}</span>
                             </div>
                             <div className='flex justify-between font-bold text-base '>
                                 <span>Available Slot</span>
-                                <span className='text-orange-600'>12</span>
+                                <span className='text-orange-600'>{tournamentData.slot_left ?? 0}</span>
                             </div>
 
                         </div>
