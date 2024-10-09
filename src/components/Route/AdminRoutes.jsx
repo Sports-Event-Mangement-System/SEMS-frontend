@@ -3,6 +3,7 @@ import AdminContact from "../Admin/Items/Contact/AdminContact";
 import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
 import TeamTable from "../Admin/Items/Team/TeamTable";
 import { element } from "prop-types";
+import Schedule from "../Admin/Items/Schedule/ScheduleManagment";
 
 const adminRoutes = [
      {
@@ -24,6 +25,10 @@ const adminRoutes = [
      {
           path: 'editTournamentForm/:id',
           element: <TournamentForm />, // For editing tournaments
+     },
+     {
+          path: 'schedule',
+          element: <Schedule />,
      },
 
 ];
