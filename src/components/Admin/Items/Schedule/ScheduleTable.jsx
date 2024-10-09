@@ -1,13 +1,14 @@
 // TournamentTable.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { MdDelete, MdEdit } from "react-icons/md";
+import { MdDelete, MdEdit, MdOutlineSchedule } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Modal from "../../../Ui/Modal/Modal";
+import { TbTournament } from "react-icons/tb";
 
-export default function TournamentTable() {
+export default function ScheduleTable() {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,33 +77,6 @@ export default function TournamentTable() {
     navigate(`/admin/addTournamentForm?tournamentId=${id}`);
   };
 
-  const toggleStatus = async (id, currentStatus) => {
-    try {
-      const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
-        { status: newStatus }, // Assuming the API expects a JSON body
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log(response.data)
-      if (response.data.status) {
-        setTournaments(prevTournaments =>
-          prevTournaments.map(t =>
-            t.id === id ? { ...t, status: newStatus } : t
-          )
-        );
-        toast.success(response.data.message);
-      }
-    } catch (err) {
-      toast.error("Error updating tournament status");
-      console.error("Error updating tournament status", err);
-    }
-  };
-
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
@@ -142,11 +116,10 @@ export default function TournamentTable() {
             <tr>
               <th className="px-6 py-3 text-start">S.N.</th>
               <th className="px-6 py-3 text-start">Tournament Name</th>
-              <th className="px-6 py-3 text-start">Starting Date</th>
-              <th className="px-6 py-3 text-start">Ending Date</th>
-              <th className="px-6 py-3 text-start">Logo</th>
-              <th className="px-6 py-3 text-start">Status</th>
-              <th className="px-6 py-3 text-start">Action</th>
+              <th className="px-6 py-3 text-start">Tournament Type</th>
+              <th className="px-6 py-3 text-start">Team Registered</th>
+              <th className="px-6 py-3 text-start">Tiesheet Generator</th>
+              <th className="px-6 py-3 text-start">Schedule</th>
             </tr>
           </thead>
           <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -177,46 +150,31 @@ export default function TournamentTable() {
                 <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{tournament.t_name}</td>
                 <td className="px-6 py-3">
-                  {new Date(tournament.ts_date).toLocaleDateString()}
+                  {tournament.tournament_type}
                 </td>
                 <td className="px-6 py-3">
-                  {new Date(tournament.te_date).toLocaleDateString()}
-                </td>
-                <td className="px-6 py-3">
-                  {tournament.t_images[0] ? (
-                    <img
-                      src={tournament.image_urls[0]}
-                      alt={`${tournament.t_name} logo`}
-                      className="w-12 h-12 object-cover"
-                    />
-                  ) : (
-                    <span>No logo</span>
-
-                  )}
-                </td>
-                <td className="px-6 py-3">
-                  <button
-                    className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? "bg-green-600" : "bg-red-600"
-                      }`}
-                    onClick={() => toggleStatus(tournament.id, tournament.status)}
-                  >
-                    {tournament.status === 1 ? "Active" : "Inactive"}
-                  </button>
+                  {tournament.teams.length}
                 </td>
                 <td className="px-6 py-3">
                   <div className="flex gap-2">
                     <button
                       className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center"
-                      onClick={() => handleEdit(tournament.id)}
+                      onClick={() => tiesheetGenerator(tournament.id)}
                     >
-                      <MdEdit />
+                      <TbTournament />
                     </button>
+
+                  </div>
+                </td>
+                <td className="px-6 py-3">
+                  <div className="flex gap-2">
                     <button
-                      className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center"
+                      className="bg-blue-500 text-white rounded-xl w-16 py-2 flex justify-center"
                       onClick={() => confirmDelete(tournament.id)}
                     >
-                      <MdDelete />
+                      <MdOutlineSchedule />
                     </button>
+
                   </div>
                 </td>
               </tr>
