@@ -28,8 +28,15 @@ export default function TeamTable() {
     fetchTeam();
   }, []);
 
+
+  const [isLoading, setIsLoading] = useState(false);
   const toggleStatus = async (id, currentStatus) => {
+     // Add a loading state
+  
+    if (isLoading) return; // Prevent multiple clicks
+  
     try {
+      setIsLoading(true); // Set loading to true when the request starts
       const newStatus = currentStatus === 1 ? 0 : 1;
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/team/${id}`,
@@ -43,7 +50,7 @@ export default function TeamTable() {
           },
         }
       );
-      console.log(response.data)
+      console.log(response.data);
       if (response.data.status) {
         fetchTeam();
         toast.success(response.data.message);
@@ -51,8 +58,11 @@ export default function TeamTable() {
     } catch (err) {
       console.log(err);
       toast.error("Error updating Team status");
+    } finally {
+      setIsLoading(false); // Set loading to false when the request completes
     }
   };
+  
 
   return (
     <>
@@ -89,8 +99,9 @@ export default function TeamTable() {
                       team.status === 1 ? "bg-green-600" : "bg-red-600"
                     }`}
                     onClick={() => toggleStatus(team.id, team.status)}
+                    disabled={isLoading}
                   >
-                    {team.status === 1 ? "Active" : "Inactive"}
+                    {isLoading ? "Loading..." : team.status === 1 ? "Active" : "Inactive"} {/* Show loading text */}
                   </button>
                 </td>
                   <td className="px-6 py-3">
