@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
 import "flatpickr/dist/themes/material_green.css";
 import Flatpickr from "react-flatpickr";
+import {dateFormatBackend} from "../../../Helper/dateFormat";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
@@ -55,7 +56,6 @@ export default function TournamentForm() {
   ];
 
   const [isDataFetched, setIsDataFetched] = useState(false);
-
   useEffect(() => {
     if (tournamentId) {
       if (isDataFetched) return;
@@ -120,8 +120,8 @@ export default function TournamentForm() {
     const formData = new FormData();
     formData.append("t_name", tournamentName || "");
     formData.append("t_description", tournamentDescription || "");
-    formData.append("ts_date", startingDate || "");
-    formData.append("te_date", endingDate || "");
+    formData.append("ts_date", dateFormatBackend(startingDate) || "");
+    formData.append("te_date", dateFormatBackend(endingDate) || "");
     // Append new images (files selected by the user)
     if (newImages.length) {
       newImages.forEach((file) => formData.append("t_images[]", file));
@@ -140,15 +140,14 @@ export default function TournamentForm() {
     formData.append("phone_number", phoneNumber || "");
     formData.append("email", email || "");
     formData.append("address", address || "");
-    formData.append("rs_date", registrationStartingDate || "");
-    formData.append("re_date", registrationEndingDate || "");
+    formData.append("rs_date", dateFormatBackend(registrationStartingDate) || "");
+    formData.append("re_date", dateFormatBackend(registrationEndingDate) || "");
     formData.append("status", status);
     formData.append("featured", featured);
 
     const url = tournamentId
       ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
       : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
-
     axios
       .post(url, formData, {
         headers: {
@@ -166,7 +165,6 @@ export default function TournamentForm() {
         setError(err.response?.data?.errors || { message: err.message });
       });
   };
-
   const [minDate, setMinDate] = useState("");
   useEffect(() => {
     const todayDate = new Date();
@@ -178,7 +176,7 @@ export default function TournamentForm() {
 
     setMinDate(currentDate);
   }, []);
-
+  
   return (
     <div>
       <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
@@ -230,10 +228,10 @@ export default function TournamentForm() {
                   id="starting"
                   value={startingDate}
                   options={{
-                    minDate: minDate,
                     dateFormat: "Y-m-d",
                   }}
-                  onChange={(date) => setStartingDate(date[0])}
+                   // Format date for Flatpickr
+                  onChange={(date) => setStartingDate(date[0])} // Update state on change
                   className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.ts_date && (
@@ -255,7 +253,7 @@ export default function TournamentForm() {
                     minDate: minDate,
                     dateFormat: "Y-m-d"
                   }}
-                  onChange={(e) => setEndingDate(e.target.value)}
+                  onChange={(date) => setEndingDate(dateFormatBackend(date[0]))}
                   className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.te_date && (
@@ -279,7 +277,7 @@ export default function TournamentForm() {
                     minDate: minDate,
                     dateFormat: "Y-m-d"
                   }}
-                  onChange={(e) => setRegistrationStartingDate(e.target.value)}
+                  onChange={(date) => setRegistrationStartingDate(dateFormatBackend(date[0]))}
                   className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.rs_date && (
@@ -301,7 +299,7 @@ export default function TournamentForm() {
                     minDate: minDate,
                     dateFormat: "Y-m-d"
                   }}
-                  onChange={(e) => setRegistrationEndingDate(e.target.value)}
+                  onChange={(date) => setRegistrationEndingDate(dateFormatBackend(date[0]))}
                   className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.re_date && (

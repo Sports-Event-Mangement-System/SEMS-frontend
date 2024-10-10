@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Modal from "../../../Ui/Modal/Modal";
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
+import {dateFormatFrontend} from "../../../Helper/dateFormat";
 
 export default function TournamentTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -189,10 +190,10 @@ export default function TournamentTable() {
                 <td className="px-6 py-3">{index + 1}</td>
                 <td className="px-6 py-3">{tournament.t_name}</td>
                 <td className="px-6 py-3">
-                  {new Date(tournament.ts_date).toLocaleDateString()}
+                  {dateFormatFrontend(tournament.ts_date)}
                 </td>
                 <td className="px-6 py-3">
-                  {new Date(tournament.te_date).toLocaleDateString()}
+                  {dateFormatFrontend(tournament.te_date)}
                 </td>
                 <td className="px-6 py-3">
                   {tournament.t_images[0] ? (

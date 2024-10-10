@@ -4,6 +4,7 @@ import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
 import TeamTable from "../Admin/Items/Team/TeamTable";
 import { element } from "prop-types";
 import Schedule from "../Admin/Items/Schedule/ScheduleManagment";
+import EditTeamForm from "../Admin/Items/Team/EditTeamForm";
 
 const adminRoutes = [
      {
@@ -13,6 +14,10 @@ const adminRoutes = [
      {
           path: 'teamManagement',
           element: <TeamTable />,
+     },
+     {
+          path: 'editTeamForm/:id',
+          element: <EditTeamForm />
      },
      {
           path: 'adminContact',
