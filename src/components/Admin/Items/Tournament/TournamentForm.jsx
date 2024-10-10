@@ -160,6 +160,20 @@ export default function TournamentForm() {
       });
   };
 
+  const [minDate, setMinDate] = useState('');
+  useEffect(() => {
+    const todayDate = new Date();
+    const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
+    const dd = String(todayDate.getDate()).padStart(2, '0');
+    const yyyy = todayDate.getFullYear();
+
+    const currentDate = `${yyyy}-${mm}-${dd}`;
+
+    setMinDate(currentDate);
+    
+  }, []);
+
+
   return (
     <div>
       <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
@@ -206,6 +220,7 @@ export default function TournamentForm() {
                   type="date"
                   label="Starting Date"
                   value={startingDate}
+                  min={minDate}
                   onChange={(e) => setStartingDate(e.target.value)}
                 />
                 {error.ts_date && (
@@ -221,6 +236,7 @@ export default function TournamentForm() {
                   type="date"
                   label="Ending Date"
                   value={endingDate}
+                  min={minDate}
                   onChange={(e) => setEndingDate(e.target.value)}
                 />
                 {error.te_date && (
@@ -238,6 +254,7 @@ export default function TournamentForm() {
                   type="date"
                   label="Registration Starting Date"
                   value={registrationStartingDate}
+                  min={minDate}
                   onChange={(e) => setRegistrationStartingDate(e.target.value)}
                 />
                 {error.rs_date && (
@@ -253,6 +270,7 @@ export default function TournamentForm() {
                   type="date"
                   label="Registration Ending Date"
                   value={registrationEndingDate}
+                  min={minDate}
                   onChange={(e) => setRegistrationEndingDate(e.target.value)}
                 />
                 {error.re_date && (
