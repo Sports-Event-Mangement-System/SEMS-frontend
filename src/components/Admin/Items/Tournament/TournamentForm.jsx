@@ -6,6 +6,8 @@ import SelectField from "../../../Ui/SelectField/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
+import "flatpickr/dist/themes/material_green.css";
+import Flatpickr from "react-flatpickr";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
@@ -26,8 +28,8 @@ export default function TournamentForm() {
   const [loading, setLoading] = useState(true);
   const [registrationStartingDate, setRegistrationStartingDate] = useState("");
   const [registrationEndingDate, setRegistrationEndingDate] = useState("");
-  const [status, setStatus] = useState('');
-  const [featured, setFeatured] = useState('');
+  const [status, setStatus] = useState("");
+  const [featured, setFeatured] = useState("");
   const [existingImages, setExistingImages] = useState([]);
   const [newImages, setNewImages] = useState([]); // New state for new images
 
@@ -48,12 +50,11 @@ export default function TournamentForm() {
   ];
 
   const tournamenTypeOption = [
-    { value: 'round-robin', label: "Round Robin" },
-    { value: 'single-elimination', label: "Single Elimination" },
+    { value: "round-robin", label: "Round Robin" },
+    { value: "single-elimination", label: "Single Elimination" },
   ];
 
   const [isDataFetched, setIsDataFetched] = useState(false);
-
 
   useEffect(() => {
     if (tournamentId) {
@@ -62,7 +63,8 @@ export default function TournamentForm() {
       const fetchTournamentData = async () => {
         try {
           const response = await axios.get(
-            `${import.meta.env.VITE_API_URL
+            `${
+              import.meta.env.VITE_API_URL
             }api/edit/tournament/${tournamentId}`,
             {
               headers: {
@@ -90,7 +92,9 @@ export default function TournamentForm() {
             setRegistrationEndingDate(data.tournament.re_date || "");
             setStatus(parseInt(data.tournament.status, 10) || 0);
             setFeatured(parseInt(data.tournament.featured, 10) || 0);
-            setImages(data.tournament.t_images ? [data.tournament.t_images] : []);
+            setImages(
+              data.tournament.t_images ? [data.tournament.t_images] : []
+            );
             setExistingImages(data.tournament.image_urls || []);
           } else {
             console.error("Tournament data not found");
@@ -124,12 +128,14 @@ export default function TournamentForm() {
     }
 
     // Append existing images as necessary
-    existingImages.forEach((image) => formData.append("existing_images[]", image));
+    existingImages.forEach((image) =>
+      formData.append("existing_images[]", image)
+    );
     formData.append("max_teams", maxTeams || 0);
     formData.append("min_teams", minTeams || 0);
     formData.append("max_players_per_team", maxPlayers || 0);
     formData.append("min_players_per_team", minPlayers || 0);
-    formData.append("tournament_type", tournamentType || '');
+    formData.append("tournament_type", tournamentType || "");
     formData.append("prize_pool", prizePool || 0);
     formData.append("phone_number", phoneNumber || "");
     formData.append("email", email || "");
@@ -143,11 +149,12 @@ export default function TournamentForm() {
       ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
       : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
 
-    axios.post(url, formData, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      },
-    })
+    axios
+      .post(url, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      })
       .then((res) => {
         if (res.data.status) {
           navigate("/admin/tournamentManagement");
@@ -160,19 +167,17 @@ export default function TournamentForm() {
       });
   };
 
-  const [minDate, setMinDate] = useState('');
+  const [minDate, setMinDate] = useState("");
   useEffect(() => {
     const todayDate = new Date();
-    const mm = String(todayDate.getMonth() + 1).padStart(2, '0');
-    const dd = String(todayDate.getDate()).padStart(2, '0');
+    const mm = String(todayDate.getMonth() + 1).padStart(2, "0");
+    const dd = String(todayDate.getDate()).padStart(2, "0");
     const yyyy = todayDate.getFullYear();
 
     const currentDate = `${yyyy}-${mm}-${dd}`;
 
     setMinDate(currentDate);
-    
   }, []);
-
 
   return (
     <div>
@@ -195,7 +200,9 @@ export default function TournamentForm() {
             )}
 
             <div>
-              <label htmlFor="description" >Description<span className="text-red-500 text-md">*</span></label>
+              <label htmlFor="description">
+                Description<span className="text-red-500 text-md">*</span>
+              </label>
               <textarea
                 placeholder="Description"
                 name="t_description"
@@ -203,7 +210,8 @@ export default function TournamentForm() {
                 label="Description"
                 value={tournamentDescription}
                 onChange={(e) => setTournamentDescription(e.target.value)}
-                className="h-24 w-full border rounded-lg px-3 py-2 focus:outline-orange-400 "></textarea>
+                className="h-24 w-full border rounded-lg px-3 py-2 focus:outline-orange-400 "
+              ></textarea>
               {error.t_description && (
                 <span className="text-red-500 text-md">
                   {error.t_description}
@@ -213,15 +221,20 @@ export default function TournamentForm() {
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
-                <Input
+                <label htmlFor="starting">
+                  Starting Date<span className="text-red-500 text-md">*</span>
+                </label>
+                <Flatpickr
                   required={true}
                   name="ts_date"
                   id="starting"
-                  type="date"
-                  label="Starting Date"
                   value={startingDate}
-                  min={minDate}
-                  onChange={(e) => setStartingDate(e.target.value)}
+                  options={{
+                    minDate: minDate,
+                    dateFormat: "Y-m-d",
+                  }}
+                  onChange={(date) => setStartingDate(date[0])}
+                  className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.ts_date && (
                   <span className="text-red-500 text-md">{error.ts_date}</span>
@@ -229,15 +242,21 @@ export default function TournamentForm() {
               </div>
 
               <div className="w-6/12">
-                <Input
+              <label htmlFor="ending">
+                Ending Date <span className="text-red-500 text-md">*</span>
+              </label>
+                <Flatpickr
                   required={true}
                   name="te_date"
                   id="ending"
                   type="date"
-                  label="Ending Date"
                   value={endingDate}
-                  min={minDate}
+                  options={{
+                    minDate: minDate,
+                    dateFormat: "Y-m-d"
+                  }}
                   onChange={(e) => setEndingDate(e.target.value)}
+                  className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.te_date && (
                   <span className="text-red-500 text-md">{error.te_date}</span>
@@ -247,15 +266,21 @@ export default function TournamentForm() {
 
             <div className="flex justify-between gap-2">
               <div className="w-6/12">
-                <Input
+              <label htmlFor="registration-starting">
+                Registration Strating Date <span className="text-red-500 text-md">*</span>
+              </label>
+                <Flatpickr
                   required={true}
                   name="rs_date"
                   id="registration-starting"
                   type="date"
-                  label="Registration Starting Date"
                   value={registrationStartingDate}
-                  min={minDate}
+                  options={{
+                    minDate: minDate,
+                    dateFormat: "Y-m-d"
+                  }}
                   onChange={(e) => setRegistrationStartingDate(e.target.value)}
+                  className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.rs_date && (
                   <span className="text-red-500 text-md">{error.rs_date}</span>
@@ -263,15 +288,21 @@ export default function TournamentForm() {
               </div>
 
               <div className="w-6/12">
-                <Input
+              <label htmlFor="registration-ending">
+                Registration Ending Date <span className="text-red-500 text-md">*</span>
+              </label>
+                <Flatpickr
                   required={true}
                   name="re_date"
                   id="registration-ending"
                   type="date"
-                  label="Registration Ending Date"
                   value={registrationEndingDate}
-                  min={minDate}
+                  options={{
+                    minDate: minDate,
+                    dateFormat: "Y-m-d"
+                  }}
                   onChange={(e) => setRegistrationEndingDate(e.target.value)}
+                  className="h-12 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
                 />
                 {error.re_date && (
                   <span className="text-red-500 text-md">{error.re_date}</span>
@@ -307,7 +338,9 @@ export default function TournamentForm() {
                   onChange={(e) => setMaxTeams(e.target.value)}
                 />
                 {error.max_teams && (
-                  <span className="text-red-500 text-md">{error.max_teams}</span>
+                  <span className="text-red-500 text-md">
+                    {error.max_teams}
+                  </span>
                 )}
               </div>
               <div className="w-6/12">
@@ -322,7 +355,9 @@ export default function TournamentForm() {
                   onChange={(e) => setMinTeams(e.target.value)}
                 />
                 {error.min_teams && (
-                  <span className="text-red-500 text-md">{error.min_teams}</span>
+                  <span className="text-red-500 text-md">
+                    {error.min_teams}
+                  </span>
                 )}
               </div>
             </div>
@@ -339,11 +374,12 @@ export default function TournamentForm() {
                   onChange={(e) => setMaxPlayers(e.target.value)}
                 />
                 {error.max_players_per_team && (
-                  <span className="text-red-500 text-md">{error.max_players_per_team}</span>
+                  <span className="text-red-500 text-md">
+                    {error.max_players_per_team}
+                  </span>
                 )}
               </div>
               <div className="w-6/12">
-
                 <Input
                   required={true}
                   name="min_players_per_team"
@@ -355,7 +391,9 @@ export default function TournamentForm() {
                   onChange={(e) => setMinPlayers(e.target.value)}
                 />
                 {error.min_players_per_team && (
-                  <span className="text-red-500 text-md">{error.min_players_per_team}</span>
+                  <span className="text-red-500 text-md">
+                    {error.min_players_per_team}
+                  </span>
                 )}
               </div>
             </div>
@@ -373,7 +411,9 @@ export default function TournamentForm() {
                   onChange={(e) => setPrizePool(e.target.value)}
                 />
                 {error.prize_pool && (
-                  <span className="text-red-500 text-md">{error.prize_pool}</span>
+                  <span className="text-red-500 text-md">
+                    {error.prize_pool}
+                  </span>
                 )}
               </div>
 
@@ -386,13 +426,17 @@ export default function TournamentForm() {
                   name="tournament_type"
                   searchable={false}
                   options={tournamenTypeOption}
-                  value={tournamenTypeOption.find(option => option.value === tournamentType)}
+                  value={tournamenTypeOption.find(
+                    (option) => option.value === tournamentType
+                  )}
                   onChange={(selectedOption) =>
                     setTournamentType(selectedOption.value)
                   }
                 />
                 {error.tournament_type && (
-                  <span className="text-red-500 text-md">{error.tournament_type}</span>
+                  <span className="text-red-500 text-md">
+                    {error.tournament_type}
+                  </span>
                 )}
               </div>
             </div>
@@ -448,7 +492,7 @@ export default function TournamentForm() {
                   name="status"
                   searchable={false}
                   options={statusOption}
-                  value={statusOption.find(option => option.value === status)}
+                  value={statusOption.find((option) => option.value === status)}
                   onChange={(selectedOption) => setStatus(selectedOption.value)}
                 />
                 {error.status && (
@@ -465,7 +509,9 @@ export default function TournamentForm() {
                   name="featured"
                   searchable={false}
                   options={featureOption}
-                  value={featureOption.find(option => option.value === featured)}
+                  value={featureOption.find(
+                    (option) => option.value === featured
+                  )}
                   onChange={(selectedOption) =>
                     setFeatured(selectedOption.value)
                   }
