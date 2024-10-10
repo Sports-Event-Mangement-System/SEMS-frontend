@@ -3,13 +3,12 @@ import axios from "axios";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
-
+import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
 
 export default function TeamTable() {
   const [teams, setTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
-  
   const fetchTeam = async () => {
     try {
       const response = await axios.get(
@@ -26,24 +25,21 @@ export default function TeamTable() {
       console.log(err);
     }
   };
-  
+
   useEffect(() => {
     fetchTeam();
   }, []);
 
+  const toggleStatus = async (id, currentStatus, index) => {
+    const updatedTeams = [...teams];
+    updatedTeams[index].isLoading = true;
+    setTeams(updatedTeams);
 
-  const [isLoading, setIsLoading] = useState(false);
-  const toggleStatus = async (id, currentStatus) => {
-     // Add a loading state
-  
-    if (isLoading) return; // Prevent multiple clicks
-  
     try {
-      setIsLoading(true); // Set loading to true when the request starts
       const newStatus = currentStatus === 1 ? 0 : 1;
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/team/${id}`,
-        { 
+        {
           team_id: id,
           status: newStatus,
         },
@@ -62,10 +58,10 @@ export default function TeamTable() {
       console.log(err);
       toast.error("Error updating Team status");
     } finally {
-      setIsLoading(false); // Set loading to false when the request completes
+      updatedTeams[index].isLoading = false;
+      setTeams(updatedTeams);
     }
   };
-  
 
   const showTeamDetails = async (id) => {
     try {
@@ -73,7 +69,6 @@ export default function TeamTable() {
         `${import.meta.env.VITE_API_URL}api/show/team/${id}`
       );
       console.log(response.data);
-      // setSelectedContact(response.data.contact);
       setShowModal(true);
     } catch (error) {
       console.error("Error fetching contact details:", error);
@@ -110,29 +105,25 @@ export default function TeamTable() {
                 </td>
                 <td className="px-6 py-3">{team.email}</td>
                 <td className="px-6 py-3">
-                  <button
-                    className={`text-white rounded-xl w-20 py-1 ${
-                      team.status === 1 ? "bg-green-600" : "bg-red-600"
-                    }`}
-                    onClick={() => toggleStatus(team.id, team.status)}
-                    disabled={isLoading}
-                  >
-                    {isLoading ? "Loading..." : team.status === 1 ? "Active" : "Inactive"} {/* Show loading text */}
-                  </button>
+                  <LoaderSpinner 
+                    isLoading={team.isLoading}
+                    status={team.status}
+                    onClick={() => toggleStatus(team.id, team.status, index)}
+                  />
                 </td>
-                  <td className="px-6 py-3">
-                    <div className="flex gap-2">
-                      <button className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500" onClick={() => showTeamDetails(team.id)}>
-                        <FaEye />
-                      </button>
-                      <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center">
-                        <MdEdit />
-                      </button>
-                      <button className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center">
-                        <MdDelete />
-                      </button>
-                    </div>
-                  </td>
+                <td className="px-6 py-3">
+                  <div className="flex gap-2">
+                    <button className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500" onClick={() => showTeamDetails(team.id)}>
+                      <FaEye />
+                    </button>
+                    <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center">
+                      <MdEdit />
+                    </button>
+                    <button className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center">
+                      <MdDelete />
+                    </button>
+                  </div>
+                </td>
               </tr>
             ))}
           </tbody>
