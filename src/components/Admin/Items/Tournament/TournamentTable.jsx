@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Modal from "../../../Ui/Modal/Modal";
+import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
 
 export default function TournamentTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -15,7 +16,6 @@ export default function TournamentTable() {
   const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
     const fetchTournaments = async () => {
       try {
         // console.log("API URL:", import.meta.env.VITE_API_URL);
@@ -37,8 +37,10 @@ export default function TournamentTable() {
       }
     };
 
-    fetchTournaments();
-  }, []);
+
+  useEffect(() => {
+      fetchTournaments();
+  }, [])
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -76,12 +78,19 @@ export default function TournamentTable() {
     navigate(`/admin/addTournamentForm?tournamentId=${id}`);
   };
 
-  const toggleStatus = async (id, currentStatus) => {
+  const toggleStatus = async (id, currentStatus, index) => {
+    const updatedTournaments = [...tournaments];
+    updatedTournaments[index].isLoading = true;
+    setTournaments(updatedTournaments);
+
     try {
       const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
-        { status: newStatus }, // Assuming the API expects a JSON body
+        { 
+          tournament_id: id,
+          status: newStatus 
+        }, // Assuming the API expects a JSON body
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -90,17 +99,23 @@ export default function TournamentTable() {
       );
       console.log(response.data)
       if (response.data.status) {
-        setTournaments(prevTournaments =>
-          prevTournaments.map(t =>
-            t.id === id ? { ...t, status: newStatus } : t
-          )
-        );
+        // setTournaments(prevTournaments =>
+        //   prevTournaments.map(t =>
+        //     t.id === id ? { ...t, status: newStatus } : t
+        //   )
+        // );
+        fetchTournaments();
         toast.success(response.data.message);
       }
     } catch (err) {
       toast.error("Error updating tournament status");
       console.error("Error updating tournament status", err);
     }
+    finally{
+      updatedTournaments[index].isLoading = false;
+      setTournaments(updatedTournaments);
+    }
+
   };
 
   return (
@@ -133,9 +148,6 @@ export default function TournamentTable() {
             </div>
           </Modal>
         )}
-
-
-
 
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
@@ -195,13 +207,11 @@ export default function TournamentTable() {
                   )}
                 </td>
                 <td className="px-6 py-3">
-                  <button
-                    className={`text-white rounded-xl w-20 py-1 ${tournament.status === 1 ? "bg-green-600" : "bg-red-600"
-                      }`}
-                    onClick={() => toggleStatus(tournament.id, tournament.status)}
-                  >
-                    {tournament.status === 1 ? "Active" : "Inactive"}
-                  </button>
+                    <LoaderSpinner 
+                      isLoading={tournament.isLoading}
+                      status={tournament.status}
+                      onClick={() => toggleStatus(tournament.id, tournament.status, index)}
+                    />
                 </td>
                 <td className="px-6 py-3">
                   <div className="flex gap-2">
