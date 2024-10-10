@@ -4,10 +4,12 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
+import { useNavigate } from "react-router-dom";
 
 export default function TeamTable() {
   const [teams, setTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   const fetchTeam = async () => {
     try {
@@ -75,6 +77,10 @@ export default function TeamTable() {
     }
   };
 
+  const handleEdit = (id) => {
+    navigate(`/admin/editTeamForm/${id}`);
+  };
+
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
@@ -105,7 +111,7 @@ export default function TeamTable() {
                 </td>
                 <td className="px-6 py-3">{team.email}</td>
                 <td className="px-6 py-3">
-                  <LoaderSpinner 
+                  <LoaderSpinner
                     isLoading={team.isLoading}
                     status={team.status}
                     onClick={() => toggleStatus(team.id, team.status, index)}
@@ -116,7 +122,7 @@ export default function TeamTable() {
                     <button className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500" onClick={() => showTeamDetails(team.id)}>
                       <FaEye />
                     </button>
-                    <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center">
+                    <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center" onClick={() => handleEdit(team.id)}>
                       <MdEdit />
                     </button>
                     <button className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center">
