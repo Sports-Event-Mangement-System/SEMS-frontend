@@ -2,59 +2,29 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Input from "../../../Ui/Input";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
-import "flatpickr/dist/themes/material_green.css";
-import Flatpickr from "react-flatpickr";
+import { ImCross } from "react-icons/im";
 
 export default function EditTeamForm() {
-  const [tournamentName, setTournamentName] = useState("");
-  const [startingDate, setStartingDate] = useState("");
-  const [endingDate, setEndingDate] = useState("");
-  const [images, setImages] = useState([]);
-  const [minTeams, setMinTeams] = useState("");
-  const [maxTeams, setMaxTeams] = useState("");
-  const [maxPlayers, setMaxPlayers] = useState("");
-  const [minPlayers, setMinPlayers] = useState("");
-  const [tournamentType, setTournamentType] = useState("");
-  const [prizePool, setPrizePool] = useState(0);
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const { teamId } = useParams();
+  const [tournament, setTournament] = useState("");
+  const [teamName, setTeamName] = useState("");
+  const [coachName, setCoachName] = useState("");
   const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [tournamentDescription, setTournamentDescription] = useState("");
-  const [error, setError] = useState({});
-  const [loading, setLoading] = useState(true);
-  const [registrationStartingDate, setRegistrationStartingDate] = useState("");
-  const [registrationEndingDate, setRegistrationEndingDate] = useState("");
-  const [status, setStatus] = useState("");
-  const [featured, setFeatured] = useState("");
   const [existingImages, setExistingImages] = useState([]);
-  const [newImages, setNewImages] = useState([]); // New state for new images
-
+  const [newImages, setNewImages] = useState([]);
+  const [image, setImage] = useState([]);
+  const [loading, setLoading] = useState([]);
+  const [players, setPlayers] = useState("");
+  const [error, setError] = useState({});
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const queryParams = new URLSearchParams(location.search);
-  const teamId = queryParams.get("tournamentId");
-
-  const statusOption = [
-    { value: 1, label: "Active" },
-    { value: 0, label: "Inactive" },
-  ];
-
-  const featureOption = [
-    { value: 1, label: "Featured" },
-    { value: 0, label: "Not Featured" },
-  ];
-
-  const tournamenTypeOption = [
-    { value: "round-robin", label: "Round Robin" },
-    { value: "single-elimination", label: "Single Elimination" },
-  ];
+  const [playerList, setPlayerList] = useState([]);
 
   const [isDataFetched, setIsDataFetched] = useState(false);
-
   useEffect(() => {
     if (teamId) {
       if (isDataFetched) return;
@@ -62,34 +32,20 @@ export default function EditTeamForm() {
       const fetchTeamData = async () => {
         try {
           const response = await axios.get(
-            `${
-              import.meta.env.VITE_API_URL
+            `${import.meta.env.VITE_API_URL
             }api/show/team/${teamId}`,
           );
           const data = response.data;
           console.log(data);
-          if (data && data.tournament) {
-            setTournamentName(data.tournament.t_name || "");
-            setTournamentDescription(data.tournament.t_description || "");
-            setStartingDate(data.tournament.ts_date || "");
-            setEndingDate(data.tournament.te_date || "");
-            setMaxTeams(data.tournament.max_teams || "");
-            setMinTeams(data.tournament.min_teams || "");
-            setMaxPlayers(data.tournament.max_players_per_team || "");
-            setMinPlayers(data.tournament.min_players_per_team || "");
-            setTournamentType(data.tournament.tournament_type || "");
-            setPrizePool(data.tournament.prize_pool || 0);
-            setPhoneNumber(data.tournament.phone_number || "");
-            setEmail(data.tournament.email || "");
-            setAddress(data.tournament.address || "");
-            setRegistrationStartingDate(data.tournament.rs_date || "");
-            setRegistrationEndingDate(data.tournament.re_date || "");
-            setStatus(parseInt(data.tournament.status, 10) || 0);
-            setFeatured(parseInt(data.tournament.featured, 10) || 0);
-            setImages(
-              data.tournament.t_images ? [data.tournament.t_images] : []
-            );
-            setExistingImages(data.tournament.image_urls || []);
+          if (data && data.team) {
+            setTournament(data.team.tournament || "");
+            setTeamName(data.team.team_name || "");
+            setCoachName(data.team.coach_name || "");
+            setPhoneNumber(data.team.phone_number || "");
+            setEmail(data.team.email || "");
+            setAddress(data.team.address || "");
+            setExistingImages(data.team.logo_urls ? [data.team.logo_urls] : []);
+            setPlayers(data.team.players || "");
           } else {
             console.error("Team data not found");
           }
@@ -108,50 +64,75 @@ export default function EditTeamForm() {
     }
   }, [teamId, isDataFetched]);
 
+
+  const handlePlayerChange = (index, field, value) => {
+    console.log(index, field, value);
+    const updatedPlayers = [...playerList];
+    updatedPlayers[index][field] = value;
+    setPlayerList(updatedPlayers);
+  };
+
+  const addPlayer = () => {
+    console.log(playerList);
+    if (playerList.length < tournament.max_players_per_team) {
+      setPlayerList([...playerList, { playerName: "", playerEmail: "" }]);
+    }
+  };
+
+  const removePlayer = (index) => {
+    if (playerList.length > tournament.min_players_per_team) {
+      const updatedPlayers = playerList.filter((_, playerId) => playerId !== index);
+      setPlayerList(updatedPlayers);
+    }
+  };
+
+  // Use useEffect to update playerList when players array changes
+  useEffect(() => {
+    if (Array.isArray(players)) {
+      const updatedPlayers = players.map((player) => ({
+        playerId: player.id,
+        playerName: player.player_name,
+        playerEmail: player.player_email
+      }));
+
+      setPlayerList(updatedPlayers); // Update player list once when players change
+    }
+  }, [players]);
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("t_name", tournamentName || "");
-    formData.append("t_description", tournamentDescription || "");
-    formData.append("ts_date", startingDate || "");
-    formData.append("te_date", endingDate || "");
-    // Append new images (files selected by the user)
-    if (newImages.length) {
-      newImages.forEach((file) => formData.append("t_images[]", file));
-    }
-
-    // Append existing images as necessary
-    existingImages.forEach((image) =>
-      formData.append("existing_images[]", image)
-    );
-    formData.append("max_teams", maxTeams || 0);
-    formData.append("min_teams", minTeams || 0);
-    formData.append("max_players_per_team", maxPlayers || 0);
-    formData.append("min_players_per_team", minPlayers || 0);
-    formData.append("tournament_type", tournamentType || "");
-    formData.append("prize_pool", prizePool || 0);
+    formData.append("tournament_id", tournament?.id || 0);
+    formData.append("team_name", teamName || "");
+    formData.append("coach_name", coachName || "");
     formData.append("phone_number", phoneNumber || "");
     formData.append("email", email || "");
     formData.append("address", address || "");
-    formData.append("rs_date", registrationStartingDate || "");
-    formData.append("re_date", registrationEndingDate || "");
-    formData.append("status", status);
-    formData.append("featured", featured);
+    if (newImages.length) {
+      formData.append("team_logo", image[0]);
+    }
 
-    const url = tournamentId
-      ? `${import.meta.env.VITE_API_URL}api/update/tournament/${tournamentId}`
-      : `${import.meta.env.VITE_API_URL}api/store/tournaments`;
+    formData.append("existing_images", existingImages)
+    formData.append("player_number", playerList.length);
+
+    // Append players data
+    playerList.forEach((player, index) => {
+      formData.append(`players[${index}][player_id]`, player.playerId ? player.playerId : "");
+      formData.append(`players[${index}][player_name]`, player.playerName);
+      formData.append(`players[${index}][player_email]`, player.playerEmail);
+    });
+
 
     axios
-      .post(url, formData, {
+      .post(`${import.meta.env.VITE_API_URL}api/update/team/${teamId}`, formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          "Content-Type": "multipart/form-data",
         },
       })
       .then((res) => {
         if (res.data.status) {
-          navigate("/admin/tournamentManagement");
+          navigate("/admin/teamManagement");
           toast.success(res.data.message);
         }
       })
@@ -166,11 +147,8 @@ export default function EditTeamForm() {
     <div className='flex mt-14 justify-center'>
       <div className='shadow-2xl rounded-2xl h-fit px-14 bg-slate-200'>
         <h1 className='text-3xl text-center text-orange-600 font-semibold mt-10'>
-          {tournamentData?.t_name} Tournament
+          {teamName} Team
         </h1>
-        <p className='text-md text-center text-orange-600 font-normal'>
-          Register Your Team Right Now!
-        </p>
         <form className="flex flex-col items-center p-10 gap-6">
           <div className="flex flex-col gap-4">
             {/* Team Details */}
@@ -182,6 +160,7 @@ export default function EditTeamForm() {
               label="Team Name"
               placeholder="Enter Team Name"
               className="w-[80vh]"
+              value={teamName}
               onChange={(e) => setTeamName(e.target.value)}
             />
             {error.team_name && (
@@ -194,6 +173,7 @@ export default function EditTeamForm() {
               name="coach_name"
               id="team coach"
               type="text"
+              value={coachName}
               label="Team Coach"
               placeholder="Enter Coach Name"
               className="w-[80vh]"
@@ -211,6 +191,7 @@ export default function EditTeamForm() {
               id="email"
               type="text"
               label="Email"
+              value={email}
               placeholder="Enter your email"
               className="w-[80vh]"
               onChange={(e) => setEmail(e.target.value)}
@@ -227,6 +208,7 @@ export default function EditTeamForm() {
               id="phone number"
               type="text"
               label="Phone Number"
+              value={phoneNumber}
               placeholder="Enter Your Team's Phone Number"
               className="w-[80vh]"
               onChange={(e) => setPhoneNumber(e.target.value)}
@@ -243,6 +225,7 @@ export default function EditTeamForm() {
               id="Address"
               type="text"
               label="Address"
+              value={address}
               placeholder="Enter Your Team's Address"
               className="w-[80vh]"
               onChange={(e) => setAddress(e.target.value)}
@@ -253,32 +236,34 @@ export default function EditTeamForm() {
               </span>
             )}
 
-            {/* Team Logo */}
             <DragDropFile
-              required={true}
-              setFile={setImages}
-              setNewImages={setImages}
+              setFile={setImage}
               label="Team Logo"
-              name="team_logo"
               accepts="image/png, image/jpeg, image/jpg"
               multiple={false}
               buttonLabel="Upload Logo"
+              placeholder="Max file size: 5MB Supports JPG, JPEG, PNG"
+              name="team_logo"
               existingImages={existingImages}
               setExistingImages={setExistingImages}
+              setNewImages={setNewImages}
             />
             {error.team_logo && (
               <span className="text-red-500 text-md">
                 {error.team_logo}
               </span>
             )}
-
-            {/* Player List */}
-
             <div className="flex w-full gap-8">
               <div className="w-full">
                 {playerList.map((player, index) => (
                   <div key={index}>
                     <div className="flex items-center justify-end">
+                      <Input
+                        name="player_id"
+                        type="hidden"
+                        value={player.playerId || ""}
+                        className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      />
                       <Input
                         required={true}
                         name="player_name"
@@ -286,7 +271,7 @@ export default function EditTeamForm() {
                         label={`Player ${index + 1} Name`}
                         placeholder={`Player ${index + 1} Name`}
                         value={player.playerName}
-                        onChange={(e) => handlePlayerChange(index, "playerName", e.target.value)}  // Update name field
+                        onChange={(e) => handlePlayerChange(index, "playerName", e.target.value)}
                         className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                       />
                     </div>
@@ -298,10 +283,51 @@ export default function EditTeamForm() {
                   </div>
                 ))}
               </div>
-              
+              {/* Player List */}
+              <div className="w-full">
+                {playerList.map((player, index) => (
+                  <div key={index}>
+                    <div className="flex items-center justify-start">
+                      <Input
+                        required={true}
+                        name="player_email"
+                        type="text"
+                        label={`Player ${index + 1} Email`}
+                        placeholder={`Player ${index + 1} Email`}
+                        value={player.playerEmail}
+                        onChange={(e) => handlePlayerChange(index, "playerEmail", e.target.value)}  // Update email field
+                        className="bg-gray-50 border border-gray-300 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      />
+                      {playerList.length > tournament.min_players_per_team && (
+                        <button
+                          type="button"
+                          onClick={() => removePlayer(index)}
+                          className="bg-red-600 px-2 py-2 rounded-lg text-white font-medium ms-2"
+                        >
+                          <ImCross />
+                        </button>
+                      )}
+                    </div>
+                    {error[`players.${index}.player_email`] && (
+                      <span className="text-red-500 text-sm">
+                        {error[`players.${index}.player_email`][0]}
+                      </span>
+                    )}
+                  </div>
+                ))}
+
+              </div>
             </div>
-
-
+            {/* Add Player Button */}
+            {playerList.length < tournament.max_players_per_team && (
+              <button
+                type="button"
+                onClick={addPlayer}
+                className="bg-blue-500 p-2.5 rounded-lg text-white font-medium self-start"
+              >
+                Add Player
+              </button>
+            )}
             <button type="submit" onClick={handleSubmit} className="bg-green-600 flex self-end text-white hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm w-full sm:w-auto px-8 py-3 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">
               Submit
             </button>

@@ -16,7 +16,7 @@ const adminRoutes = [
           element: <TeamTable />,
      },
      {
-          path: 'editTeamForm/:id',
+          path: 'editTeamForm/:teamId',
           element: <EditTeamForm />
      },
      {

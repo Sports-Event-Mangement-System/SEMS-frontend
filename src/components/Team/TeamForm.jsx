@@ -22,7 +22,6 @@ export default function TeamManagement() {
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
 
-  // Initialize player list based on min_players_per_team
   useEffect(() => {
     if (tournamentData?.min_players_per_team) {
       const initialPlayers = Array.from({ length: tournamentData.min_players_per_team }, () => ({
@@ -55,7 +54,6 @@ export default function TeamManagement() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append("tournament_id", tournamentData?.id || 0);
     formData.append("team_name", teamName || "");
@@ -72,11 +70,10 @@ export default function TeamManagement() {
       formData.append(`players[${index}][player_email]`, player.playerEmail);
     });
 
-
-
     axios.post(`${import.meta.env.VITE_API_URL}api/store/team`, formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        "Content-Type": "multipart/form-data",
       },
     })
       .then((res) => {
@@ -202,7 +199,6 @@ export default function TeamManagement() {
             )}
 
             {/* Player List */}
-
             <div className="flex w-full gap-8">
               <div className="w-full">
                 {playerList.map((player, index) => (
@@ -261,7 +257,6 @@ export default function TeamManagement() {
 
               </div>
             </div>
-
 
             {/* Add Player Button */}
             {playerList.length < tournamentData.max_players_per_team && (

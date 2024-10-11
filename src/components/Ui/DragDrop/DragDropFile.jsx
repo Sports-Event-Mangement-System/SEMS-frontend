@@ -11,12 +11,13 @@ export default function DragDropFile({
   multiple = true,
   placeholder = "",
   buttonLabel = "Select Files",
-  existingImages = [],
-  setExistingImages,
+  existingImages = [], // Existing images from the backend
+  setExistingImages, // Function to update the state of existing images
 }) {
   const [previews, setPreviews] = useState([]); // For previewing new images
   const [isDragging, setIsDragging] = useState(false);
 
+  // Dragging Events
   const handleDrag = (e) => {
     e.preventDefault();
     setIsDragging(true);
@@ -35,17 +36,27 @@ export default function DragDropFile({
     const files = Array.from(e.dataTransfer.files);
     const acceptedFiles = files.filter((file) => accepts.includes(file.type));
 
-    setFile((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles)); // Update parent component's state for form submission
-    setNewImages((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles)); // Update new images state in parent
-    updatePreviews(acceptedFiles);
+    handleNewImages(acceptedFiles);
   };
 
   const handleFiles = (e) => {
     const files = Array.from(e.target.files);
     const acceptedFiles = files.filter((file) => accepts.includes(file.type));
 
-    setFile((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles)); // Update parent component's state for form submission
-    setNewImages((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles)); // Update new images state in parent
+    handleNewImages(acceptedFiles);
+  };
+
+  // Handle new images, clear existing ones if not multiple
+  const handleNewImages = (acceptedFiles) => {
+    if (!multiple) {
+      // Clear existing images when a new single image is uploaded
+      setExistingImages([]);
+      setPreviews([]);
+    }
+
+    // Append new files to both the previews and the parent's state for submission
+    setFile((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles));
+    setNewImages((prev) => (multiple ? [...prev, ...acceptedFiles] : acceptedFiles));
     updatePreviews(acceptedFiles);
   };
 
@@ -145,5 +156,3 @@ export default function DragDropFile({
     </div>
   );
 }
-
-
