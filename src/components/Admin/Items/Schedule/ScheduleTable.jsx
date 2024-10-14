@@ -31,8 +31,7 @@ export default function ScheduleTable() {
         console.log(response.data)
         setTournaments(response.data.tournaments || []);
       } catch (err) {
-        setError("Error fetching tournaments");
-        console.error("Error fetching tournaments", err);
+        setError("Error fetching Datas");
       } finally {
         setLoading(false);
       }
@@ -51,26 +50,8 @@ export default function ScheduleTable() {
     setShowDeleteModal(true);
   };
 
-  const deleteTournament = async () => {
-    try {
-      const response = await axios.delete(
-        `${import.meta.env.VITE_API_URL
-        }api/delete/tournament/${tournamentToDelete}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      setTournaments(tournaments.filter(t => t.id !== tournamentToDelete));
-      closeDeleteModal();
-      if (response.data.status) {
-        toast.success(response.data.message);
-      }
-    } catch (err) {
-      toast.error("Error deleting tournament");
-      console.error("Error deleting tournament", err);
-    }
+  const tiesheetGenerator = (id) => {
+    navigate(`/admin/tiesheetGenerator/${id}`);
   }
 
   const handleEdit = (id) => {
@@ -80,37 +61,6 @@ export default function ScheduleTable() {
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
-
-
-        {showDeleteModal && (
-          <Modal closeModal={closeDeleteModal}>
-            <div className='flex justify-center mb-12 mt-5'>
-              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
-            </div>
-            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
-            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-              Are you sure want to delete this row from the table?
-            </div>
-            <div className="flex justify-center mt-4 gap-3">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                onClick={closeDeleteModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                onClick={deleteTournament}
-              >
-                Yes, Delete it!
-              </button>
-            </div>
-          </Modal>
-        )}
-
-
-
-
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
             <tr>

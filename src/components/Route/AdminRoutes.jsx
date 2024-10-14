@@ -5,6 +5,8 @@ import TeamTable from "../Admin/Items/Team/TeamTable";
 import { element } from "prop-types";
 import Schedule from "../Admin/Items/Schedule/ScheduleManagment";
 import EditTeamForm from "../Admin/Items/Team/EditTeamForm";
+import PlayerManagement from "../Admin/Items/Player/playerManagment";
+import TiesheetGenerator from "../Admin/Items/Schedule/TiesheetGenerator";
 
 const adminRoutes = [
      {
@@ -15,9 +17,14 @@ const adminRoutes = [
           path: 'teamManagement',
           element: <TeamTable />,
      },
+     
      {
           path: 'editTeamForm/:teamId',
           element: <EditTeamForm />
+     },
+     {
+          path: 'playerManagement',
+          element: <PlayerManagement />,
      },
      {
           path: 'adminContact',
@@ -34,6 +41,10 @@ const adminRoutes = [
      {
           path: 'schedule',
           element: <Schedule />,
+     },
+     {
+          path: 'tiesheetGenerator/:tournamentId',
+          element: <TiesheetGenerator />,
      },
 
 ];
