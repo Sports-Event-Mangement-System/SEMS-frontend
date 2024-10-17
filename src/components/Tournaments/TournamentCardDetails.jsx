@@ -9,6 +9,7 @@ import '@splidejs/react-splide/css';
 export default function TournamentCardDetails() {
     const [toggle, setToggle] = useState(1);
     const [tournamentData, setTournamentData] = useState(null); // Initially null to handle loading state
+    const [teamData, setTeamData] = useState([]); // Initially null to handle loading state
 
     const { id } = useParams();
 
@@ -17,10 +18,25 @@ export default function TournamentCardDetails() {
     };
 
     useEffect(() => {
+        const fetchTeamData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/teams/tournament/${id}`);
+                setTeamData(response.data.teams);
+
+            } catch (error) {
+                console.log('Error in fetching:', error);
+            }
+        };
+        fetchTeamData();
+
+        return () => {
+        };
+    }, [id]);
+
+    useEffect(() => {
         const fetchTournamentData = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${id}`);
-                console.log(response);
                 setTournamentData(response.data.tournament);
 
             } catch (error) {
@@ -32,6 +48,11 @@ export default function TournamentCardDetails() {
         return () => {
         };
     }, [id]);
+
+
+
+
+
 
     if (!tournamentData) {
         // Return a loading state while the data is being fetched
@@ -46,6 +67,7 @@ export default function TournamentCardDetails() {
 
 
     console.log(tournamentData);
+    console.log(teamData)
     return (
         <div className='flex flex-col items-center'>
             <div className='w-[83%] bg-gray-200 h-fit space-y-9 pb-8'>
@@ -83,7 +105,7 @@ export default function TournamentCardDetails() {
                     </div>
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
-                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink 
+                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink
                             to="addTeam" state={{ tournamentData }}
                         > <div className='flex items-center gap-1'>Register Now</div></NavLink>
                         </button>
@@ -109,7 +131,7 @@ export default function TournamentCardDetails() {
             </div>
 
             <div className='w-[83%] h-fit mt-16'>
-                <TournamentDetailsContent tabIndex={toggle} tournamentData={tournamentData} />
+                <TournamentDetailsContent tabIndex={toggle} tournamentData={tournamentData} teamData={teamData} />
             </div>
 
         </div>
