@@ -5,7 +5,7 @@ import { FaUsers, FaTrophy } from "react-icons/fa";
 import { GiWallet } from "react-icons/gi";
 import { TbTournament } from "react-icons/tb";
 
-export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
+export default function TournamentDetailsContent({ tabIndex, tournamentData, teamData }) {
     return (
         <div>
             {tabIndex == 1 && (
@@ -79,7 +79,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
 
                         <h1 className='font-bold text-3xl mb-6'>Rules</h1>
                         <div>
-                            <ul class="list-disc font-medium space-y-1">
+                            <ul className="list-disc font-medium space-y-1">
                                 <li>Please be respectful to your host and other participants. If any malicious behavior is reported, you will be removed from the tournament.</li>
                                 <li>Please be on time for your registration and for the actual tournament. You (and your team) will be disqualified on no-show.</li>
                                 <li>You and all of your teammates must be registered to qualify for the event.</li>
@@ -91,11 +91,31 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData }) {
             )}
 
 
-            {tabIndex == 3 && (
+            {tabIndex === 3 && (
                 <div>
-                    <h1 className='font-bold text-3xl mb-6'>Participant</h1>
+                    <h1 className='font-bold text-3xl mb-6'>Participants in this Tournament</h1>
+                    <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full'>
+                        {teamData.length > 0 ? (
+                            teamData.map((team, index) => (
+                                <div key={index} className='bg-gray-100 h-fit w-full flex flex-row drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] px-2 py-2'>
+                                    <div className='w-[25%]'>
+                                        <img src={team.logo_urls || "/images/Logo.png"} alt="Team Logo" className='h-28 w-28 pl-3' />
+                                    </div>
+                                    <div className='flex flex-col justify-center items-center w-full'>
+                                        <h1 className='font-medium text-base '><b>Team Name: </b>{team.team_name}</h1>
+                                        <h2 className='font-medium text-base '><b>Team Coach: </b>{team.coach_name || 'N/A'}</h2>
+                                        <h2 className='font-medium text-base '><b>Address: </b>{team.address || 'N/A'}</h2>
+                                        <h2 className='font-medium text-base '><b>No of players: </b>{team.player_number || 'N/A'}</h2>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p>No teams have registered yet.</p>
+                        )}
+                    </div>
                 </div>
             )}
+
 
 
             {tabIndex == 4 && (
