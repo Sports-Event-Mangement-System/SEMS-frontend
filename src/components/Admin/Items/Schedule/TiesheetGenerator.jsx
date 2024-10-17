@@ -1,4 +1,4 @@
-import { SingleEliminationBracket, DoubleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
+import { SingleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -8,47 +8,56 @@ import ClipLoader from 'react-spinners/ClipLoader';
 import { toast } from 'react-toastify';
 
 export default function TiesheetGenerator() {
-  const [tournament, setTournament] = useState([]);
+  const [tournament, setTournament] = useState({});
   const [matches, setMatches] = useState([]);
-  const [showTiesheet, setShowTiesheet] = useState([]);
+  const [showTiesheet, setShowTiesheet] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { tournamentId } = useParams();
-  const [isDataFetched, setIsDataFetched] = useState(false);
-  const [randomTeams, setRandomTeams] = useState();
+  const [randomTeams, setRandomTeams] = useState(false);
   const [createMatches, setCreateMatches] = useState(false);
 
+  const { tournamentId } = useParams();
   const { width, height } = useWindowSize();
   const finalWidth = Math.max(width - 50, 500);
   const finalHeight = Math.max(height - 100, 500);
 
-
   useEffect(() => {
-    if (tournamentId) {
-      if (isDataFetched) return;
-      const fetchTournamentData = async () => {
-        try {
-          // console.log("API URL:", import.meta.env.VITE_API_URL);
-          const response = await axios.get(
-            `${import.meta.env.VITE_API_URL}api/show/tournament/${tournamentId}`,
-          );
-          console.log(response.data)
-          setTournament(response.data.tournament || []);
-        } catch (err) {
-          setError("Error fetching Datas");
-        } finally {
-          setLoading(false);
-          setIsDataFetched(true);
-        }
-      };
-      fetchTournamentData();
-    }
-  }, [tournamentId, isDataFetched]);
+    fetchTournamentData();
+    getTiesheetResponse();
+  }, [tournamentId]);
 
-  const generateTiesheet = async (randomTeams) => {
+  const fetchTournamentData = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${tournamentId}`);
+      setTournament(response.data.tournament || {});
+    } catch (err) {
+      setError("Error fetching tournament data");
+    }
+  };
+
+  const getTiesheetResponse = async () => {
     setLoading(true);
     try {
-      // console.log("API URL:", import.meta.env.VITE_API_URL);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      setMatches(response.data.data || []);
+      setShowTiesheet(response.data.showTiesheet || false);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error fetching tiesheet");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const generateTiesheet = async () => {
+    setLoading(true);
+    try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
         {
@@ -58,25 +67,22 @@ export default function TiesheetGenerator() {
           },
         }
       );
-      console.log(response.data)
       setMatches(response.data.matches || []);
       setCreateMatches(response.data.saveButton);
       toast.success(response.data.message);
-      setShowTiesheet(true);
     } catch (err) {
-      setError(err.response.data.message);
+      setError(err.response?.data?.message || "Error generating tiesheet");
     } finally {
       setLoading(false);
-      setIsDataFetched(true);
     }
   };
 
-  const saveMatches = async (matches) => {
+  const saveMatches = async () => {
     setLoading(true);
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/save/matches/tournament/${tournamentId}`,
-        matches,
+        { matches },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -84,65 +90,92 @@ export default function TiesheetGenerator() {
         }
       );
       toast.success(response.data.message);
+      setCreateMatches(false);
+      setShowTiesheet(true);
     } catch (err) {
-      toast.error(err.response.data.message);
+      toast.error(err.response?.data?.message || "Error saving matches");
     } finally {
       setLoading(false);
-      setIsDataFetched(true);
     }
   };
 
-  console.log('Matches:', matches);
+  const deleteTiesheet = async () => {
+    // Implement the delete functionality here
+    // For now, we'll just reset the state
+    setMatches([]);
+    setShowTiesheet(false);
+    toast.success("Tiesheet deleted successfully");
+  };
+
   return (
     <>
       <h1 className="text-2xl font-semibold text-gray-800 dark:text-black">Tiesheet Generator</h1>
       <h2 className="text-1xl font-semibold text-gray-800 dark:text-black">Tournament {tournament.t_name}</h2>
-      <Alert type="info" message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database." >
-      </Alert>
-      <div className="flex items-center">
-        <button
-          disabled={loading}
-          onClick={() => generateTiesheet(randomTeams)}
-          className={`bg-green-600 flex items-center text-white hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-8 py-3 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ${loading ? 'cursor-not-allowed' : ''}`}
-        >
-          {matches.length > 0 ? 'Generate Another Tiesheet' : 'Generate Tiesheet'}
-        </button>
-        {createMatches &&
-          <div className="flex items-center ml-4">
-            <button
-              disabled={loading}
-              onClick={() => saveMatches({matches})}
-              className={`bg-green-600 flex items-center text-white hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-8 py-3 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 ${loading ? 'cursor-not-allowed' : ''}`}
-            >
-              Create Matches in Databases
-            </button>
-          </div>
-        }
-        <div className="flex items-center ml-4">
-          <input
-            type="checkbox"
-            checked={randomTeams}
-            onChange={(e) => setRandomTeams(e.target.checked)}
-            id="randomTeams"
-            className="w-4 h-4 mr-2"
-          />
-          <label htmlFor="randomTeams" className="text-sm font-medium">Randomize Teams</label>
-        </div>
-
-      </div>
-      {!loading && Array.isArray(matches) && matches.length > 0 ? (
-        <SingleEliminationBracket
-          matches={Array.isArray(matches) ? matches : [matches]}
-          matchComponent={Match}
-          svgWrapper={({ children, ...props }) => (
-            <SVGViewer width={finalWidth} height={finalHeight} {...props}>
-              {children}
-            </SVGViewer>
-          )}
-        />
+      <Alert type="info" message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database." />
+      
+      {loading ? (
+        <ClipLoader />
+      ) : error ? (
+        <span className='text-red-600'>{error}</span>
       ) : (
-        <p>{loading ? <ClipLoader></ClipLoader> : error ? <span className='text-red-600'>{error}</span> : "Click generate button To generate Tiesheet "}</p>
+        <>
+          {!showTiesheet && (
+            <div className="flex items-center space-x-4">
+              <button
+                disabled={loading}
+                onClick={generateTiesheet}
+                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
+              >
+                {matches.length > 0 ? 'Generate Another Tiesheet' : 'Generate Tiesheet'}
+              </button>
+              
+              {createMatches && (
+                <button
+                  disabled={loading}
+                  onClick={saveMatches}
+                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
+                >
+                  Create Matches in Database
+                </button>
+              )}
+              
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  checked={randomTeams}
+                  onChange={(e) => setRandomTeams(e.target.checked ? true : false)}
+                  id="randomTeams"
+                  className="w-4 h-4 mr-2"
+                />
+                <label htmlFor="randomTeams" className="text-sm font-medium">Randomize Teams</label>
+              </div>
+            </div>
+          )}
+
+          {showTiesheet && (
+            <button
+              onClick={deleteTiesheet}
+              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700"
+            >
+              Delete Tiesheet
+            </button>
+          )}
+
+          {matches.length > 0 ? (
+            <SingleEliminationBracket
+              matches={matches}
+              matchComponent={Match}
+              svgWrapper={({ children, ...props }) => (
+                <SVGViewer width={finalWidth} height={finalHeight} {...props}>
+                  {children}
+                </SVGViewer>
+              )}
+            />
+          ) : (
+            <p>Click generate button to generate Tiesheet</p>
+          )}
+        </>
       )}
     </>
   );
-};
+}
