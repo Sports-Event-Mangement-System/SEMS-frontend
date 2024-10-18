@@ -4,8 +4,10 @@ import { FaBuildingCircleCheck } from "react-icons/fa6";
 import { FaUsers, FaTrophy } from "react-icons/fa";
 import { GiWallet } from "react-icons/gi";
 import { TbTournament } from "react-icons/tb";
+import { NavLink } from 'react-router-dom';
 
 export default function TournamentDetailsContent({ tabIndex, tournamentData, teamData }) {
+
     return (
         <div>
             {tabIndex == 1 && (
@@ -91,39 +93,59 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
             )}
 
 
+
             {tabIndex === 3 && (
-                <div>
-                    <h1 className='font-bold text-3xl mb-6'>Participants in this Tournament</h1>
-                    <div className='grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full'>
+                <>
+                    <h1 className="font-bold text-3xl mb-6">Participants in this Tournament</h1>
+                    <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
                         {teamData.length > 0 ? (
                             teamData.map((team, index) => (
-                                <div key={index} className='bg-gray-100 h-fit w-full flex flex-row drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] px-2 py-2'>
-                                    <div className='w-[25%]'>
-                                        <img src={team.logo_urls || "/images/Logo.png"} alt="Team Logo" className='h-28 w-28 pl-3' />
+                                <NavLink to={`/tournamentDetails/registeredTeamDetails/${team.id}`} key={index}>
+                                    <div
+                                        className="bg-gray-100 h-fit w-full flex flex-row drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] px-2 py-2 hover:bg-gray-200 cursor-pointer"
+                                    >
+                                        <div className="w-[25%]">
+                                            <img
+                                                src={team.logo_urls || "/images/Logo.png"}
+                                                alt="Team Logo"
+                                                className="h-28 w-28 pl-3"
+                                            />
+                                        </div>
+                                        <div className="flex flex-col justify-center items-center w-full">
+                                            <h1 className="font-medium text-base">
+                                                <b>Team Name: </b>{team.team_name || "N/A"}
+                                            </h1>
+                                            <h2 className="font-medium text-base">
+                                                <b>Team Coach: </b>{team.coach_name || "N/A"}
+                                            </h2>
+                                            <h2 className="font-medium text-base">
+                                                <b>Address: </b>{team.address || "N/A"}
+                                            </h2>
+                                            <h2 className="font-medium text-base">
+                                                <b>No of players: </b>{team.player_number || "N/A"}
+                                            </h2>
+                                        </div>
                                     </div>
-                                    <div className='flex flex-col justify-center items-center w-full'>
-                                        <h1 className='font-medium text-base '><b>Team Name: </b>{team.team_name}</h1>
-                                        <h2 className='font-medium text-base '><b>Team Coach: </b>{team.coach_name || 'N/A'}</h2>
-                                        <h2 className='font-medium text-base '><b>Address: </b>{team.address || 'N/A'}</h2>
-                                        <h2 className='font-medium text-base '><b>No of players: </b>{team.player_number || 'N/A'}</h2>
-                                    </div>
-                                </div>
+                                </NavLink>
                             ))
                         ) : (
                             <p>No teams have registered yet.</p>
                         )}
                     </div>
-                </div>
+                </>
             )}
 
 
 
-            {tabIndex == 4 && (
-                <div>
-                    <h1 className='font-bold text-3xl mb-6'>Prices</h1>
-                </div>
-            )}
 
-        </div>
+            {
+                tabIndex == 4 && (
+                    <div>
+                        <h1 className='font-bold text-3xl mb-6'>{tournamentData.tournament_type === "single-elimination" ? "Single Elimination" : "Round Robin"}</h1>
+                    </div>
+                )
+            }
+
+        </div >
     )
 }
