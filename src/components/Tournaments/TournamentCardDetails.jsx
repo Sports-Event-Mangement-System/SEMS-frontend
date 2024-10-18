@@ -17,42 +17,31 @@ export default function TournamentCardDetails() {
         setToggle(index);
     };
 
+    const fetchTournamentData = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${id}`);
+            setTournamentData(response.data.tournament);
+
+        } catch (error) {
+            console.log('Error in fetching:', error);
+        }
+    };
+
+
+    const fetchTeamData = async () => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/teams/tournament/${id}`);
+            setTeamData(response.data.teams);
+
+        } catch (error) {
+            console.log('Error in fetching:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchTeamData = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/teams/tournament/${id}`);
-                setTeamData(response.data.teams);
-
-            } catch (error) {
-                console.log('Error in fetching:', error);
-            }
-        };
-        fetchTeamData();
-
-        return () => {
-        };
-    }, [id]);
-
-    useEffect(() => {
-        const fetchTournamentData = async () => {
-            try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${id}`);
-                setTournamentData(response.data.tournament);
-
-            } catch (error) {
-                console.log('Error in fetching:', error);
-            }
-        };
         fetchTournamentData();
-
-        return () => {
-        };
+        fetchTeamData();
     }, [id]);
-
-
-
-
-
 
     if (!tournamentData) {
         // Return a loading state while the data is being fetched
@@ -64,10 +53,8 @@ export default function TournamentCardDetails() {
         const date = new Date(dateString);
         return !isNaN(date) ? date.toLocaleDateString(undefined, options) : "Invalid date";
     };
+    // console.log(teamData)
 
-
-    console.log(tournamentData);
-    console.log(teamData)
     return (
         <div className='flex flex-col items-center'>
             <div className='w-[83%] bg-gray-200 h-fit space-y-9 pb-8'>
@@ -124,7 +111,7 @@ export default function TournamentCardDetails() {
                         <span className='cursor-pointer' onClick={() => toggleTab(3)}>PARTICIPANT</span>
                     </div>
                     <div className={`flex justify-center items-center font-bold text-lg hover:text-orange-600 ${toggle === 4 ? 'text-orange-600' : ''}`}>
-                        <span className='cursor-pointer' onClick={() => toggleTab(4)}>PRIZES</span>
+                        <span className='cursor-pointer' onClick={() => toggleTab(4)}>TIESHEET</span>
                     </div>
                 </div>
 
