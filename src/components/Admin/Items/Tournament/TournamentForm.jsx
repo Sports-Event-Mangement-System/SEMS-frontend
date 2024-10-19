@@ -228,6 +228,7 @@ export default function TournamentForm() {
                   id="starting"
                   value={startingDate}
                   options={{
+                    minDate: tournamentId ? null : minDate,
                     dateFormat: "Y-m-d",
                   }}
                    // Format date for Flatpickr
@@ -250,7 +251,7 @@ export default function TournamentForm() {
                   type="date"
                   value={endingDate}
                   options={{
-                    minDate: minDate,
+                    minDate: tournamentId ? null : minDate,
                     dateFormat: "Y-m-d"
                   }}
                   onChange={(date) => setEndingDate(dateFormatBackend(date[0]))}
@@ -274,7 +275,7 @@ export default function TournamentForm() {
                   type="date"
                   value={registrationStartingDate}
                   options={{
-                    minDate: minDate,
+                    minDate: tournamentId ? null : minDate,
                     dateFormat: "Y-m-d"
                   }}
                   onChange={(date) => setRegistrationStartingDate(dateFormatBackend(date[0]))}
@@ -296,7 +297,7 @@ export default function TournamentForm() {
                   type="date"
                   value={registrationEndingDate}
                   options={{
-                    minDate: minDate,
+                    minDate: tournamentId ? null : minDate,
                     dateFormat: "Y-m-d"
                   }}
                   onChange={(date) => setRegistrationEndingDate(dateFormatBackend(date[0]))}
