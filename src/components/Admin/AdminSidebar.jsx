@@ -57,7 +57,13 @@ export default function AdminSidebar() {
                                                                   }}
                                                             >
                                                                   <NavLink to={innerItem?.link} className={({ isActive }) => `${isActive ? 'text-white font-bold border border-white rounded-xl' : 'text-gray-200'} flex items-center gap-1 hover:text-white hover:font-bold`} >
-                                                                        <div className='p-1'><FontAwesomeIcon icon={innerItem.icon} style={{ width: '20px', height: '16px' }} /></div>
+                                                                        <div className='p-1'>
+                                                                              {typeof innerItem.icon === 'string' ? (
+                                                                                    <img src={innerItem.icon} alt={innerItem.itemName} style={{ width: '20px', height: '16px' }} />
+                                                                              ) : (
+                                                                                    <FontAwesomeIcon icon={innerItem.icon} style={{ width: '20px', height: '16px' }} />
+                                                                              )}
+                                                                        </div>
                                                                         {innerItem.itemName} <IoIosArrowDown className='ml-1' size={20} />
                                                                   </NavLink>
 
