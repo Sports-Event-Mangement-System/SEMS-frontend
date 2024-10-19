@@ -100,12 +100,25 @@ export default function TiesheetGenerator() {
   };
 
   const deleteTiesheet = async () => {
-    // Implement the delete functionality here
-    // For now, we'll just reset the state
-    setMatches([]);
-    setShowTiesheet(false);
-    toast.success("Tiesheet deleted successfully");
+    try {
+      const response = await axios.delete(
+        `${import.meta.env.VITE_API_URL}api/delete/tiesheet/${tournamentId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );    
+      setMatches([]);
+      setShowTiesheet(false);
+      toast.success(response.data.message);
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error deleting tiesheet");
+    }finally{
+      setLoading(false);
+    }
   };
+  console.log(matches);
 
   return (
     <>
@@ -157,7 +170,7 @@ export default function TiesheetGenerator() {
               onClick={deleteTiesheet}
               className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700"
             >
-              Delete Tiesheet
+              Delete Tiesheet & Matches
             </button>
           )}
 

@@ -3,10 +3,11 @@ import AdminContact from "../Admin/Items/Contact/AdminContact";
 import TournamentForm from "../Admin/Items/Tournament/TournamentForm";
 import TeamTable from "../Admin/Items/Team/TeamTable";
 import { element } from "prop-types";
-import Schedule from "../Admin/Items/Schedule/ScheduleManagment";
+import ScheduleManagment from "../Admin/Items/Schedule/ScheduleManagment";
 import EditTeamForm from "../Admin/Items/Team/EditTeamForm";
 import PlayerManagement from "../Admin/Items/Player/playerManagment";
 import TiesheetGenerator from "../Admin/Items/Schedule/TiesheetGenerator";
+import MatchManagment from "../Admin/Items/Match/MatchManagment";
 
 const adminRoutes = [
      {
@@ -39,8 +40,12 @@ const adminRoutes = [
           element: <TournamentForm />, // For editing tournaments
      },
      {
-          path: 'schedule',
-          element: <Schedule />,
+          path: 'scheduleManagment',
+          element: <ScheduleManagment />,
+     },
+     {
+          path: 'matchManagment',
+          element: <MatchManagment />,
      },
      {
           path: 'tiesheetGenerator/:tournamentId',

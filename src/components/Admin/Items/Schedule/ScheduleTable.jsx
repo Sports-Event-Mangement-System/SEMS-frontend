@@ -69,7 +69,6 @@ export default function ScheduleTable() {
               <th className="px-6 py-3 text-start">Tournament Type</th>
               <th className="px-6 py-3 text-start">Team Registered</th>
               <th className="px-6 py-3 text-start">Tiesheet Generator</th>
-              <th className="px-6 py-3 text-start">Schedule</th>
             </tr>
           </thead>
           <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
@@ -112,17 +111,6 @@ export default function ScheduleTable() {
                       onClick={() => tiesheetGenerator(tournament.id)}
                     >
                       <TbTournament />
-                    </button>
-
-                  </div>
-                </td>
-                <td className="px-6 py-3">
-                  <div className="flex gap-2">
-                    <button
-                      className="bg-blue-500 text-white rounded-xl w-16 py-2 flex justify-center"
-                      onClick={() => confirmDelete(tournament.id)}
-                    >
-                      <MdOutlineSchedule />
                     </button>
 
                   </div>
