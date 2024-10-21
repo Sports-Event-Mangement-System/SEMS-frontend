@@ -1,11 +1,16 @@
-import { SingleEliminationBracket, Match, SVGViewer } from '@g-loot/react-tournament-brackets';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import {
+  SingleEliminationBracket,
+  Match,
+  SVGViewer,
+} from "@g-loot/react-tournament-brackets";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { useWindowSize } from "@uidotdev/usehooks";
-import Alert from '../../../Ui/AlertBox/alert';
-import ClipLoader from 'react-spinners/ClipLoader';
-import { toast } from 'react-toastify';
+import Alert from "../../../Ui/AlertBox/alert";
+import ClipLoader from "react-spinners/ClipLoader";
+import { toast } from "react-toastify";
+import RoundRobinBracket from "./RoundRobinBracket";
 
 export default function TiesheetGenerator() {
   const [tournament, setTournament] = useState({});
@@ -28,7 +33,9 @@ export default function TiesheetGenerator() {
 
   const fetchTournamentData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/tournament/${tournamentId}`);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/show/tournament/${tournamentId}`
+      );
       setTournament(response.data.tournament || {});
     } catch (err) {
       setError("Error fetching tournament data");
@@ -59,7 +66,9 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/tiesheet/tournament/${tournamentId}`,
         {
           params: { randomTeams },
           headers: {
@@ -81,7 +90,9 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}api/save/matches/tournament/${tournamentId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/save/matches/tournament/${tournamentId}`,
         { matches },
         {
           headers: {
@@ -108,13 +119,13 @@ export default function TiesheetGenerator() {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         }
-      );    
+      );
       setMatches([]);
       setShowTiesheet(false);
       toast.success(response.data.message);
     } catch (err) {
       toast.error(err.response?.data?.message || "Error deleting tiesheet");
-    }finally{
+    } finally {
       setLoading(false);
     }
   };
@@ -122,14 +133,21 @@ export default function TiesheetGenerator() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold text-gray-800 dark:text-black">Tiesheet Generator</h1>
-      <h2 className="text-1xl font-semibold text-gray-800 dark:text-black">Tournament {tournament.t_name}</h2>
-      <Alert type="info" message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database." />
-      
+      <h1 className="text-2xl font-semibold text-gray-800 dark:text-black">
+        Tiesheet Generator
+      </h1>
+      <h2 className="text-1xl font-semibold text-gray-800 dark:text-black">
+        Tournament {tournament.t_name}
+      </h2>
+      <Alert
+        type="info"
+        message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database."
+      />
+
       {loading ? (
         <ClipLoader />
       ) : error ? (
-        <span className='text-red-600'>{error}</span>
+        <span className="text-red-600">{error}</span>
       ) : (
         <>
           {!showTiesheet && (
@@ -137,30 +155,51 @@ export default function TiesheetGenerator() {
               <button
                 disabled={loading}
                 onClick={generateTiesheet}
-                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
+                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
+                  loading
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-green-700"
+                }`}
               >
-                {matches.length > 0 ? 'Generate Another Tiesheet' : 'Generate Tiesheet'}
+                {matches.length > 0
+                  ? "Generate Another Tiesheet"
+                  : "Generate Tiesheet"}
               </button>
-              
+
+              {tournament.tournament_type === "round-robin" && (
+                <div className="text-sm text-blue-600">
+                  Note: This tournament format is round-robin, where each team
+                  plays against every other team.
+                </div>
+              )}
+
               {createMatches && (
                 <button
                   disabled={loading}
                   onClick={saveMatches}
-                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-green-700'}`}
+                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
+                    loading
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-green-700"
+                  }`}
                 >
                   Create Matches in Database
                 </button>
               )}
-              
+
               <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={randomTeams}
-                  onChange={(e) => setRandomTeams(e.target.checked ? true : false)}
+                  onChange={(e) =>
+                    setRandomTeams(e.target.checked ? true : false)
+                  }
                   id="randomTeams"
                   className="w-4 h-4 mr-2"
                 />
-                <label htmlFor="randomTeams" className="text-sm font-medium">Randomize Teams</label>
+                <label htmlFor="randomTeams" className="text-sm font-medium">
+                  Randomize Teams
+                </label>
               </div>
             </div>
           )}
@@ -175,15 +214,19 @@ export default function TiesheetGenerator() {
           )}
 
           {matches.length > 0 ? (
-            <SingleEliminationBracket
-              matches={matches}
-              matchComponent={Match}
-              svgWrapper={({ children, ...props }) => (
-                <SVGViewer width={finalWidth} height={finalHeight} {...props}>
-                  {children}
-                </SVGViewer>
-              )}
-            />
+            tournament.tournament_type === "single-elimination" ? (
+              <SingleEliminationBracket
+                matches={matches}
+                matchComponent={Match}
+                svgWrapper={({ children, ...props }) => (
+                  <SVGViewer width={finalWidth} height={finalHeight} {...props}>
+                    {children}
+                  </SVGViewer>
+                )}
+              />
+            ) : (
+              <RoundRobinBracket matches={matches} />
+            )
           ) : (
             <p>Click generate button to generate Tiesheet</p>
           )}
