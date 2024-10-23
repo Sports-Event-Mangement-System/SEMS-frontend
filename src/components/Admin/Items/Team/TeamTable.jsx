@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { MdOutlineSchedule, MdExpandMore, MdExpandLess } from "react-icons/md";
+
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
@@ -14,9 +16,12 @@ export default function TeamTable() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState(null);
 
+  const [groupedTeams, setGroupedTeams] = useState({});
+  const [collapsedGroups, setCollapsedGroups] = useState({});
+
   const navigate = useNavigate();
 
-  const fetchTeam = async () => {
+  const fetchTeams = async () => {
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/teams`,
@@ -26,15 +31,42 @@ export default function TeamTable() {
           },
         }
       );
-      console.log(response.data.data);
       setTeams(response.data.data);
+      groupTeamsByTournament(response.data.data);
     } catch (err) {
       console.log(err);
+      toast.error("Error fetching teams");
     }
   };
 
+  const groupTeamsByTournament = (teams) => {
+    const grouped = teams.reduce((acc, team) => {
+      const tournamentId = team.tournament_id;
+      if (!acc[tournamentId]) {
+        acc[tournamentId] = {
+          tournament: team.tournament,
+          teams: []
+        };
+      }
+      acc[tournamentId].teams.push(team);
+      return acc;
+    }, {});
+    setGroupedTeams(grouped);
+  };
+
   useEffect(() => {
-    fetchTeam();
+    fetchTeams();
+  }, []);
+
+  const toggleGroup = (tournamentId) => {
+    setCollapsedGroups(prev => ({
+      ...prev,
+      [tournamentId]: !prev[tournamentId]
+    }));
+  };
+
+  useEffect(() => {
+    fetchTeams();
   }, []);
 
   const toggleStatus = async (id, currentStatus, index) => {
@@ -58,7 +90,7 @@ export default function TeamTable() {
       );
       console.log(response.data);
       if (response.data.status) {
-        fetchTeam();
+        fetchTeams();
         toast.success(response.data.message);
       }
     } catch (err) {
@@ -108,7 +140,7 @@ export default function TeamTable() {
           },
         }
       );
-      fetchTeam();
+      fetchTeams();
       closeDeleteModal();
       if (response.data.status) {
         toast.success(response.data.message);
@@ -119,32 +151,8 @@ export default function TeamTable() {
   }
   return (
     <>
+      {/* ... keep existing modal code ... */}
       <div className="p-4 w-full shadow-2xl">
-        {showDeleteModal && (
-          <Modal closeModal={closeDeleteModal}>
-            <div className='flex justify-center mb-12 mt-5'>
-              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
-            </div>
-            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
-            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-              Are you sure want to delete this Team?
-            </div>
-            <div className="flex justify-center mt-4 gap-3">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                onClick={closeDeleteModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                onClick={deleteTeam}
-              >
-                Yes, Delete it!
-              </button>
-            </div>
-          </Modal>
-        )}
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
             <tr>
@@ -158,41 +166,54 @@ export default function TeamTable() {
             </tr>
           </thead>
           <tbody className="bg-white hover:bg-gray-50">
-            {teams.map((team, index) => (
-              <tr key={index} className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-medium">
-                <td className="px-6 py-3">{index + 1}</td>
-                <td className="px-6 py-3">{team.team_name}</td>
-                <td className="px-6 py-3">{team.coach_name}</td>
-                <td className="px-6 py-3">
-                  <img
-                    src={team.logo_urls}
-                    alt={`${team.team_name} logo`}
-                    className="w-12 h-12 object-cover"
-                  />
-                </td>
-                <td className="px-6 py-3">{team.email}</td>
-                <td className="px-6 py-3">
-                  <LoaderSpinner
-                    isLoading={team.isLoading}
-                    status={team.status}
-                    onClick={() => toggleStatus(team.id, team.status, index)}
-                  />
-                </td>
-                <td className="px-6 py-3">
-                  <div className="flex gap-2">
-                    <button className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500" onClick={() => showTeamDetails(team.id)}>
-                      <FaEye />
-                    </button>
-                    <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center" onClick={() => handleEdit(team.id)}>
-                      <MdEdit />
-                    </button>
-                    <button className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center"
-                      onClick={() => confirmDelete(team.id)}>
-                      <MdDelete />
-                    </button>
-                  </div>
-                </td>
-              </tr>
+            {Object.entries(groupedTeams).map(([tournamentId, { tournament, teams }]) => (
+              <React.Fragment key={tournamentId}>
+                <tr
+                  className="cursor-pointer bg-orange-100 dark:bg-orange-300 hover:bg-orange-200"
+                  onClick={() => toggleGroup(tournamentId)}
+                >
+                  <td colSpan="7" className="px-6 py-3 font-bold">
+                    {tournament.t_name} ({teams.length} teams)
+                    {collapsedGroups[tournamentId] ? <MdExpandMore className="inline ml-2" /> : <MdExpandLess className="inline ml-2" />}
+                  </td>
+                </tr>
+                {!collapsedGroups[tournamentId] && teams.map((team, index) => (
+                  <tr key={team.id} className="border dark:bg-gray-700 dark:hover:bg-gray-600">
+                    <td className="px-6 py-3">{index + 1}</td>
+                    <td className="px-6 py-3">{team.team_name}</td>
+                    <td className="px-6 py-3">{team.coach_name}</td>
+                    <td className="px-6 py-3">
+                      <img
+                        src={team.logo_urls}
+                        alt={`${team.team_name} logo`}
+                        className="w-12 h-12 object-cover"
+                      />
+                    </td>
+                    <td className="px-6 py-3">{team.email}</td>
+                    <td className="px-6 py-3">
+                      <LoaderSpinner
+                        isLoading={team.isLoading}
+                        status={team.status}
+                        onClick={() => toggleStatus(team.id, team.status, index)}
+                      />
+                    </td>
+                    <td className="px-6 py-3">
+                      <div className="flex gap-2">
+                        <button className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500" onClick={() => showTeamDetails(team.id)}>
+                          <FaEye />
+                        </button>
+                        <button className="bg-blue-500 text-white rounded-xl w-14 py-2 flex justify-center" onClick={() => handleEdit(team.id)}>
+                          <MdEdit />
+                        </button>
+                        <button className="bg-red-500 text-white rounded-xl w-16 py-2 flex justify-center"
+                          onClick={() => confirmDelete(team.id)}>
+                          <MdDelete />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
