@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Input from "../Ui/Input";
+import Input from "../Ui/FormInput/Input";
 import { NavLink } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";

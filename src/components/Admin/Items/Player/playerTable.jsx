@@ -7,14 +7,27 @@ import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../../Ui/Modal/Modal";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import Pagination from "../../../Ui/Pagination/Pagination";
 
 export default function PlayerTable() {
     const [players, setPlayers] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [teamToDelete, setTeamToDelete] = useState(null);
-
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+    
     const navigate = useNavigate();
+
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentPlayers = players.slice(indexOfFirstItem, indexOfLastItem);
+
+    const totalPages = Math.ceil(players.length / itemsPerPage);
+
+    const handlePageChange = (pageNumber) => {
+        setCurrentPage(pageNumber);
+    };
 
     const fetchPlayer = async () => {
         try {
@@ -123,9 +136,9 @@ export default function PlayerTable() {
                         </tr>
                     </thead>
                     <tbody className="bg-white hover:bg-gray-50">
-                        {players.map((player, index) => (
+                        {currentPlayers.map((player, index) => (
                             <tr key={index} className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-medium">
-                                <td className="px-6 py-3">{index + 1}</td>
+                                <td className="px-6 py-3">{(currentPage - 1) * itemsPerPage + index + 1}</td>
                                 <td className="px-6 py-3">{player.player_name} {player.is_captain === 1 && (
                                     <span className="text-green-500 font-bold">(Captain)</span>
                                 )}</td>
@@ -146,6 +159,11 @@ export default function PlayerTable() {
                         ))}
                     </tbody>
                 </table>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={totalPages}
+                    onPageChange={handlePageChange}
+                />
             </div>
         </>
     );

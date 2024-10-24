@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdOutlineSchedule, MdExpandMore, MdExpandLess } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import Modal from '../../../Ui/Modal/Modal';
+import MatchForm from "./MatchForm";
+import Pagination from "../../../Ui/Pagination/Pagination";
 
 export default function MatchTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -9,6 +12,31 @@ export default function MatchTable() {
   const [error, setError] = useState(null);
   const [collapsedGroups, setCollapsedGroups] = useState({});
   const navigate = useNavigate();   
+  const [showModal, setShowModal] = useState(false);
+  const [selectedMatch, setSelectedMatch] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(10);
+
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentTournaments = tournaments.slice(indexOfFirstItem, indexOfLastItem);
+
+  const totalPages = Math.ceil(tournaments.length / itemsPerPage);
+
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+  
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedMatch(null);
+  };
+  
+  const closeMatchModal = () => {
+    setShowModal(false);
+    setSelectedMatch(null);
+  };
 
   useEffect(() => {
     const fetchTournaments = async () => {
@@ -39,6 +67,17 @@ export default function MatchTable() {
     }));
   };
 
+  const fetchMatchDetails = async (id) => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}api/match/details/${id}`);
+      console.log(response.data.data)
+      setSelectedMatch(response.data.data);
+      setShowModal(true);
+    } catch (error) {
+      console.error("Error fetching match details:", error);
+    }
+  };
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
   console.log(tournaments)
@@ -58,7 +97,7 @@ export default function MatchTable() {
           </tr>
         </thead>
         <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-          {tournaments.map((tournament, tournamentIndex) => (
+          {currentTournaments.map((tournament, tournamentIndex) => (
             <React.Fragment key={tournament.id}>
               <tr 
                 className="group-header cursor-pointer bg-orange-100 dark:bg-orange-300 hover:bg-orange-100 dark:hover:bg-orange-200"
@@ -108,7 +147,7 @@ export default function MatchTable() {
                     <div className="flex gap-2">
                       <button
                         className="bg-blue-500 text-white rounded-xl w-16 py-2 flex justify-center"
-                        onClick={() => {/* Handle action */}}
+                        onClick={() => { fetchMatchDetails(match.id) }}
                       >
                         <MdOutlineSchedule />
                       </button>
@@ -120,6 +159,17 @@ export default function MatchTable() {
           ))}
         </tbody>
       </table>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
+
+      {showModal && (
+        <Modal closeModal={closeMatchModal}>
+          <MatchForm match={selectedMatch} />
+        </Modal>
+      )}
     </div>
   );
 }

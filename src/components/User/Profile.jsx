@@ -1,4 +1,4 @@
-import Input from '../Ui/Input';
+import Input from '../Ui/FormInput/Input';
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useRef, useState } from 'react';

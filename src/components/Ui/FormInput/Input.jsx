@@ -7,7 +7,7 @@ export default function Input({id, label, type, placeholder, value, onChange, ac
       <label htmlFor={id}>{label}{required && <span className="text-red-500 text-md">*</span>}</label>
       <input 
             name={name}
-            className='border rounded-md p-2 focus:outline-orange-400'
+            className='border border-gray-400 rounded-md p-2 focus:outline-orange-400'
             type={type}
             placeholder={placeholder}
             value={value}
