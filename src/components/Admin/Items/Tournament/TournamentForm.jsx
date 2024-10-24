@@ -1,7 +1,7 @@
 // TournamentForm.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Input from "../../../Ui/Input";
+import Input from "../../../Ui/FormInput/Input";
 import SelectField from "../../../Ui/SelectField/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";

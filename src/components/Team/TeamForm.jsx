@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Input from "../Ui/Input";
+import Input from "../Ui/FormInput/Input";
 import DragDropFile from "../Ui/DragDrop/DragDropFile";
 import { ImCross } from "react-icons/im";
 import { useLocation, useNavigate } from "react-router-dom";

@@ -1,7 +1,7 @@
 // EditTeamForm.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Input from "../../../Ui/Input";
+import Input from "../../../Ui/FormInput/Input";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
