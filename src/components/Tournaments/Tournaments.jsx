@@ -130,6 +130,7 @@ function Tournaments() {
                 className="w-full px-4 py-[5px] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
               />
             </div>
+
             <div className="w-full md:w-[20%]">
               <SelectField
                 label="Featured"
@@ -172,25 +173,33 @@ function Tournaments() {
 
         <div className='mx-14'>
           <h1 className="text-3xl font-bold">Tournament List</h1>
-          <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12'>
-            {currentTournaments.map((details, index) => (
-              <TournamentCard
-                key={index}
-                t_images={details.t_images}
-                image={details.image_urls}
-                tournament_name={details.t_name}
-                min_teams={details.min_teams}
-                max_teams={details.max_teams}
-                address={details.address}
-                reg_start={formatDate(details.rs_date)}
-                reg_end={formatDate(details.re_date)}
-                price={details.prize_pool}
-                id={details.id}
-                featured={details.featured}
-                format={details.tournament_type}
-              />
-            ))}
-          </div>
+
+          {currentTournaments.length === 0 ? (
+            <p className="text-xl text-center font-semibold text-gray-700 mt-6">
+              No tournaments found.
+            </p>
+          ) : (
+            <div className='grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12'>
+              {currentTournaments.map((details, index) => (
+                <TournamentCard
+                  key={index}
+                  t_images={details.t_images}
+                  image={details.image_urls}
+                  tournament_name={details.t_name}
+                  min_teams={details.min_teams}
+                  max_teams={details.max_teams}
+                  address={details.address}
+                  reg_start={formatDate(details.rs_date)}
+                  reg_end={formatDate(details.re_date)}
+                  price={details.prize_pool}
+                  id={details.id}
+                  featured={details.featured}
+                  format={details.tournament_type}
+                />
+              ))}
+            </div>
+          )}
+
           <div className='flex justify-between mt-8'>
             <button
               onClick={handlePrevious}
@@ -208,6 +217,7 @@ function Tournaments() {
             </button>
           </div>
         </div>
+
       </div>
     </>
   );
