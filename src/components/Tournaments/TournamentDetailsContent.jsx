@@ -1,12 +1,48 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IoLocationSharp } from "react-icons/io5";
 import { FaBuildingCircleCheck } from "react-icons/fa6";
 import { FaUsers, FaTrophy } from "react-icons/fa";
 import { GiWallet } from "react-icons/gi";
 import { TbTournament } from "react-icons/tb";
 import { NavLink } from 'react-router-dom';
+import {
+    SingleEliminationBracket,
+    Match,
+    SVGViewer,
+} from "@g-loot/react-tournament-brackets";
+import RoundRobinBracket from '../Admin/Items/Schedule/RoundRobinBracket';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+
 
 export default function TournamentDetailsContent({ tabIndex, tournamentData, teamData }) {
+    const [matches, setMatches] = useState([]);
+    const [showTiesheet, setShowTiesheet] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    const getTiesheetResponse = async () => {
+        console.log("hello")
+        setLoading(true);
+        try {
+            const response = await axios.get(
+                `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentData.id}`
+            );
+            console.log(response.data)
+            setMatches(response.data.data || []);
+            setShowTiesheet(response.data.showTiesheet || false);
+        } catch (err) {
+            toast.error(err.response?.data?.message || "Error fetching tiesheet");
+            console.log(err)
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getTiesheetResponse();
+        console.log(matches)
+    }, []);
 
     return (
         <div>
@@ -97,40 +133,44 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
             {tabIndex === 3 && (
                 <>
                     <h1 className="font-bold text-3xl mb-6">Participants in this Tournament</h1>
-                    <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
-                        {teamData.length > 0 ? (
-                            teamData.map((team, index) => (
-                                <NavLink to={`/tournamentDetails/registeredTeamDetails/${team.id}`} key={index}>
-                                    <div
-                                        className="bg-gray-100 h-fit w-full flex flex-row drop-shadow-[0_7px_3px_rgba(0,0,0,0.30)] px-2 py-2 hover:bg-gray-200 cursor-pointer"
-                                    >
-                                        <div className="w-[25%]">
-                                            <img
-                                                src={team.logo_urls || "/images/Logo.png"}
-                                                alt="Team Logo"
-                                                className="h-28 w-28 pl-3"
-                                            />
+                    <div
+                        className="bg-[#fbfbfb] h-fit w-full flex flex-row rounded-lg border border-[#e0e0e0] p-14"
+                    >
+                        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
+                            {teamData.length > 0 ? (
+                                teamData.map((team, index) => (
+                                    <NavLink to={`/tournamentDetails/registeredTeamDetails/${team.id}`} key={index}>
+                                        <div
+                                            className="bg-white h-fit w-full flex flex-row rounded-md border border-[#d8d8d8] px-2 py-2 hover:bg-gray-200 cursor-pointer"
+                                        >
+                                            <div className="w-[25%] ">
+                                                <img
+                                                    src={team.logo_urls || "/images/Logo.png"}
+                                                    alt="Team Logo"
+                                                    className="w-full h-28 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)]"
+                                                />
+                                            </div>
+                                            <div className="flex flex-col justify-center items-center w-full">
+                                                <h1 className="font-medium text-base">
+                                                    <b>Team Name: </b>{team.team_name || "N/A"}
+                                                </h1>
+                                                <h2 className="font-medium text-base">
+                                                    <b>Team Coach: </b>{team.coach_name || "N/A"}
+                                                </h2>
+                                                <h2 className="font-medium text-base">
+                                                    <b>Address: </b>{team.address || "N/A"}
+                                                </h2>
+                                                <h2 className="font-medium text-base">
+                                                    <b>No of players: </b>{team.player_number || "N/A"}
+                                                </h2>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col justify-center items-center w-full">
-                                            <h1 className="font-medium text-base">
-                                                <b>Team Name: </b>{team.team_name || "N/A"}
-                                            </h1>
-                                            <h2 className="font-medium text-base">
-                                                <b>Team Coach: </b>{team.coach_name || "N/A"}
-                                            </h2>
-                                            <h2 className="font-medium text-base">
-                                                <b>Address: </b>{team.address || "N/A"}
-                                            </h2>
-                                            <h2 className="font-medium text-base">
-                                                <b>No of players: </b>{team.player_number || "N/A"}
-                                            </h2>
-                                        </div>
-                                    </div>
-                                </NavLink>
-                            ))
-                        ) : (
-                            <p>No teams have registered yet.</p>
-                        )}
+                                    </NavLink>
+                                ))
+                            ) : (
+                                <p>No teams have registered yet.</p>
+                            )}
+                        </div>
                     </div>
                 </>
             )}
@@ -140,9 +180,31 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
 
             {
                 tabIndex == 4 && (
-                    <div>
-                        <h1 className='font-bold text-3xl mb-6'>{tournamentData.tournament_type === "single-elimination" ? "Single Elimination" : "Round Robin"}</h1>
-                    </div>
+                    <>
+                        <div>
+                            <h1 className='font-bold text-3xl mb-6'>{tournamentData.tournament_type === "single-elimination" ? "Single Elimination" : "Round Robin"}</h1>
+                        </div>
+                        <div>
+                            {matches.length > 0 ? (
+                                tournamentData.tournament_type === "single-elimination" ? (
+                                    <SingleEliminationBracket
+                                        matches={matches}
+                                        matchComponent={Match}
+                                        svgWrapper={({ children, ...props }) => (
+                                            <SVGViewer width={500} height={500} {...props}>
+                                                {children}
+                                            </SVGViewer>
+                                        )}
+                                    />
+                                ) : (
+                                    <RoundRobinBracket matches={matches} />
+                                )
+                            ) : (
+                                <p>Tiesheet not found</p>
+                            )}
+                        </div>
+                    </>
+
                 )
             }
 

@@ -31,6 +31,7 @@ export default function TeamTable() {
           },
         }
       );
+      console.log(response.data)
       setTeams(response.data.data);
       groupTeamsByTournament(response.data.data);
     } catch (err) {

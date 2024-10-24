@@ -111,7 +111,7 @@ export default function TournamentCardDetails() {
                         <span className='cursor-pointer' onClick={() => toggleTab(3)}>PARTICIPANT</span>
                     </div>
                     <div className={`flex justify-center items-center font-bold text-lg hover:text-orange-600 ${toggle === 4 ? 'text-orange-600' : ''}`}>
-                        <span className='cursor-pointer' onClick={() => toggleTab(4)}>TIESHEET</span>
+                        <span className='cursor-pointer' onClick={() => toggleTab(4)}>{tournamentData.tournament_type === "single-elimination" ? "TIESHEET" : "TABLE"}</span>
                     </div>
                 </div>
 
