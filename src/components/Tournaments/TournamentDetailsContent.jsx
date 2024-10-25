@@ -141,7 +141,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                                 teamData.map((team, index) => (
                                     <NavLink to={`/tournamentDetails/registeredTeamDetails/${team.id}`} key={index}>
                                         <div
-                                            className="bg-white h-fit w-full flex flex-row rounded-md border border-[#d8d8d8] px-2 py-2 hover:bg-gray-200 cursor-pointer"
+                                            className="bg-[#f4f4f4] h-fit w-full flex flex-row rounded-md border border-[#c6c6c6] px-4 py-4 hover:bg-gray-200 cursor-pointer"
                                         >
                                             <div className="w-[25%] ">
                                                 <img
@@ -150,19 +150,21 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                                                     className="w-full h-28 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)]"
                                                 />
                                             </div>
-                                            <div className="flex flex-col justify-center items-center w-full">
-                                                <h1 className="font-medium text-base">
-                                                    <b>Team Name: </b>{team.team_name || "N/A"}
-                                                </h1>
-                                                <h2 className="font-medium text-base">
-                                                    <b>Team Coach: </b>{team.coach_name || "N/A"}
-                                                </h2>
-                                                <h2 className="font-medium text-base">
-                                                    <b>Address: </b>{team.address || "N/A"}
-                                                </h2>
-                                                <h2 className="font-medium text-base">
-                                                    <b>No of players: </b>{team.player_number || "N/A"}
-                                                </h2>
+                                            <div className="flex justify-center items-center w-full">
+                                                <div className='flex flex-col items-start'>
+                                                    <div className='flex'>
+                                                        <h1 className='w-32'><b>Team Name: </b></h1><span>{team.team_name || "N/A"}</span>
+                                                    </div>
+                                                    <div className='flex'>
+                                                        <h1 className='w-32'><b>Team Coach: </b></h1><span>{team.coach_name || "N/A"}</span>
+                                                    </div>
+                                                    <div className='flex'>
+                                                        <h1 className='w-32'><b>Address: </b></h1><span>{team.address || "N/A"}</span>
+                                                    </div>
+                                                    <div className='flex'>
+                                                        <h1 className='w-32'><b>No of Players: </b></h1><span>{team.player_number || "N/A"}</span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </NavLink>
