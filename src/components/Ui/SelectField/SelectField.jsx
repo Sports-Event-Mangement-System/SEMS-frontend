@@ -15,17 +15,27 @@ function SelectField({
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
-      borderColor: state.isFocused ? "rgb(255, 140, 0)" : "rgb(75, 85, 99)",
+      borderColor: state.isFocused ? "rgb(255, 140, 0)" : "rgb(209, 213, 219)",
       boxShadow: state.isFocused ? "0 0 0 1px rgb(255, 140, 0)" : "none",
       "&:hover": {
         borderColor: "rgb(255, 140, 0)",
       },
-      "&:focus": {
-        borderColor: "rgb(255, 140, 0)",
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "rgb(255, 140, 0)" : "white",
+      "&:hover": {
+        backgroundColor: state.isSelected ? "rgb(255, 140, 0)" : "rgba(255, 140, 0, 0.1)",
       },
     }),
+    singleValue: (provided) => ({
+      ...provided,
+    }),
+    menuPortal: (provided) => ({
+      ...provided,
+      zIndex: 9999, // Ensure the dropdown is above the modal
+    }),
   };
-
 
   const selectedOption =
     Array.isArray(options) && options.length
@@ -39,7 +49,8 @@ function SelectField({
       </label>
       <div className="relative">
         <Select
-          menuPortalTarget={document.body}
+          menuPortalTarget={document.body} // Render the menu in the body
+          menuPosition="fixed" // Use fixed positioning
           isSearchable={searchable}
           name={name}
           id={id}

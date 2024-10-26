@@ -6,7 +6,7 @@ import SelectField from "../../../Ui/SelectField/SelectField";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
-import "flatpickr/dist/themes/material_green.css";
+import "flatpickr/dist/themes/material_orange.css";
 import Flatpickr from "react-flatpickr";
 import {dateFormatBackend} from "../../../Helper/dateFormat";
 
