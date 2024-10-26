@@ -1,0 +1,31 @@
+/* flatpickr-custom.css */
+.flatpickr-calendar {
+    background-color: #fff;
+    border: 1px solid #ffa500; /* Orange border */
+}
+
+.flatpickr-day {
+    color: #333;
+}
+
+.flatpickr-day:hover,
+.flatpickr-day:focus {
+    background-color: #ffa500; /* Orange hover */
+    color: #fff;
+}
+
+.flatpickr-day.selected,
+.flatpickr-day.startRange,
+.flatpickr-day.endRange {
+    background-color: #ffa500; /* Orange selected day */
+    color: #fff;
+}
+
+.flatpickr-month {
+    color: #ffa500; /* Orange month text */
+}
+
+.flatpickr-prev-month,
+.flatpickr-next-month {
+    color: #ffa500; /* Orange navigation arrows */
+}
