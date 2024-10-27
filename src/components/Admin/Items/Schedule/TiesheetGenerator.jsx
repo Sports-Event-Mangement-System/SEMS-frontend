@@ -66,11 +66,12 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/tiesheet/tournament/${tournamentId}`,
+        `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
         {
-          params: { randomTeams },
+          params: {
+            tournament_type: tournament.tournament_type,
+            randomTeams: randomTeams
+          },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
