@@ -46,10 +46,11 @@ const RoundRobinBracket = ({ matches }) => {
                 <tr>
                   <th className="px-6 py-3 border">SN</th>
                   <th className="px-6 py-3 border">Team</th>
-                  <th className="px-6 py-3 border">P</th>
+                  <th className="px-6 py-3 border">MP</th>
                   <th className="px-6 py-3 border">W</th>
                   <th className="px-6 py-3 border">D</th>
                   <th className="px-6 py-3 border">L</th>
+                  <th className="px-6 py-3 border">PTS</th>
                 </tr>
               </thead>
               <tbody>
@@ -57,10 +58,11 @@ const RoundRobinBracket = ({ matches }) => {
                     <tr key={match.id}>
                       <td className="px-6 py-4 border">{match.id}</td> {/* Serial number */}
                       <td className="px-6 py-4 border">{match.teamA}</td>
-                      <td className="px-6 py-4 border">{match.pointsA}</td>
+                      <td className="px-6 py-4 border">{match.mathcedPlayed}</td>
                       <td className="px-6 py-4 border">{match.winsA}</td>
                       <td className="px-6 py-4 border">{match.drawsA}</td>
                       <td className="px-6 py-4 border">{match.lossesA}</td>
+                      <td className="px-6 py-4 border">{match.pointsA}</td>
                     </tr>
                 ))}
               </tbody>
