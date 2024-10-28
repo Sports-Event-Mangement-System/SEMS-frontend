@@ -226,7 +226,8 @@ export default function TiesheetGenerator() {
                 )}
               />
             ) : (
-              <RoundRobinBracket matches={matches} />
+              // <RoundRobinBracket matches={matches} />
+              <RoundRobinBracket />
             )
           ) : (
             <p>Click generate button to generate Tiesheet</p>
