@@ -46,7 +46,7 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentId}`,
+        `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -227,7 +227,7 @@ export default function TiesheetGenerator() {
               />
             ) : (
               // <RoundRobinBracket matches={matches} />
-              <RoundRobinBracket />
+              <RoundRobinBracket matches={matches} />
             )
           ) : (
             <p>Click generate button to generate Tiesheet</p>
