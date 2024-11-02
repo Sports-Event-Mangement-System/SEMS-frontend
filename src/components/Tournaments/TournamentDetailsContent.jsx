@@ -139,7 +139,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
                             {teamData.length > 0 ? (
                                 teamData.map((team, index) => (
-                                    <NavLink to={`/tournamentDetails/registeredTeamDetails/${team.id}`} key={index}>
+                                    <NavLink to={`/TeamDetails/${team.id}`} key={index}>
                                         <div
                                             className="bg-[#f4f4f4] h-fit w-full flex flex-row rounded-md border border-[#c6c6c6] px-4 py-4 hover:bg-gray-200 cursor-pointer"
                                         >

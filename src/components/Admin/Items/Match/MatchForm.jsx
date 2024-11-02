@@ -7,7 +7,7 @@ import { dateFormatBackend } from "../../../Helper/dateFormat";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-export default function MatchForm({ match, closeModal }) {
+export default function MatchForm({ match, closeModal, onFormUpdate }) {
 
   const [error, setError] = useState(null);
   const [matchState, setMatchState] = useState("SCHEDULED");
@@ -78,6 +78,7 @@ export default function MatchForm({ match, closeModal }) {
         if (res.data.status) {
           closeModal();
           toast.success(res.data.message);
+          onFormUpdate();
         }
       })
       .catch((err) => {
