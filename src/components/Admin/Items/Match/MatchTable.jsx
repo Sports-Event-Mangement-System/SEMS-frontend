@@ -38,25 +38,25 @@ export default function MatchTable() {
     setSelectedMatch(null);
   };
 
-  useEffect(() => {
-    const fetchTournaments = async () => {
-      try {
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/tournament/matches`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
-        setTournaments(response.data.tournaments || []);
-      } catch (err) {
-        setError("Error fetching tournaments");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTournaments = async () => {
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/tournament/matches`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      setTournaments(response.data.tournaments || []);
+    } catch (err) {
+      setError("Error fetching tournaments");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchTournaments();
   }, []);
 
@@ -76,6 +76,9 @@ export default function MatchTable() {
     } catch (error) {
       console.error("Error fetching match details:", error);
     }
+  };
+  const handleFormUpdate = () => {
+    fetchTournaments();
   };
 
   if (loading) return <div>Loading...</div>;
@@ -137,11 +140,15 @@ export default function MatchTable() {
                         <span>TBD</span>
                       </div>)}
                   </td>
-                  <td className="px-6 py-3">{match.match_winner ? match.match_winner : <div className="flex items-center justify-center">
-                    <span>TBD</span>
-                  </div>}</td>
+                  <td className="px-6 py-3">
+                    {match.participants && match.participants[0] ? (
+                      match.participants.find(participant => participant.isWinner)?.name || "TBD"
+                    ) : (
+                      <span>TBD</span>
+                    )}
+                  </td>
                   <td className="px-6 py-3">{match.name}</td>
-                  <td className="px-6 py-3">{match.start_time ? match.start_time : "Not Started"}</td>
+                  <td className="px-6 py-3">{match.startTime ? match.startTime : "Not Started"}</td>
                   <td className="px-6 py-3">{match.state}</td>
                   <td className="px-6 py-3">
                     <div className="flex gap-2">
@@ -165,11 +172,11 @@ export default function MatchTable() {
         onPageChange={handlePageChange}
       />
 
-{showModal && (
-  <Modal closeModal={closeMatchModal}>
-    <MatchForm match={selectedMatch} closeModal={closeMatchModal} />
-  </Modal>
-)}
+      {showModal && (
+        <Modal closeModal={closeMatchModal}>
+          <MatchForm match={selectedMatch} closeModal={closeMatchModal} onFormUpdate={handleFormUpdate} />
+        </Modal>
+      )}
     </div>
   );
 }

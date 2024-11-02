@@ -7,6 +7,7 @@ import LogIn from '../Account/LogIn';
 import SignUp from '../Account/SignUp';
 import PrivateRoute from './PrivateRoute';
 import TournamentCardDetails from '../Tournaments/TournamentCardDetails';
+import SingleTeamDetails from '../Team/SingleTeamDetails';
 
 
 const publicRoutes = [
@@ -47,6 +48,14 @@ const publicRoutes = [
     element: (
       <PrivateRoute redirectAuthenticated={true}>
         <SignUp />
+      </PrivateRoute>
+    ),
+  },
+  {
+    path: '/TeamDetails/:id',
+    element: (
+      <PrivateRoute>
+        <SingleTeamDetails />
       </PrivateRoute>
     ),
   },
