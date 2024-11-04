@@ -10,6 +10,7 @@ import {
     Match,
     SVGViewer,
 } from "@g-loot/react-tournament-brackets";
+import { useWindowSize } from "@uidotdev/usehooks";
 import RoundRobinBracket from '../Admin/Items/Schedule/RoundRobinBracket';
 import axios from 'axios';
 import { toast } from 'react-toastify';
@@ -20,6 +21,10 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
     const [showTiesheet, setShowTiesheet] = useState(false);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const { width, height } = useWindowSize();
+    const finalWidth = Math.max(width - 50, 500);
+    const finalHeight = Math.max(height - 100, 500);
 
     const getTiesheetResponse = async () => {
         console.log("hello")
@@ -193,7 +198,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                                         matches={matches}
                                         matchComponent={Match}
                                         svgWrapper={({ children, ...props }) => (
-                                            <SVGViewer width={500} height={500} {...props}>
+                                            <SVGViewer width={finalWidth} height={finalHeight} {...props}>
                                                 {children}
                                             </SVGViewer>
                                         )}

@@ -29,6 +29,7 @@ export default function SingleTeamDetails() {
         fetchTeamDetails();
     }, [id]);
 
+
     return (
         <div>
             {teamDetails ? (
@@ -37,12 +38,12 @@ export default function SingleTeamDetails() {
                         <img
                             src={teamDetails?.logo_urls || '/images/Logo.png'}
                             alt="Team Logo"
-                            className='h-30 w-30 mr-4'
+                            className='h-40 w-36 mr-4'
                         />
                         <h1 className='font-bold text-[3.25rem] mb-2 uppercase'><b></b>{teamDetails?.team_name}</h1>
                         <div className="group flex justify-center items-center gap-2 cursor-pointer rounded-lg w-34 h-14 py-2 px-4 border border-blue-600 bg-white text-blue-600 hover:border-blue-600 hover:text-white hover:bg-blue-600 absolute top-4 right-4">
                             <FaRegStar size={22} className="group-hover:hidden" />
-                            <FaStar size={22} className="hidden group-hover:block" /> 
+                            <FaStar size={22} className="hidden group-hover:block" />
                             <span className='text-[18px] font-semibold'>Follow</span>
                         </div>
                     </div>
@@ -67,80 +68,119 @@ export default function SingleTeamDetails() {
                             <Tab label="Fixtures">
                                 <div className="py-4">
                                     <div>
-                                        <h2 className='font-bold text-lg mb-2'>Matches:</h2>
-                                        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
-                                            {fixtureMatches.length > 0 ? (  
+                                        <h2 className="font-bold text-lg mb-2">Matches:</h2>
+                                        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-y-12 w-full justify-items-center mt-12">
+                                            {fixtureMatches.length > 0 ? (
                                                 fixtureMatches.map((match, index) => (
                                                     <div
-                                                        className="bg-[#f4f4f4] h-fit w-full flex flex-row rounded-md border border-[#c6c6c6] px-2 py-2 hover:bg-gray-200 cursor-pointer"
+                                                        key={index}
+                                                        className="bg-white w-[65vh] rounded-md border py-5 border-[#c6c6c6] cursor-pointer transition-transform transform hover:-translate-y-2 hover:shadow-lg"
                                                     >
-                                                        <div className="w-full h-full flex flex-col">
-                                                            <div className="flex mb-4">
-                                                                <img
-                                                                    src={match.participants[0].teamLogo  || "/images/Logo.png"}
-                                                                    alt="Team Logo"
-                                                                    className="w-24 h-18 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
-                                                                />
-                                                                <span className='text-red-500 mt-2 px-2 py-4 rounded-full text-xl font-bold'>{match.participants[0].name}</span>
+                                                        <div className="flex h-fit w-full px-5">
+                                                            <div className="flex flex-col space-y-4 border-r-2 border-r-gray-300 h-15 w-[70%]">
+                                                                <div className="flex items-center">
+                                                                    <img
+                                                                        src={match.participants[0]?.teamLogo || "/images/Logo.png"}
+                                                                        alt="Team Logo"
+                                                                        className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                    />
+                                                                    <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                        {match.participants[0]?.name}
+                                                                    </span>
+                                                                </div>
+                                                                <div className="flex items-center">
+                                                                    <img
+                                                                        src={match.participants[1]?.teamLogo || "/images/Logo.png"}
+                                                                        alt="Team Logo"
+                                                                        className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                    />
+                                                                    <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                        {match.participants[1]?.name}
+                                                                    </span>
+                                                                </div>
                                                             </div>
-                                                            <div className="flex">
-                                                                <img
-                                                                    src={match.participants[1].teamLogo  || "/images/Logo.png"}
-                                                                    alt="Team Logo"
-                                                                    className="w-24 h-18 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
-                                                                />
-                                                                <span className='text-red-500 mt-2 px-2 py-1 rounded-full text-xl font-bold'>{match.participants[1].name}</span>
+                                                            <div className="flex h-15 items-center justify-center w-[30%]">
+                                                                <div className="text-black text-[16px] font-semibold">{match.startTime}</div>
                                                             </div>
-                                                        <hr className="my-4 border-t border-gray-400 w-full" />
+                                                        </div>
+                                                        <hr className="my-4 border-1 border-gray-300 w-full" />
+                                                        <div className="px-5">
+                                                            <h1>{teamDetails.tournament.t_name}</h1>
                                                         </div>
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p>No teams have registered yet.</p>
+                                                <p>There is no fixture available for this team</p>
                                             )}
                                         </div>
-
                                     </div>
                                 </div>
                             </Tab>
+
                             <Tab label="Results">
                                 <div className="py-4">
                                     <div>
-                                        <h2 className='font-bold text-lg mb-2'>Results:</h2>
-                                        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-9 w-full">
-                                            {resultMatches.length > 0 ? (  
+                                        <h2 className="font-bold text-lg mb-2">Results:</h2>
+                                        <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-y-12 w-full justify-items-center mt-12">
+
+                                            {resultMatches.length > 0 ? (
                                                 resultMatches.map((match, index) => (
                                                     <div
-                                                        className="bg-[#f4f4f4] h-fit w-full flex flex-row rounded-md border border-[#c6c6c6] px-2 py-2 hover:bg-gray-200 cursor-pointer"
+                                                        key={index}
+                                                        className="bg-white w-[65vh] h-fit rounded-md border py-5 border-[#c6c6c6] cursor-pointer transition-transform transform hover:-translate-y-2 hover:shadow-lg"
                                                     >
-                                                        <div className="w-full h-full flex flex-col">
-                                                            <div className="flex mb-4">
-                                                                <img
-                                                                    src={match.participants[0].teamLogo  || "/images/Logo.png"}
-                                                                    alt="Team Logo"
-                                                                    className="w-24 h-18 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
-                                                                />
-                                                                <span className='text-red-500 mt-2 px-2 py-4 rounded-full text-xl font-bold'>{match.participants[0].name}</span>
+                                                        <div className="flex h-fit w-full px-5">
+                                                            <div className="flex flex-col space-y-4 border-r-2 border-r-gray-300 h-15 w-[70%]">
+                                                                <div className="flex justify-between pr-4 items-center">
+                                                                    <div className="flex">
+                                                                        <img
+                                                                            src={match.participants[0]?.teamLogo || "/images/Logo.png"}
+                                                                            alt="Team Logo"
+                                                                            className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                        />
+                                                                        <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                            {match.participants[0]?.name}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="font-semibold">{match.participants[0]?.resultText}</div>
+                                                                </div>
+                                                                {match.participants[1] ? <div className="flex justify-between pr-4 items-center">
+                                                                    <div className="flex">
+                                                                        <img
+                                                                            src={match.participants[1]?.teamLogo || "/images/Logo.png"}
+                                                                            alt="Team Logo"
+                                                                            className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                        />
+                                                                        <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                            {match.participants[1]?.name}
+                                                                        </span>
+                                                                    </div>
+                                                                    <div className="font-semibold">{match.participants[1]?.resultText}</div>
+                                                                </div> : <>
+                                                                    <div className='h-9'>
+                                                                        <h1 className='font-semibold text-blue-500'>Walk over match</h1>
+                                                                    </div>
+                                                                </>}
+
                                                             </div>
-                                                            <div className="flex">
-                                                                <img
-                                                                    src={match.participants[1].teamLogo  || "/images/Logo.png"}
-                                                                    alt="Team Logo"
-                                                                    className="w-24 h-18 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
-                                                                />
-                                                                <span className='text-red-500 mt-2 px-2 py-1 rounded-full text-xl font-bold'>{match.participants[1].name}</span>
+                                                            <div className="flex h-15 items-center justify-center w-[30%]">
+                                                                <div className="text-black text-[16px] font-semibold">{match.startTime}</div>
                                                             </div>
-                                                        <hr className="my-4 border-t border-gray-400 w-full" />
+                                                        </div>
+                                                        <hr className="my-4 border-1 border-gray-300 w-full" />
+                                                        <div className="px-5">
+                                                            <h1>{teamDetails.tournament.t_name}</h1>
                                                         </div>
                                                     </div>
                                                 ))
                                             ) : (
-                                                <p>No teams have registered yet.</p>
+                                                <p>No any results</p>
                                             )}
                                         </div>
                                     </div>
                                 </div>
                             </Tab>
+
                             <Tab label="Squad">
                                 <div className="py-4">
                                     <div>
