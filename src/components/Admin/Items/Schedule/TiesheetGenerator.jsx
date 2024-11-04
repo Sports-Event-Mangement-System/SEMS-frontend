@@ -20,6 +20,7 @@ export default function TiesheetGenerator() {
   const [error, setError] = useState(null);
   const [randomTeams, setRandomTeams] = useState(false);
   const [createMatches, setCreateMatches] = useState(false);
+  const [pointsTable, setPointsTable] = useState([]);
 
   const { tournamentId } = useParams();
   const { width, height } = useWindowSize();
@@ -55,6 +56,9 @@ export default function TiesheetGenerator() {
       );
       setMatches(response.data.data || []);
       setShowTiesheet(response.data.showTiesheet || false);
+      if (tournament.tournament_type === "round-robin") {
+        setPointsTable(response.data.points_table || []);
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || "Error fetching tiesheet");
     } finally {
@@ -78,6 +82,9 @@ export default function TiesheetGenerator() {
         }
       );
       setMatches(response.data.matches || []);
+      if (tournament.tournament_type === "round-robin") {
+        setPointsTable(response.data.points_table || []);
+      }
       setCreateMatches(response.data.saveButton);
       toast.success(response.data.message);
     } catch (err) {
@@ -89,12 +96,13 @@ export default function TiesheetGenerator() {
 
   const saveMatches = async () => {
     setLoading(true);
+    console.log(pointsTable);
     try {
       const response = await axios.post(
         `${
           import.meta.env.VITE_API_URL
         }api/save/matches/tournament/${tournamentId}`,
-        { matches },
+        { pointsTable, matches },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -130,7 +138,6 @@ export default function TiesheetGenerator() {
       setLoading(false);
     }
   };
-  console.log(matches);
 
   return (
     <>
