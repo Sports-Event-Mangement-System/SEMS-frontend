@@ -9,14 +9,13 @@ const Tabs = ({ children }) => {
   };
 
   return (
-    <div className="max-w-3xl">
+    <div className="w-full">
       <div className="flex flex-start border-b border-gray-300">
         {children.map(child => (
           <button
             key={child.props.label}
-            className={`${
-              activeTab === child.props.label ? 'border-b-2 border-orange-500' : ''
-            } flex-1 text-gray-700 font-medium py-2`}
+            className={`${activeTab === child.props.label ? 'border-b-2 border-orange-500' : ''
+              } flex-1 text-gray-700 font-medium py-2`}
             onClick={e => handleClick(e, child.props.label)}
           >
             {child.props.label}
