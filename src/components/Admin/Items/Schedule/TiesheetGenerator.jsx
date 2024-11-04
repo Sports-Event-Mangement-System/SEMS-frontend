@@ -27,6 +27,8 @@ export default function TiesheetGenerator() {
   const finalWidth = Math.max(width - 50, 500);
   const finalHeight = Math.max(height - 100, 500);
 
+  const [maxRounds, setMaxRounds] = useState([]);
+
   useEffect(() => {
     fetchTournamentData();
     getTiesheetResponse();
@@ -54,11 +56,13 @@ export default function TiesheetGenerator() {
           },
         }
       );
-      setMatches(response.data.data || []);
+      setMatches(response.data.matches || []);
       setShowTiesheet(response.data.showTiesheet || false);
       if (tournament.tournament_type === "round-robin") {
         setPointsTable(response.data.points_table || []);
       }
+      setMaxRounds(response.data.max_rounds);
+      console.log(response.data.max_rounds)
     } catch (err) {
       toast.error(err.response?.data?.message || "Error fetching tiesheet");
     } finally {
@@ -233,8 +237,8 @@ export default function TiesheetGenerator() {
                 )}
               />
             ) : (
-              // <RoundRobinBracket matches={matches} />
-              <RoundRobinBracket matches={matches} />
+
+              <RoundRobinBracket matches={matches} max_rounds={maxRounds} />
             )
           ) : (
             <p>Click generate button to generate Tiesheet</p>
