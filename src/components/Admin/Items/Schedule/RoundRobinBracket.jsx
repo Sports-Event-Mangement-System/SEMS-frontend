@@ -3,7 +3,7 @@ import FixtureTable from "../../../Ui/RoundRobinBracket/FixtureTable";
 import PointsTable from "../../../Ui/RoundRobinBracket/PointsTable";
 // import { SampleRounds } from "./SampleRounds";
 
-const RoundRobinBracket = ({ matches, max_rounds }) => {
+const RoundRobinBracket = ({ matches, max_rounds, pointsTable }) => {
   console.log(matches);
   matches.map((match) => {
     console.log(match.participants);
@@ -15,10 +15,14 @@ const RoundRobinBracket = ({ matches, max_rounds }) => {
       <div className="mt-4">
         <div className="flex gap-8">
           {/* Fixture Table */}
-          <FixtureTable matches={matches} max_rounds={max_rounds} />
+          <div className="w-6/12">
+            <FixtureTable matches={matches} max_rounds={max_rounds} />
+          </div>
 
           {/* Score Table */}
-          <PointsTable matches={matches} />
+          <div className="w-6/12">
+            <PointsTable pointsTable={pointsTable} />
+          </div>
         </div>
       </div>
     </div>
