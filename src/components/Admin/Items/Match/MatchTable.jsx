@@ -112,7 +112,7 @@ export default function MatchTable() {
               </tr>
               {!collapsedGroups[tournament.id] && tournament.matches?.map((match, matchIndex) => (
                 <tr key={match.id} className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-600 dark:hover:bg-gray-500 font-medium">
-                  <td className="px-6 py-3">{tournamentIndex * 1000 + matchIndex + 1}</td>
+                  <td className="px-6 py-3">{matchIndex + 1}</td>
                   <td className="px-6 py-3">
                     {match.participants && match.participants[0] ? (
                       <div className="flex items-center">

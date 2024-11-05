@@ -4,11 +4,6 @@ import PointsTable from "../../../Ui/RoundRobinBracket/PointsTable";
 // import { SampleRounds } from "./SampleRounds";
 
 const RoundRobinBracket = ({ matches, max_rounds, pointsTable }) => {
-  console.log(matches);
-  matches.map((match) => {
-    console.log(match.participants);
-  });
-
   return (
     <div>
       {/* Loop through each round and display its matches */}

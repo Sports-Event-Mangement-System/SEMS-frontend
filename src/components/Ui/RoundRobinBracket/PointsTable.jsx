@@ -2,10 +2,7 @@ import React from "react";
 
 export default function PointsTable({ pointsTable }) {
 
-  console.log(pointsTable)
-
   const safePointsTable = Array.isArray(pointsTable) ? pointsTable : [];
-  console.log(safePointsTable)
   
   // Iterate through the teams to display their stats
   return (

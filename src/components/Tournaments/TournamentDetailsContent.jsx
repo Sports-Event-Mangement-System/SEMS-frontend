@@ -34,7 +34,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                 `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentData.id}`
             );
             console.log(response.data)
-            setMatches(response.data.data || []);
+            setMatches(response.data.matches || []);
             setShowTiesheet(response.data.showTiesheet || false);
         } catch (err) {
             toast.error(err.response?.data?.message || "Error fetching tiesheet");

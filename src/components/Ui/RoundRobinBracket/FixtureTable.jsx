@@ -2,10 +2,6 @@ import React from "react";
 import vsIcon from '/svg/versus-icon.svg';
 
 export default function FixtureTable({ matches, max_rounds }) {
-  // Log for debugging
-  console.log("Max Rounds:", max_rounds);
-  console.log("Matches:", matches);
-
   return (
     <div className="w-full text-sm text-left mb-4 border border-collapse rounded-lg shadow-md overflow-hidden">
       <div className="bg-blue-500 text-white border">
@@ -30,7 +26,9 @@ export default function FixtureTable({ matches, max_rounds }) {
                   .filter(match => match.round === roundIndex + 1) // Filter matches for the current round
                   .map(match => (
                     <tr key={match.id}>
-                      <td className="border px-4 py-2 w-1/4"></td>
+                      <td className="border px-4 py-2 w-1/4">
+                        <span className="font-semibold">{match.startTime ? match.startTime : 'Not Scheduled Yet'}</span>
+                      </td>
                       <td className="border px-4 py-2 flex justify-between items-center">
                         <div className="flex items-center w-full">
                           {match.participants.map((participant, i) => (
@@ -69,6 +67,9 @@ export default function FixtureTable({ matches, max_rounds }) {
                                   />
                                   <span className="font-semibold">{participant.name}</span>
                                 </div>
+                              )}
+                              {match.participants.length === 1 && (
+                                <span className="font-bold">(Rest This Round)</span>
                               )}
                             </React.Fragment>
                           ))}
