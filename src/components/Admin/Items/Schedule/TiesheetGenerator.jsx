@@ -20,7 +20,7 @@ export default function TiesheetGenerator() {
   const [error, setError] = useState(null);
   const [randomTeams, setRandomTeams] = useState(false);
   const [createMatches, setCreateMatches] = useState(false);
-  const [pointsTable, setPointsTable] = useState([]);
+  const [pointsTableData, setPointsTableData] = useState([]);
 
   const { tournamentId } = useParams();
   const { width, height } = useWindowSize();
@@ -59,10 +59,10 @@ export default function TiesheetGenerator() {
       setMatches(response.data.matches || []);
       setShowTiesheet(response.data.showTiesheet || false);
       if (tournament.tournament_type === "round-robin") {
-        setPointsTable(response.data.points_table || []);
+        setPointsTableData(response.data.points_table || []);
       }
       setMaxRounds(response.data.max_rounds);
-      console.log(response.data.max_rounds)
+      console.log(response.data.points_table)
     } catch (err) {
       toast.error(err.response?.data?.message || "Error fetching tiesheet");
     } finally {
@@ -87,7 +87,7 @@ export default function TiesheetGenerator() {
       );
       setMatches(response.data.matches || []);
       if (tournament.tournament_type === "round-robin") {
-        setPointsTable(response.data.points_table || []);
+        setPointsTableData(response.data.points_table || []);
       }
       setCreateMatches(response.data.saveButton);
       toast.success(response.data.message);
@@ -100,13 +100,13 @@ export default function TiesheetGenerator() {
 
   const saveMatches = async () => {
     setLoading(true);
-    console.log(pointsTable);
+    console.log(pointsTableData);
     try {
       const response = await axios.post(
         `${
           import.meta.env.VITE_API_URL
         }api/save/matches/tournament/${tournamentId}`,
-        { pointsTable, matches },
+        { pointsTableData, matches },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -238,7 +238,7 @@ export default function TiesheetGenerator() {
               />
             ) : (
 
-              <RoundRobinBracket matches={matches} max_rounds={maxRounds} />
+              <RoundRobinBracket matches={matches} max_rounds={maxRounds} pointsTable={pointsTableData} />
             )
           ) : (
             <p>Click generate button to generate Tiesheet</p>

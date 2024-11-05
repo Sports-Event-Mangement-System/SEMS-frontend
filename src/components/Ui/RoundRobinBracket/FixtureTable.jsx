@@ -31,15 +31,48 @@ export default function FixtureTable({ matches, max_rounds }) {
                   .map(match => (
                     <tr key={match.id}>
                       <td className="border px-4 py-2 w-1/4"></td>
-                      <td className="border px-4 py-2">
-                        {match.participants.map((participant, i) => (
-                          <span key={participant.id}>
-                            {participant.name}
-                            {i < match.participants.length - 1 && (
-                              <img src={vsIcon} alt="vs" className="inline h-8 mx-2"  style={{ filter: 'invert(100%)' }} />
-                        )}
-                          </span>
-                        ))}
+                      <td className="border px-4 py-2 flex justify-between items-center">
+                        <div className="flex items-center w-full">
+                          {match.participants.map((participant, i) => (
+                            <React.Fragment key={participant.id}>
+                              {/* Left Participant */}
+                              {i === 0 && (
+                                <div className="flex items-center w-6/12">
+                                  <img 
+                                    src={participant.teamLogo} 
+                                    className="inline h-8 w-8 mx-2 rounded-full" 
+                                    alt={participant.name} 
+                                  />
+                                  <span className="font-semibold">{participant.name}</span>
+                                </div>
+                              )}
+                              
+                              {/* VS Icon */}
+                              {i === 0 && match.participants.length > 1 && (
+                                <div className="flex items-center mr-4">
+                                  <img 
+                                    src={vsIcon} 
+                                    alt="vs" 
+                                    className="h-8" 
+                                    style={{ filter: 'invert(100%)' }} 
+                                  />
+                                </div>
+                              )}
+
+                              {/* Right Participant */}
+                              {i === 1 && (
+                                <div className="flex items-center w-6/12">
+                                  <img 
+                                    src={participant.teamLogo} 
+                                    className="inline h-8 w-8 mx-2 rounded-full" 
+                                    alt={participant.name} 
+                                  />
+                                  <span className="font-semibold">{participant.name}</span>
+                                </div>
+                              )}
+                            </React.Fragment>
+                          ))}
+                        </div>
                       </td>
                     </tr>
                   ))}
