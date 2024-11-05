@@ -34,6 +34,8 @@ export default function TiesheetGenerator() {
     getTiesheetResponse();
   }, [tournamentId]);
 
+
+  // Fetch Tournament Data
   const fetchTournamentData = async () => {
     try {
       const response = await axios.get(
@@ -45,31 +47,26 @@ export default function TiesheetGenerator() {
     }
   };
 
+  // Fetch Tiesheet Response If there is in Database else the button generate will be shown
   const getTiesheetResponse = async () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
+        `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentId}`,
       );
       setMatches(response.data.matches || []);
       setShowTiesheet(response.data.showTiesheet || false);
-      if (tournament.tournament_type === "round-robin") {
+      if (tournament.tournament_type = "round-robin") {
         setPointsTableData(response.data.points_table || []);
       }
       setMaxRounds(response.data.max_rounds);
-      console.log(response.data.points_table)
     } catch (err) {
-      toast.error(err.response?.data?.message || "Error fetching tiesheet");
     } finally {
       setLoading(false);
     }
   };
 
+  // Generate Tiesheet after clicking generate button
   const generateTiesheet = async () => {
     setLoading(true);
     try {
@@ -77,7 +74,6 @@ export default function TiesheetGenerator() {
         `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
         {
           params: {
-            tournament_type: tournament.tournament_type,
             randomTeams: randomTeams
           },
           headers: {
@@ -90,6 +86,7 @@ export default function TiesheetGenerator() {
         setPointsTableData(response.data.points_table || []);
       }
       setCreateMatches(response.data.saveButton);
+      setMaxRounds(response.data.max_rounds);
       toast.success(response.data.message);
     } catch (err) {
       setError(err.response?.data?.message || "Error generating tiesheet");
@@ -98,13 +95,12 @@ export default function TiesheetGenerator() {
     }
   };
 
+  // Save Matches in Database after clicking create matches button
   const saveMatches = async () => {
     setLoading(true);
-    console.log(pointsTableData);
     try {
       const response = await axios.post(
-        `${
-          import.meta.env.VITE_API_URL
+        `${import.meta.env.VITE_API_URL
         }api/save/matches/tournament/${tournamentId}`,
         { pointsTableData, matches },
         {
@@ -123,6 +119,7 @@ export default function TiesheetGenerator() {
     }
   };
 
+  // Delete Tiesheet and Matches in Database after clicking delete tiesheet button
   const deleteTiesheet = async () => {
     try {
       const response = await axios.delete(
@@ -162,38 +159,35 @@ export default function TiesheetGenerator() {
         <span className="text-red-600">{error}</span>
       ) : (
         <>
+          {tournament.tournament_type === "round-robin" && (
+            <div className="text-sm text-blue-600">
+              Note: This tournament format is round-robin, where each team
+              plays against every other team.
+            </div>
+          )}
           {!showTiesheet && (
             <div className="flex items-center space-x-4">
               <button
                 disabled={loading}
                 onClick={generateTiesheet}
-                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
-                  loading
+                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-green-700"
-                }`}
+                  }`}
               >
                 {matches.length > 0
                   ? "Generate Another Tiesheet"
                   : "Generate Tiesheet"}
               </button>
 
-              {tournament.tournament_type === "round-robin" && (
-                <div className="text-sm text-blue-600">
-                  Note: This tournament format is round-robin, where each team
-                  plays against every other team.
-                </div>
-              )}
-
               {createMatches && (
                 <button
                   disabled={loading}
                   onClick={saveMatches}
-                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
-                    loading
+                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-green-700"
-                  }`}
+                    }`}
                 >
                   Create Matches in Database
                 </button>
@@ -237,7 +231,6 @@ export default function TiesheetGenerator() {
                 )}
               />
             ) : (
-
               <RoundRobinBracket matches={matches} max_rounds={maxRounds} pointsTable={pointsTableData} />
             )
           ) : (

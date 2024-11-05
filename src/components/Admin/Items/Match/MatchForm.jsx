@@ -17,7 +17,6 @@ export default function MatchForm({ match, closeModal, onFormUpdate }) {
   const [team2ResultText, setTeam2ResultText] = useState("");
 
   const matchStateOptions = [
-    { value: "NO_SHOW", label: "No Show" },
     { value: "SCHEDULED", label: "Scheduled" },
     { value: "WALK_OVER", label: "Walk Over" },
     { value: "DONE", label: "Completed" },
@@ -149,6 +148,7 @@ export default function MatchForm({ match, closeModal, onFormUpdate }) {
                     value={matchStateOptions.find((option) => option.value === matchState)}
                     onChange={(selectedOption) => setMatchState(selectedOption.value)}
                     className="h-12 w-full" />
+                  {error?.state && <p className="text-red-500 text-sm">{error.state}</p>}
                 </div>
                 <div className="flex-1">
                   <label htmlFor="startTime" className="block text-sm font-medium text-gray-700 mb-1">Match Start Time</label>
@@ -181,6 +181,7 @@ export default function MatchForm({ match, closeModal, onFormUpdate }) {
                       setMatchWinner(selectedOption.value)
                     }
                   />
+                  {error?.matchWinner && <p className="text-red-500 text-sm">{error.matchWinner}</p>}
                 </div>
                 <div className="flex-1">
                 </div>
