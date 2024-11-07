@@ -100,7 +100,7 @@ export default function TournamentCardDetails() {
                 </div>
                 <div className='bg-gray-400 h-1 w-[95%] items-center mx-auto'></div>
 
-                <div className='grid grid-cols-4'>
+                <div className='grid grid-cols-5'>
                     <div className={`flex justify-center items-center border-r-2 border-r-orange-600 font-bold text-lg hover:text-orange-600 ${toggle === 1 ? 'text-orange-600' : ''}`}>
                         <span className='cursor-pointer' onClick={() => toggleTab(1)}>OVERVIEW</span>
                     </div>
@@ -110,8 +110,11 @@ export default function TournamentCardDetails() {
                     <div className={`flex justify-center items-center border-r-2 border-r-orange-600 font-bold text-lg hover:text-orange-600 ${toggle === 3 ? 'text-orange-600' : ''}`}>
                         <span className='cursor-pointer' onClick={() => toggleTab(3)}>PARTICIPANT</span>
                     </div>
-                    <div className={`flex justify-center items-center font-bold text-lg hover:text-orange-600 ${toggle === 4 ? 'text-orange-600' : ''}`}>
+                    <div className={`flex justify-center items-center border-r-2 border-r-orange-600 font-bold text-lg hover:text-orange-600 ${toggle === 4 ? 'text-orange-600' : ''}`}>
                         <span className='cursor-pointer' onClick={() => toggleTab(4)}>{tournamentData.tournament_type === "single-elimination" ? "TIESHEET" : "TABLE"}</span>
+                    </div>
+                    <div className={`flex justify-center items-center font-bold text-lg hover:text-orange-600 ${toggle === 5 ? 'text-orange-600' : ''}`}>
+                        <span className='cursor-pointer' onClick={() => toggleTab(5)}>FIXTURES</span>
                     </div>
                 </div>
 

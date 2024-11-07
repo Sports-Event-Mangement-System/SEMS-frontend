@@ -214,6 +214,16 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
 
                 )
             }
+            {
+                tabIndex == 5 && (
+                    <>
+                        <div>
+                            Fixtures here
+                        </div>
+                    </>
+
+                )
+            }
 
         </div >
     )
