@@ -1,5 +1,5 @@
 // TournamentTable.jsx
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +7,8 @@ import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Modal from "../../../Ui/Modal/Modal";
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
-import {dateFormatFrontend} from "../../../Helper/dateFormat";
+import { dateFormatFrontend } from "../../../Helper/dateFormat";
+import RollingBall from "../../../Ui/RollingBall/RollingBall";
 
 export default function TournamentTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -17,31 +18,45 @@ export default function TournamentTable() {
   const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
 
-    const fetchTournaments = async () => {
-      try {
-        // console.log("API URL:", import.meta.env.VITE_API_URL);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/tournaments`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
-        console.log(response.data)
-        setTournaments(response.data.tournaments || []);
-      } catch (err) {
-        setError("Error fetching tournaments");
-        console.error("Error fetching tournaments", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const addNewTournament = () => {
+    navigate(`/admin/addTournamentForm`);
+  }
 
+  const fetchTournaments = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/tournaments`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      setLoading(false);
+      setTournaments(response.data.tournaments || []);
+    } catch (err) {
+      setError("Error fetching tournaments");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-      fetchTournaments();
+    fetchTournaments();
   }, [])
+
+
+  if (loading) {
+    return (
+      <div className="relative min-h-[600px]">
+        <RollingBall
+          size={100}
+          centered={true}
+        />
+      </div>
+    );
+  }
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
@@ -88,9 +103,9 @@ export default function TournamentTable() {
       const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
-        { 
+        {
           tournament_id: id,
-          status: newStatus 
+          status: newStatus
         }, // Assuming the API expects a JSON body
         {
           headers: {
@@ -98,13 +113,7 @@ export default function TournamentTable() {
           },
         }
       );
-      console.log(response.data)
       if (response.data.status) {
-        // setTournaments(prevTournaments =>
-        //   prevTournaments.map(t =>
-        //     t.id === id ? { ...t, status: newStatus } : t
-        //   )
-        // );
         fetchTournaments();
         toast.success(response.data.message);
       }
@@ -112,7 +121,7 @@ export default function TournamentTable() {
       toast.error("Error updating tournament status");
       console.error("Error updating tournament status", err);
     }
-    finally{
+    finally {
       updatedTournaments[index].isLoading = false;
       setTournaments(updatedTournaments);
     }
@@ -121,9 +130,14 @@ export default function TournamentTable() {
 
   return (
     <>
+      {!error && (
+        <button className="text-white bg-green-700 hover:bg-green-800 focus:outline-none focus:ring-4 focus:ring-green-300 font-medium rounded-2xl text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+          onClick={addNewTournament}
+        >
+          Add Tournament
+        </button>
+      )}
       <div className="p-4 w-full shadow-2xl">
-
-
         {showDeleteModal && (
           <Modal closeModal={closeDeleteModal}>
             <div className='flex justify-center mb-12 mt-5'>
@@ -208,11 +222,11 @@ export default function TournamentTable() {
                   )}
                 </td>
                 <td className="px-6 py-3">
-                    <LoaderSpinner 
-                      isLoading={tournament.isLoading}
-                      status={tournament.status}
-                      onClick={() => toggleStatus(tournament.id, tournament.status, index)}
-                    />
+                  <LoaderSpinner
+                    isLoading={tournament.isLoading}
+                    status={tournament.status}
+                    onClick={() => toggleStatus(tournament.id, tournament.status, index)}
+                  />
                 </td>
                 <td className="px-6 py-3">
                   <div className="flex gap-2">

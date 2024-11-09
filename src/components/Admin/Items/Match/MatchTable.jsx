@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from '../../../Ui/Modal/Modal';
 import MatchForm from "./MatchForm";
 import Pagination from "../../../Ui/Pagination/Pagination";
+import RollingBall from "../../../Ui/RollingBall/RollingBall";
 
 export default function MatchTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -39,6 +40,7 @@ export default function MatchTable() {
   };
 
   const fetchTournaments = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/tournament/matches`,
@@ -81,7 +83,7 @@ export default function MatchTable() {
     fetchTournaments();
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <RollingBall size={100} color="#4a90e2" centered={true} />;
   if (error) return <div>{error}</div>;
   console.log(tournaments)
   return (
