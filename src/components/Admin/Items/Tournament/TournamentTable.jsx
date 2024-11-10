@@ -5,9 +5,10 @@ import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Modal from "../../../Ui/Modal/Modal";
+
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
-import {dateFormatFrontend} from "../../../Helper/dateFormat";
+import { dateFormatFrontend } from "../../../Helper/dateFormat";
+import DeleteModal from "../../../Ui/Modal/DeleteModal";
 
 export default function TournamentTable() {
   const [tournaments, setTournaments] = useState([]);
@@ -17,30 +18,30 @@ export default function TournamentTable() {
   const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
 
-    const fetchTournaments = async () => {
-      try {
-        // console.log("API URL:", import.meta.env.VITE_API_URL);
-        const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}api/tournaments`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
-        console.log(response.data)
-        setTournaments(response.data.tournaments || []);
-      } catch (err) {
-        setError("Error fetching tournaments");
-        console.error("Error fetching tournaments", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchTournaments = async () => {
+    try {
+      // console.log("API URL:", import.meta.env.VITE_API_URL);
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}api/tournaments`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      console.log(response.data)
+      setTournaments(response.data.tournaments || []);
+    } catch (err) {
+      setError("Error fetching tournaments");
+      console.error("Error fetching tournaments", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   useEffect(() => {
-      fetchTournaments();
+    fetchTournaments();
   }, [])
 
   const closeDeleteModal = () => {
@@ -88,9 +89,9 @@ export default function TournamentTable() {
       const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
-        { 
+        {
           tournament_id: id,
-          status: newStatus 
+          status: newStatus
         }, // Assuming the API expects a JSON body
         {
           headers: {
@@ -112,7 +113,7 @@ export default function TournamentTable() {
       toast.error("Error updating tournament status");
       console.error("Error updating tournament status", err);
     }
-    finally{
+    finally {
       updatedTournaments[index].isLoading = false;
       setTournaments(updatedTournaments);
     }
@@ -125,29 +126,7 @@ export default function TournamentTable() {
 
 
         {showDeleteModal && (
-          <Modal closeModal={closeDeleteModal}>
-            <div className='flex justify-center mb-12 mt-5'>
-              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
-            </div>
-            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
-            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-              Are you sure want to delete this row from the table?
-            </div>
-            <div className="flex justify-center mt-4 gap-3">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                onClick={closeDeleteModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                onClick={deleteTournament}
-              >
-                Yes, Delete it!
-              </button>
-            </div>
-          </Modal>
+          <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteTournament} />
         )}
 
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
@@ -208,11 +187,11 @@ export default function TournamentTable() {
                   )}
                 </td>
                 <td className="px-6 py-3">
-                    <LoaderSpinner 
-                      isLoading={tournament.isLoading}
-                      status={tournament.status}
-                      onClick={() => toggleStatus(tournament.id, tournament.status, index)}
-                    />
+                  <LoaderSpinner
+                    isLoading={tournament.isLoading}
+                    status={tournament.status}
+                    onClick={() => toggleStatus(tournament.id, tournament.status, index)}
+                  />
                 </td>
                 <td className="px-6 py-3">
                   <div className="flex gap-2">
