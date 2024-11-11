@@ -19,25 +19,26 @@ export default function TournamentTable() {
   const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
 
-  const fetchTournaments = async () => {
-    try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tournaments`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        }
-      );
-      console.log(response.data)
-      setTournaments(response.data.tournaments || []);
-    } catch (err) {
-      setError("Error fetching tournaments");
-      console.error("Error fetching tournaments", err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const fetchTournaments = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${import.meta.env.VITE_API_URL}api/tournaments`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+  //         },
+  //       }
+  //     );
+  //     console.log(response.data)
+  //     setTournaments(response.data.tournaments || []);
+  //   } catch (err) {
+  //     setError("Error fetching tournaments");
+  //     console.error("Error fetching tournaments", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const addNewTournament = () => {
     navigate(`/admin/addTournamentForm`);
   }
