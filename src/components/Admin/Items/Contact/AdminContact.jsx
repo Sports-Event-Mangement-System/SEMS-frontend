@@ -5,6 +5,7 @@ import { MdDelete } from "react-icons/md";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from 'react-toastify';
 import Modal from '../../../Ui/Modal/Modal';
+import DeleteModal from '../../../Ui/Modal/DeleteModal';
 
 export default function AdminContact() {
   const [contactData, setContactData] = useState([]);
@@ -59,7 +60,7 @@ export default function AdminContact() {
     setShowDeleteModal(true);
   };
 
-  const deleteContact = async () => {
+  const deleteRow = async () => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_API_URL}api/delete/contacts/${contactToDelete}`, {
         headers: {
@@ -106,29 +107,7 @@ export default function AdminContact() {
 
 
         {showDeleteModal && (
-          <Modal closeModal={closeDeleteModal}>
-            <div className='flex justify-center mb-12 mt-5'>
-              <RiDeleteBin6Line size={80} color='rgb(255,140,0)' />
-            </div>
-            <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
-            <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-              Are you sure want to delete this row from the table?
-            </div>
-            <div className="flex justify-center mt-4 gap-3">
-              <button
-                className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
-                onClick={closeDeleteModal}
-              >
-                Cancel
-              </button>
-              <button
-                className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-500"
-                onClick={deleteContact}
-              >
-                Yes, Delete it!
-              </button>
-            </div>
-          </Modal>
+          <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteRow} />
         )}
 
 
