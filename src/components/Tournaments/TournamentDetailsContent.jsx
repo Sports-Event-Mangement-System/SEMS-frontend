@@ -26,6 +26,9 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
     const finalWidth = Math.max(width - 50, 500);
     const finalHeight = Math.max(height - 100, 500);
 
+    const [maxRounds, setMaxRounds] = useState([]);
+    const [pointsTableData, setPointsTableData] = useState([]);
+
     const getTiesheetResponse = async () => {
         console.log("hello")
         setLoading(true);
@@ -36,6 +39,10 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
             console.log(response.data)
             setMatches(response.data.matches || []);
             setShowTiesheet(response.data.showTiesheet || false);
+            if (tournamentData.tournament_type = "round-robin") {
+                setPointsTableData(response.data.points_table || []);
+              }
+            setMaxRounds(response.data.max_rounds);
         } catch (err) {
             toast.error(err.response?.data?.message || "Error fetching tiesheet");
             console.log(err)
@@ -204,7 +211,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                                         )}
                                     />
                                 ) : (
-                                    <RoundRobinBracket matches={matches} />
+                                    <RoundRobinBracket matches={matches} max_rounds={maxRounds} pointsTable={pointsTableData} />
                                 )
                             ) : (
                                 <p>Tiesheet not found</p>
