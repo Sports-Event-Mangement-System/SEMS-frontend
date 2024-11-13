@@ -4,6 +4,7 @@ import { loginUser } from '../../store/UserSlice';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Input from '../Ui/FormInput/Input';
 import { toast } from 'react-toastify';
+import { clearPendingAction } from '../../store/PendingActionsSlice';
 
 export default function LogIn() {
   //States
@@ -16,6 +17,7 @@ export default function LogIn() {
   };
   //redux states
   const { loading } = useSelector((state) => state.auth);
+  const { redirectPath } = useSelector(state => state.pendingActions);
 
   //Login form handle with axios and redux.
   const handleLogin = (e) => {
@@ -32,7 +34,7 @@ export default function LogIn() {
       if (result.payload.status === true) {
         localStorage.setItem('access_token', result.payload.access_token);
         localStorage.setItem('role', result.payload.role);
-        navigate('/');
+        navigate(redirectPath);
         toast.success(result.payload.message);
       }
       else {

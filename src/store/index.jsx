@@ -11,9 +11,10 @@ import {
   } from 'redux-persist';
 import storage from "redux-persist/lib/storage"; 
 import authReducer from "./UserSlice";  
+import pendingActionsReducer from "./PendingActionsSlice";
 
 const persistConfig = {
-    key: 'root',
+    key: 'auth',
     storage,
 };
 
@@ -22,6 +23,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 const store = configureStore({
     reducer: {
         auth: persistedReducer,
+        pendingActions: pendingActionsReducer,
     },
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware({

@@ -54,9 +54,7 @@ const publicRoutes = [
   {
     path: '/TeamDetails/:id',
     element: (
-      <PrivateRoute>
-        <SingleTeamDetails />
-      </PrivateRoute>
+      <SingleTeamDetails />
     ),
   },
 ];

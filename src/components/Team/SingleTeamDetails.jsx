@@ -6,23 +6,35 @@ import { FaRegStar, FaStar } from 'react-icons/fa6';
 import { GrUserManager, GrPhone } from 'react-icons/gr';
 import { MdEmail } from 'react-icons/md';
 import Card from '../Ui/Card/Card';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { setPendingAction, clearPendingAction } from '../../store/PendingActionsSlice';
+import { toast } from 'react-toastify';
 
 export default function SingleTeamDetails() {
     const { id } = useParams();
-
+    const navigate = useNavigate();
     const [teamDetails, setTeamDetails] = useState(null);
     const [fixtureMatches, setFixtureMatches] = useState(null);
     const [resultMatches, setResultMatches] = useState(null);
+    const dispatch = useDispatch();
+    const [isFollowed, setIsFollowed] = useState(false);
+
+
+    const { user } = useSelector(state => state.auth);
+    const pendingAction = useSelector(state => state.pendingActions);
 
     useEffect(() => {
         const fetchTeamDetails = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/team/${id}`);
-                console.log(response);
+                const response = await axios.get(`${import.meta.env.VITE_API_URL}api/show/team/${id}`, {
+                    params: {
+                        user_id: user?.user_details?.id
+                    }
+                });
                 setTeamDetails(response.data.team);
                 setFixtureMatches(response.data.team.fixture_matches);
                 setResultMatches(response.data.team.result_matches);
+                setIsFollowed(response.data.team.is_followed);
             } catch (error) {
                 console.error('Error fetching team details:', error);
             }
@@ -31,7 +43,42 @@ export default function SingleTeamDetails() {
         fetchTeamDetails();
     }, [id]);
 
+    const handleFollow = async (autoFollow = false) => {
+        try {
+            if (user === null && !autoFollow) {
+                dispatch(setPendingAction({
+                    type: 'FOLLOW_TEAM',
+                    data: { teamId: id }
+                }));
+                navigate('/login');
+                return;
+            }
 
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}api/follow/team/${id}`, {
+                user_id: user?.user_details?.id
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+            });
+
+            if (autoFollow) {
+                navigate(`/TeamDetails/${id}`, { replace: true });
+            }
+
+            setIsFollowed(true);
+            toast.success(response.data.message);
+        } catch (error) {
+            toast.error('Error following team');
+        }
+    };
+
+    useEffect(() => {
+        if (!!user?.user_details && pendingAction?.action?.type === 'FOLLOW_TEAM' && pendingAction?.action?.data?.teamId == id) {
+            handleFollow(true);
+            dispatch(clearPendingAction());
+        }
+    }, [user, pendingAction, id]);
     return (
         <div>
             {teamDetails ? (
@@ -43,10 +90,13 @@ export default function SingleTeamDetails() {
                             className='h-40 w-36 mr-4'
                         />
                         <h1 className='font-bold text-[3.25rem] mb-2 uppercase'><b></b>{teamDetails?.team_name}</h1>
-                        <div className="group flex justify-center items-center gap-2 cursor-pointer rounded-lg w-34 h-14 py-2 px-4 border border-blue-600 bg-white text-blue-600 hover:border-blue-600 hover:text-white hover:bg-blue-600 absolute top-4 right-4">
-                            <FaRegStar size={22} className="group-hover:hidden" />
-                            <FaStar size={22} className="hidden group-hover:block" />
-                            <span className='text-[18px] font-semibold'>Follow</span>
+                        <div onClick={() => handleFollow()} className={`group flex justify-center items-center gap-2 cursor-pointer rounded-lg w-34 h-14 py-2 px-4 border ${isFollowed ? 'border-blue-600 bg-blue-600 text-white' : 'border-blue-600 bg-white text-blue-600 hover:border-blue-600 hover:text-white hover:bg-blue-600'} absolute top-4 right-4`}>
+                            {isFollowed ? (
+                                <FaStar size={22} className="block" />
+                            ) : (
+                                <FaRegStar size={22} className="group-hover:block" />
+                            )}
+                            <span className='text-[18px] font-semibold'>{isFollowed ? 'Following' : 'Follow'}</span>
                         </div>
                     </div>
                     <div className='px-8 py-9 rounded-md pl-20'>
