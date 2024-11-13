@@ -83,12 +83,7 @@ function Tournaments() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}api/tournaments`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.access_token}`,
-          },
-        });
-        console.log(response)
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}api/active/tournaments`);
         setTournaments(response.data.tournaments);
       } catch (error) {
         console.log("Error in fetching", error);
