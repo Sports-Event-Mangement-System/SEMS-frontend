@@ -126,14 +126,66 @@ export default function SingleTeamDetails() {
                                                 fixtureMatches.map((match, index) => (
                                                     <Card
                                                         key={index}
-                                                        participants={match.participants}
-                                                        startTime={match.startTime}
-                                                        tournamentName={teamDetails.tournament.t_name}
-                                                    />
+                                                    >
+                                                        <div className='my-5'>
+                                                            <div className="flex h-fit w-[57vh] px-5">
+
+                                                                <div className="flex flex-col space-y-4 border-r-2 border-r-gray-300 h-15 w-[70%]">
+
+                                                                    <div className="flex justify-between pr-4 items-center">
+                                                                        <div className="flex items-center">
+                                                                            <img
+                                                                                src={match.participants[0]?.teamLogo || "/images/Logo.png"}
+                                                                                alt="Team Logo"
+                                                                                className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                            />
+                                                                            <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                                {match.participants[0]?.name}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="font-semibold">{match.participants[0]?.resultText}</div>
+                                                                    </div>
+
+
+                                                                    {match.participants[1] ? (
+                                                                        <div className="flex justify-between pr-4 items-center">
+                                                                            <div className="flex items-center">
+                                                                                <img
+                                                                                    src={match.participants[1]?.teamLogo || "/images/Logo.png"}
+                                                                                    alt="Team Logo"
+                                                                                    className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                                />
+                                                                                <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                                    {match.participants[1]?.name}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="font-semibold">{match.participants[1]?.resultText}</div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="h-9">
+                                                                            <h1 className="font-semibold text-blue-500">Walk over match</h1>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+
+                                                                <div className="flex h-15 items-center justify-center w-[30%]">
+                                                                    <div className="text-black text-[16px] font-semibold">{match.startTime || "Not Decided"}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr className="my-4 border-1 border-gray-300 w-full" />
+                                                            <div className="px-5">
+                                                                <h1>{teamDetails.tournament.t_name}</h1>
+                                                            </div>
+                                                        </div>
+
+                                                    </Card>
                                                 ))
                                             ) : (
                                                 <p>There is no fixture available for this team</p>
                                             )}
+
                                         </div>
                                     </div>
                                 </div>
@@ -149,10 +201,60 @@ export default function SingleTeamDetails() {
                                                 resultMatches.map((match, index) => (
                                                     <Card
                                                         key={index}
-                                                        participants={match.participants}
-                                                        startTime={match.startTime}
-                                                        tournamentName={teamDetails.tournament.t_name}
-                                                    />
+                                                    >
+                                                        <div className='my-5'>
+                                                            <div className="flex h-fit w-[57vh] px-5">
+
+                                                                <div className="flex flex-col space-y-4 border-r-2 border-r-gray-300 h-15 w-[70%]">
+
+                                                                    <div className="flex justify-between pr-4 items-center">
+                                                                        <div className="flex items-center">
+                                                                            <img
+                                                                                src={match.participants[0]?.teamLogo || "/images/Logo.png"}
+                                                                                alt="Team Logo"
+                                                                                className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                            />
+                                                                            <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                                {match.participants[0]?.name}
+                                                                            </span>
+                                                                        </div>
+                                                                        <div className="font-semibold">{match.participants[0]?.resultText}</div>
+                                                                    </div>
+
+
+                                                                    {match.participants[1] ? (
+                                                                        <div className="flex justify-between pr-4 items-center">
+                                                                            <div className="flex items-center">
+                                                                                <img
+                                                                                    src={match.participants[1]?.teamLogo || "/images/Logo.png"}
+                                                                                    alt="Team Logo"
+                                                                                    className="w-9 h-9 rounded-2xl object-cover object-top drop-shadow-[0_6px_5px_rgba(0,0,0,0.15)] mr-2"
+                                                                                />
+                                                                                <span className="text-black rounded-full text-[16px] font-semibold">
+                                                                                    {match.participants[1]?.name}
+                                                                                </span>
+                                                                            </div>
+                                                                            <div className="font-semibold">{match.participants[1]?.resultText}</div>
+                                                                        </div>
+                                                                    ) : (
+                                                                        <div className="h-9">
+                                                                            <h1 className="font-semibold text-blue-500">Walk over match</h1>
+                                                                        </div>
+                                                                    )}
+                                                                </div>
+
+
+                                                                <div className="flex h-15 items-center justify-center w-[30%]">
+                                                                    <div className="text-black text-[16px] font-semibold">{match.startTime || "Not Decided"}</div>
+                                                                </div>
+                                                            </div>
+
+                                                            <hr className="my-4 border-1 border-gray-300 w-full" />
+                                                            <div className="px-5">
+                                                                <h1>{teamDetails.tournament.t_name}</h1>
+                                                            </div>
+                                                        </div>
+                                                    </Card>
                                                 ))
                                             ) : (
                                                 <p>No any results</p>
