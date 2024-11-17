@@ -1,5 +1,5 @@
 import React from 'react';
-import { faTrophy, faPeopleGroup, faAddressBook, faClock, faMale } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy, faPeopleGroup, faAddressBook, faClock, faMale, faTachometer } from '@fortawesome/free-solid-svg-icons'
 import VersusIcon from '../../../public/svg/versus-icon.svg';
 
 
@@ -7,6 +7,11 @@ export const AdminSideBarData = [
     {
         title: 'DASHBOARD',
         menuItems: [
+            {
+                itemName: 'Dashboard',
+                link: 'dashboardManagment',
+                icon: faTachometer
+            },
             {
                 itemName: 'Tournament',
                 link: 'tournamentManagement',
