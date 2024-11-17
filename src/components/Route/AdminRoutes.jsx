@@ -8,8 +8,13 @@ import EditTeamForm from "../Admin/Items/Team/EditTeamForm";
 import PlayerManagement from "../Admin/Items/Player/playerManagment";
 import TiesheetGenerator from "../Admin/Items/Schedule/TiesheetGenerator";
 import MatchManagment from "../Admin/Items/Match/MatchManagment";
+import DashboardManagment from "../Admin/Items/Dashboard/DashboardManagment";
 
 const adminRoutes = [
+     {
+          path: 'dashboardManagment',
+          element: <DashboardManagment />,
+     },
      {
           path: 'tournamentManagement',
           element: <TournamentManagement />,

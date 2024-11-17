@@ -81,7 +81,7 @@ function Header() {
                                     <div className="flex items-center gap-4">
                                           {isAdmin && (
                                                 <div className="flex justify-center items-center gap-4 cursor-pointer rounded-lg w-36 h-12 py-2 px-4 border border-blue-600 bg-blue-600 text-white hover:bg-blue-700">
-                                                      <NavLink to="/admin" className="flex items-center gap-2">
+                                                      <NavLink to="/admin/dashboardManagment" className="flex items-center gap-2">
                                                             <MdDashboard size={21} />
                                                             <span className='text-[16px] font-semibold'>Dashboard</span>
                                                       </NavLink>
