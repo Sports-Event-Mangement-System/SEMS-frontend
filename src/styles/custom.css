@@ -1,0 +1,7 @@
+.team-modal{
+      @apply flex w-full;
+}
+
+.team-key{
+      @apply w-1/3 text-lg font-bold;
+}
