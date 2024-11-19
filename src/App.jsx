@@ -4,6 +4,7 @@ import Footer from './components/Footer/Footer';
 import { Outlet } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { logout, useInactivityLogout } from './store/UserSlice';
+import './styles/custom.css'
 
 
 function App() {
