@@ -86,16 +86,25 @@ export default function TournamentCardDetails() {
                 <div className='flex justify-between px-16 items-center'>
                     <div className='space-y-1'>
                         <h1 className='font-bold text-4xl text-orange-600'>{tournamentData.t_name}</h1>
-                        <h2 className='font-bold text-lg'>Registration Date: <span className='font-medium'> {formatDate(tournamentData.ts_date)} to {formatDate(tournamentData.te_date)}</span></h2>
-                        <h2 className='font-bold text-lg'>Start Date: <span className='font-medium'> {formatDate(tournamentData.rs_date)} to {formatDate(tournamentData.re_date)}</span></h2>
+                        <h2 className='font-bold text-lg'>Registration Date: <span className='font-medium'> {formatDate(tournamentData.rs_date)} to {formatDate(tournamentData.re_date)}</span></h2>
+                        <h2 className='font-bold text-lg'>Start Date: <span className='font-medium'> {formatDate(tournamentData.ts_date)} to {formatDate(tournamentData.te_date)}</span></h2>
                         <h2 className='font-bold text-lg'>Location: <span className='font-medium'> {tournamentData.address}</span></h2>
                     </div>
                     <div className='flex flex-col items-center space-y-3'>
                         <h1 className='font-bold text-xl flex items-end'>Prize Pool: <MdCurrencyRupee size={22} /> {tournamentData.prize_pool}</h1>
-                        <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'><NavLink
-                            to="addTeam" state={{ tournamentData }}
-                        > <div className='flex items-center gap-1'>Register Now</div></NavLink>
-                        </button>
+
+                        {new Date(tournamentData.re_date) <= new Date() ? (
+                            <span className='font-semibold text-xl text-red-600'>Registration End</span>
+                        ) : tournamentData.team_register >= tournamentData.max_teams ? (
+                            <span className='font-semibold text-xl text-red-600'>Team Full</span>
+                        ) : (
+                            <button className='h-fit w-fit border-2 bg-orange-600 border-transparent px-3 py-1 rounded-lg font-semibold text-white hover:border-white'>
+                                <NavLink to="addTeam" state={{ tournamentData }}>
+                                    <div className='flex items-center gap-1'>Register Now</div>
+                                </NavLink>
+                            </button>
+                        )}
+
                     </div>
                 </div>
                 <div className='bg-gray-400 h-1 w-[95%] items-center mx-auto'></div>
