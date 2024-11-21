@@ -1,14 +1,13 @@
 import React from 'react'
 import AdminSidebar from './AdminSidebar'
 import { Outlet } from 'react-router-dom'
-import TournamentManagement from './Items/Tournament/TournamentManagement'
 
 export default function AdminPage() {
       return (
             <>
-                  <div className='grid grid-cols-1fr-5fr h-screen'>
+                  <div className='flex h-screen overflow-x-hidden'>
                         <AdminSidebar />
-                        <div className='w-full p-4'>
+                        <div className='flex-1 p-4 overflow-auto'>
                               <Outlet />
                         </div>
                   </div>

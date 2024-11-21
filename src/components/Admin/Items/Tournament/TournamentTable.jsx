@@ -158,7 +158,7 @@ export default function TournamentTable() {
           Add Tournament
         </button>
       )}
-      <div className="p-4 w-full shadow-2xl">
+      <div className="p-4 shadow-2xl ">
         {showDeleteModal && (
           <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteTournament} />
         )}
