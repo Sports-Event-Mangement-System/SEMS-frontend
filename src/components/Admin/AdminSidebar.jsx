@@ -2,11 +2,13 @@ import React, { useState } from "react";
 import { AdminSideBarData } from "./AdminSidebarData";
 import { Link, NavLink } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { IoIosArrowDown } from "react-icons/io";
+import { IoIosArrowDown, IoIosArrowDropleft } from "react-icons/io";
 import { VscDash } from "react-icons/vsc";
+import { IoAdd } from "react-icons/io5";
 
 export default function AdminSidebar() {
   const [dropdownTournament, setDropdownTournament] = useState(false);
+  const [isSidebarMinimized, setIsSidebarMinimized] = useState(false);
   // const [dropdownTeam, setDropdownTeam] = useState(false);
 
   const handleDropdownTournament = () => {
@@ -23,23 +25,42 @@ export default function AdminSidebar() {
     e.stopPropagation(); // Prevents the click event from propagating to parent elements
   };
 
+  const toggleSideBar = () => {
+      setIsSidebarMinimized((prev) => !prev);
+  }
+
   return (
-    <>
-      <div className="bg-theme-color h-full text-white">
+      <div className={`bg-theme-color text-white sidebar ${isSidebarMinimized ? 'w-20' : 'w-70'}`}
+      >
         <div>
           {AdminSideBarData.map((item, index) => (
-            <div key={index} className="flex flex-col gap-10">
+            <div key={index} className={`flex flex-col gap-10 ${isSidebarMinimized ? "flex justify-start items-center" : ""}`}>
               <div className="flex bg-theme-color items-center justify-evenly h-16 mt-4">
                 <Link to="/">
                   <img
                     src="/public/images/adminlogo.png"
                     alt=""
-                    className="h-10 w-12"
+                    className={`h-10 w-12 transition-all ${
+                      isSidebarMinimized ? "hidden" : "block"
+                    }`}
                   />
                 </Link>
-                <p className="text-center text-[27px] font-extrabold text-white">
+                <p className={`text-center text-2xl font-extrabold text-white transition-all ${
+                    isSidebarMinimized ? "hidden" : "block"
+                  }`}>
                   {item.title}
                 </p>
+
+                <button 
+                  onClick={toggleSideBar}
+                  className="px-2"
+                >
+                  <IoIosArrowDropleft 
+                    className={`transition-all ${isSidebarMinimized ? "rotate-180" : ""}`}
+                    size={30}
+                  />
+                </button>
+
               </div>
 
               <div>
@@ -81,9 +102,14 @@ export default function AdminSidebar() {
                             />
                           )}
                         </div>
-                        {innerItem.itemName}{" "}
+
+                        {!isSidebarMinimized && (
+                          <span className="ml-2">{innerItem.itemName}</span>
+                        )}
+
+                        {/* {innerItem.itemName}{" "} */}
                         {(innerItem.itemName === "Tournament") ||
-                        innerItem.subItems?.length > 0 ? (
+                        innerItem.subItems?.length > 0 && !isSidebarMinimized ? (
                           <IoIosArrowDown className="ml-1" size={20} />
                         ) : null}
                       </NavLink>
@@ -106,9 +132,17 @@ export default function AdminSidebar() {
                               to="addTournamentForm"
                             >
                               {" "}
-                              <div className="flex items-center gap-1">
-                                <VscDash size={30} />
-                                Add
+                              <div className={`flex items-center gap-1 ${isSidebarMinimized ? "text-sm mr-3" : ''}`}>
+                                {isSidebarMinimized ? (
+                                    <>
+                                      <IoAdd size={20}/>
+                                    </>
+                                ) : (
+                                  <>
+                                    <VscDash size={30}/>
+                                    Add
+                                  </>
+                                )}
                               </div>
                             </NavLink>
                           </div>
@@ -116,21 +150,6 @@ export default function AdminSidebar() {
                       ) : (
                         <></>
                       )}
-
-                      {/* {
-                                                                        innerItem.itemName === "Team" && dropdownTeam ? (
-                                                                              <>
-                                                                                    <div className='pl-6 pt-2'
-                                                                                          onClick={handleClickInsideDropdown}
-                                                                                    >
-                                                                                    </div>
-                                                                              </>
-                                                                        ) :
-                                                                              (
-                                                                                    <></>
-                                                                              )
-                                                                  } */}
-                      {/* {console.log(innerItem?.link)} */}
                     </li>
                   ))}
                 </ul>
@@ -139,6 +158,5 @@ export default function AdminSidebar() {
           ))}
         </div>
       </div>
-    </>
   );
 }

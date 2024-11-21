@@ -39,7 +39,7 @@ export default function DashboardManagement() {
   }, []);
 
   return (
-    <div className="m-4">
+    <div className="m-4"> 
       <div className="font-bold text-2xl mb-7">DASHBOARD</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {cardData.map((card, index) => (
