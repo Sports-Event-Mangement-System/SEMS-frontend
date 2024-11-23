@@ -12,6 +12,15 @@ export default {
       colors: {
         'theme-color': '#405189',
       },
+      width: {
+        '70': '280px',  // expanded sidebar width
+        '24': '96px',   // collapsed sidebar width
+        '26': '104px',
+      },
+      transitionProperty: {
+        'width': 'width',
+        'spacing': 'margin, padding',
+      }
     },
   },
   plugins: [],
