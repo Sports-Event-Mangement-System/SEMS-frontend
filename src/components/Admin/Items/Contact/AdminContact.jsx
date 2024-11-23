@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { FaEye } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-import { RiDeleteBin6Line } from "react-icons/ri";
 import { toast } from 'react-toastify';
 import Modal from '../../../Ui/Modal/Modal';
 import DeleteModal from '../../../Ui/Modal/DeleteModal';
+import RollingBall from '../../../Ui/RollingBall/RollingBall';
 
 export default function AdminContact() {
   const [contactData, setContactData] = useState([]);
@@ -13,7 +13,7 @@ export default function AdminContact() {
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [contactToDelete, setContactToDelete] = useState(null);
-
+  const [loading, setLoading] = useState(true);
   const closeModal = () => {
     setShowModal(false);
     setSelectedContact(null);
@@ -29,15 +29,19 @@ export default function AdminContact() {
   }, []);
 
   const fetchContact = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}api/contacts`, {
         headers: {
           Authorization: `Bearer ${localStorage.access_token}`,
         },
       });
+      setLoading(false);
       setContactData(response.data.contacts);
     } catch (error) {
       console.error("Error fetching contacts:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -83,6 +87,17 @@ export default function AdminContact() {
       { label: 'Message', value: contact.message },
     ];
   };
+
+  if (loading) {
+    return (
+      <div className="relative min-h-[600px]">
+        <RollingBall
+          size={100}
+          centered={true}
+        />
+      </div>
+    );
+  }
   return (
     <>
       <div className="p-4 w-full shadow-2xl">
@@ -105,11 +120,9 @@ export default function AdminContact() {
           </Modal>
         )}
 
-
         {showDeleteModal && (
           <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteRow} />
         )}
-
 
         <table className="table-auto w-full">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">

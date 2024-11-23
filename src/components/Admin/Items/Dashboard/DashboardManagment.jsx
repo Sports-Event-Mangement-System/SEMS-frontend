@@ -7,6 +7,7 @@ import axios from 'axios';
 import "flatpickr/dist/themes/material_orange.css";
 import Flatpickr from "react-flatpickr";
 import CountUp from 'react-countup';
+import PageHeader from '../../../Ui/Header/PageHeader';
 
 export default function DashboardManagement() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -54,7 +55,16 @@ export default function DashboardManagement() {
     fetchDashboardData();
   }, []);
 
+  const breadcrumbs = [
+    { label: 'Dashboard', link: '/admin/dashboardManagment' },
+  ];
+
   return (
+    <div className="flex flex-col flex-1 h-screen">
+      <PageHeader 
+        title="Dashboard"
+        breadcrumbItems={breadcrumbs}
+      />
     <div className="m-4"> 
       <div className="font-bold text-2xl mb-7">DASHBOARD</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -98,6 +108,7 @@ export default function DashboardManagement() {
       </div>
     </div>
 
+    </div>
     </div>
   );
 }

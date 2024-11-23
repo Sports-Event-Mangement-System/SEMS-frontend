@@ -28,10 +28,10 @@ function About() {
                 System
               </h1>
               <br />
-              <p>SS Events Pvt. Ltd. is a Private Company established in 2014 with the goal of organizing and managing different events throughout the nations. On it's initial phase the company is coming forward with the project related to cricket. It has group of young talented cricketer both Regional and National having vision and passion with the motto of nurture and develop cricketing culture in Nepal.
-                <br /> <br />
-                Cricket being the popular and the most successful sports of the nation, the company is trying to involve the corporate giants into the game. The main theme of the project is to involve the corporate in the development of the cricketing field. Through this corporate super sixes tournament the various corporate giants directly or indirectly helping the sports for its promotion.
-                <br /> <br /> Besides organizing cricket events, SS Events Pvt. Ltd. has its Cricket Team as well which had participated in various club level tournaments as well, like Kathmandu Cricket League (KCL) 2015, Ruslan Cricket Cup 2016, YFN Shahid Smiriti Cup 2072 in which SS Cricket Team won the YFN Shahid Smiriti Cup 2072.</p>
+              <p>We are CSIT 7th semester students dedicated to developing our final project, the Sports Event Management System. This innovative web platform is designed to streamline the organization of sports events and leagues.
+                <br /> By simplifying match scheduling, team management, and performance tracking, it ensures an efficient process for both organizers and participants. 
+                <br /> Our system supports two primary roles: admins and regular users. Regular users can easily register their teams for tournaments and track their progress through a user-friendly interface. Meanwhile, admins have the capability to organize tournaments, manage team registrations, schedule matches, and send notifications using a comprehensive admin dashboard.
+                <br /> By automating these tasks, the platform provides a seamless experience for everyone involved, making it a comprehensive solution for effective sports event management.</p>
             </div>
           </div>
         </div>
