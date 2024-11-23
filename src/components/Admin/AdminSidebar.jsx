@@ -35,9 +35,10 @@ export default function AdminSidebar() {
         <div>
           {AdminSideBarData.map((item, index) => (
             <div key={index} className={`flex flex-col gap-10 ${isSidebarMinimized ? "flex justify-start items-center" : ""}`}>
-              <div className="flex bg-theme-color items-center justify-evenly h-16 mt-4">
-                <Link to="/">
-                  <img
+              <div className="flex bg-theme-color items-center justify-evenly h-16 mt-4 h-16 px-4 border-b border-gray-700">
+
+                  <Link to="/">
+                    <img
                     src="/public/images/adminlogo.png"
                     alt=""
                     className={`h-10 w-12 transition-all ${
@@ -60,7 +61,6 @@ export default function AdminSidebar() {
                     size={30}
                   />
                 </button>
-
               </div>
 
               <div>
@@ -83,9 +83,8 @@ export default function AdminSidebar() {
                         className={({ isActive }) =>
                           `${
                             isActive
-                              ? "text-white font-bold border border-white rounded-xl"
-                              : "text-gray-200"
-                          } flex items-center gap-1 hover:text-white hover:font-bold`
+                              ? "bg-gray-700" : "hover:bg-gray-700/50"
+                          } flex items-center p-2 rounded-lg gap-1 hover:text-white hover:font-bold`
                         }
                       >
                         <div className="p-1">
@@ -125,9 +124,8 @@ export default function AdminSidebar() {
                               className={({ isActive }) =>
                                 `${
                                   isActive
-                                    ? "text-white font-bold border border-white rounded-xl"
-                                    : "text-gray-200"
-                                } flex items-center gap-1 hover:text-white hover:font-bold`
+                                    ? "bg-gray-700" : "hover:bg-gray-700/50"
+                                } flex items-center p-2 ml-6 mt-1 rounded-lg hover:text-white hover:font-bold`
                               }
                               to="addTournamentForm"
                             >

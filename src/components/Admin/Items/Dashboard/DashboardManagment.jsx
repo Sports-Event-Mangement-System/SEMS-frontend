@@ -4,12 +4,28 @@ import { FaTrophy } from "react-icons/fa6";
 import { HiUserGroup } from "react-icons/hi";
 import { IoMdMan } from "react-icons/io";
 import axios from 'axios';
-import Flatpickr from 'react-flatpickr';
-import 'flatpickr/dist/flatpickr.min.css';
+import "flatpickr/dist/themes/material_orange.css";
+import Flatpickr from "react-flatpickr";
+import CountUp from 'react-countup';
 
 export default function DashboardManagement() {
   const [dashboardData, setDashboardData] = useState(null);
-  const [selectedDate, setSelectedDate] = useState(null);
+
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [events, setEvents] = useState([
+    { date: '2024-11-09', title: 'Development planning', time: '9:20 AM' },
+    { date: '2024-11-12', title: 'Design new UI and check sales', time: '11:30 AM' },
+    { date: '2024-11-25', title: 'Weekly catch-up', time: '2:00 PM' },
+  ]);
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date[0]);
+  };
+
+  const formatDate = (date) => {
+    return date.toISOString().split('T')[0];
+  };
 
   const cardData = [
     { title: 'TOTAL TOURNAMENT', value: dashboardData?.total_tournaments || 0, icon: < FaTrophy size={24} color="#e97026" />, color: 'bg-red-100' },
@@ -43,6 +59,7 @@ export default function DashboardManagement() {
       <div className="font-bold text-2xl mb-7">DASHBOARD</div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {cardData.map((card, index) => (
+          
           <Card key={index} background={card.color}>
             <div className="m-6">
               <div className="text-gray-500 font-medium text-base text-center w-[40vh] mb-6">
@@ -50,7 +67,9 @@ export default function DashboardManagement() {
               </div>
               <div className="flex gap-8 items-center">
                 <div className="p-2 h-fit w-fit rounded-md bg-[#dcdcdc]">{card.icon}</div>
-                <h1 className="text-2xl font-medium">{card.value}</h1>
+                <h1 className="text-2xl font-medium">
+                <CountUp end={card.value} />
+                </h1>
               </div>
             </div>
           </Card>
@@ -60,14 +79,24 @@ export default function DashboardManagement() {
       <div className="mt-10 p-4 bg-white rounded-lg shadow-md">
         <Flatpickr
           value={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
+          onChange={handleDateChange}
           options={{
             inline: true,
+            dateFormat: 'Y-m-d',
           }}
-
-        />
+          className="h-14 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
+          />
+      <div className="events-list">
+        <h3>Events:</h3>
+        {events
+          .filter(event => event.date === formatDate(selectedDate))
+          .map((event, index) => (
+            <div key={index} className="event-item">
+              <strong>{event.title}</strong> at {event.time}
+            </div>
+          ))}
       </div>
-
+    </div>
 
     </div>
   );

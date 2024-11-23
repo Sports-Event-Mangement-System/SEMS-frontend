@@ -18,7 +18,6 @@ export default function MatchForm({ match, closeModal, onFormUpdate }) {
 
   const matchStateOptions = [
     { value: "SCHEDULED", label: "Scheduled" },
-    { value: "WALK_OVER", label: "Walk Over" },
     { value: "DONE", label: "Completed" },
     { value: "SCORE_DONE", label: "Score Completed" },
     { value: "UPCOMING", label: "Upcoming" },
