@@ -1,25 +1,24 @@
 // TournamentTable.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
-import { MdDelete, MdEdit, MdOutlineSchedule } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RiDeleteBin6Line } from "react-icons/ri";
-import Modal from "../../../Ui/Modal/Modal";
 import { TbTournament } from "react-icons/tb";
+import RollingBall from "../../../Ui/RollingBall/RollingBall";
 
 export default function ScheduleTable() {
   const [tournaments, setTournaments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
 
+  const handlePageChange = (pageNumber) => {
+      setCurrentPage(pageNumber);
+  };
   useEffect(() => {
     const fetchTournaments = async () => {
+      setLoading(true);
       try {
-        // console.log("API URL:", import.meta.env.VITE_API_URL);
         const response = await axios.get(
           `${import.meta.env.VITE_API_URL}api/tournaments`,
           {
@@ -28,7 +27,7 @@ export default function ScheduleTable() {
             },
           }
         );
-        console.log(response.data)
+        setLoading(false);
         setTournaments(response.data.tournaments || []);
       } catch (err) {
         setError("Error fetching Datas");
@@ -40,16 +39,6 @@ export default function ScheduleTable() {
     fetchTournaments();
   }, []);
 
-  const closeDeleteModal = () => {
-    setShowDeleteModal(false);
-    setTournamentToDelete(null);
-  };
-
-  const confirmDelete = (id) => {
-    setTournamentToDelete(id);
-    setShowDeleteModal(true);
-  };
-
   const tiesheetGenerator = (id) => {
     navigate(`/admin/tiesheetGenerator/${id}`);
   }
@@ -58,6 +47,16 @@ export default function ScheduleTable() {
     navigate(`/admin/addTournamentForm?tournamentId=${id}`);
   };
 
+  if (loading) {
+    return (
+      <div className="relative min-h-[600px]">
+        <RollingBall
+          size={100}
+          centered={true}
+        />
+      </div>
+    );
+  }
   return (
     <>
       <div className="p-4 w-full shadow-2xl">

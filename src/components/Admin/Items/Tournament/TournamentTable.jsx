@@ -4,7 +4,6 @@ import axios from "axios";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { RiDeleteBin6Line } from "react-icons/ri";
 
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
 import { dateFormatFrontend } from "../../../Helper/dateFormat";
@@ -18,26 +17,6 @@ export default function TournamentTable() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [tournamentToDelete, setTournamentToDelete] = useState(null);
   const navigate = useNavigate();
-
-  // const fetchTournaments = async () => {
-  //   try {
-  //     const response = await axios.get(
-  //       `${import.meta.env.VITE_API_URL}api/tournaments`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-  //         },
-  //       }
-  //     );
-  //     console.log(response.data)
-  //     setTournaments(response.data.tournaments || []);
-  //   } catch (err) {
-  //     setError("Error fetching tournaments");
-  //     console.error("Error fetching tournaments", err);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
 
   const addNewTournament = () => {
     navigate(`/admin/addTournamentForm`);
@@ -121,13 +100,13 @@ export default function TournamentTable() {
     setTournaments(updatedTournaments);
 
     try {
-      const newStatus = currentStatus === 1 ? 0 : 1; // Toggle status
+      const newStatus = currentStatus === 1 ? 0 : 1;
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}api/update-status/tournament/${id}`,
         {
           tournament_id: id,
           status: newStatus
-        }, // Assuming the API expects a JSON body
+        },
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -146,7 +125,6 @@ export default function TournamentTable() {
       updatedTournaments[index].isLoading = false;
       setTournaments(updatedTournaments);
     }
-
   };
 
   return (

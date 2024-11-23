@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MdOutlineSchedule, MdExpandMore, MdExpandLess } from "react-icons/md";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { toast } from "react-toastify";
 import { FaEye } from "react-icons/fa";
 import LoaderSpinner from "../../../../Spinner/LoaderSpinner";
 import { useNavigate } from "react-router-dom";
 import Modal from "../../../Ui/Modal/Modal";
-import { RiDeleteBin6Line } from "react-icons/ri";
-
+import RollingBall from "../../../Ui/RollingBall/RollingBall";
+import DeleteModal from "../../../Ui/Modal/DeleteModal";
+import PageHeader from '../../../Ui/Header/PageHeader';
 export default function TeamTable() {
+  const breadcrumbs = [
+    { label: 'Dashboard', link: '/admin/dashboardManagment' },
+    { label: 'Team', link: '/admin/team' },
+  ];
+
   const [teams, setTeams] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [teamToDelete, setTeamToDelete] = useState(null);
@@ -24,6 +31,7 @@ export default function TeamTable() {
 
   // Fetch all teams from the API and group them by tournament
   const fetchTeams = async () => {
+    setLoading(true);
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/teams`,
@@ -33,11 +41,10 @@ export default function TeamTable() {
           },
         }
       );
-      console.log(response.data.data);
+      setLoading(false);
       setTeams(response.data.data);
       groupTeamsByTournament(response.data.data);
     } catch (err) {
-      console.log(err);
       toast.error("Error fetching teams");
     }
   };
@@ -78,7 +85,7 @@ export default function TeamTable() {
     // Set loading state for the specific team
     updatedGroupedTeams[tournamentId].teams[index].isLoading = true;
     setGroupedTeams(updatedGroupedTeams);
-
+    setLoading(true);
     try {
       const newStatus = currentStatus === 1 ? 0 : 1;
 
@@ -94,19 +101,15 @@ export default function TeamTable() {
           },
         }
       );
-      console.log(response.data);
-      if (response.data.status) {
-        // Update the status of the team inside the groupedTeams object
+      if (response.data.status === true) {
         updatedGroupedTeams[tournamentId].teams[index].status = newStatus;
         updatedGroupedTeams[tournamentId].teams[index].isLoading = false;
 
         // Update the state with the new groupedTeams
         setGroupedTeams(updatedGroupedTeams);
-
         toast.success(response.data.message);
       }
     } catch (err) {
-      console.log(err);
       toast.error("Error updating Team status");
 
       // Reset loading state in case of an error
@@ -121,7 +124,6 @@ export default function TeamTable() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/show/team/${id}`
       );
-      console.log(response.data.team);
       setShowTeam(response.data.team);
       setShowModal(true);
     } catch (error) {
@@ -169,9 +171,26 @@ export default function TeamTable() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="relative min-h-[600px]">
+        <RollingBall
+          size={100}
+          centered={true}
+        />
+      </div>
+    );
+  }
+
   return (
-    <>
-      {/* ... Modal for team details and delete confirmation (kept the same) ... */}
+    <div className="flex flex-col flex-1 h-screen">
+      <PageHeader 
+        title="Team Table"
+        breadcrumbItems={breadcrumbs}
+      />
+      {showDeleteModal && (
+        <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteTeam} />
+      )}
       <div className="p-4 w-full shadow-2xl">
         <table className="table-auto w-full border-spacing-1 border border-gray-200">
           <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
@@ -343,6 +362,6 @@ export default function TeamTable() {
           </div>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

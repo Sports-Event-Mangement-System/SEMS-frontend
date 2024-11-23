@@ -1,17 +1,21 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import MatchTable from './MatchTable';
+import PageHeader from '../../../Ui/Header/PageHeader';
 
 export default function MatchManagment() {
-  const navigate = useNavigate();
 
-  const addNewTournament = () => {
-    navigate(`/admin/addTournamentForm`);
-  }
+  const breadcrumbs = [
+    { label: 'Dashboard', link: '/admin/dashboardManagment' },
+    { label: 'Match', link: '/admin/match' },
+  ];
 
   return (
-    <>
+    <div className="flex flex-col flex-1 h-screen">
+      <PageHeader 
+        title="Match Table"
+        breadcrumbItems={breadcrumbs}
+      />
       <MatchTable />
-    </>
+    </div>
   )
 }

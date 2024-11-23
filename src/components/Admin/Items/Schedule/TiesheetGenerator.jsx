@@ -8,9 +8,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useWindowSize } from "@uidotdev/usehooks";
 import Alert from "../../../Ui/AlertBox/alert";
-import ClipLoader from "react-spinners/ClipLoader";
 import { toast } from "react-toastify";
 import RoundRobinBracket from "./RoundRobinBracket";
+import RollingBall from "../../../Ui/RollingBall/RollingBall";
 
 export default function TiesheetGenerator() {
   const [tournament, setTournament] = useState({});
@@ -145,7 +145,7 @@ export default function TiesheetGenerator() {
       <h1 className="text-2xl font-semibold text-gray-800 dark:text-black">
         Tiesheet Generator
       </h1>
-      <h2 className="text-1xl font-semibold text-gray-800 dark:text-black">
+      <h2 className="text-2xl font-semibold text-green-800 dark:text-green-600">
         Tournament {tournament.t_name}
       </h2>
       <Alert
@@ -154,7 +154,7 @@ export default function TiesheetGenerator() {
       />
 
       {loading ? (
-        <ClipLoader />
+        <RollingBall size={100} centered={true} />
       ) : error ? (
         <span className="text-red-600">{error}</span>
       ) : (
@@ -192,9 +192,9 @@ export default function TiesheetGenerator() {
                   Create Matches in Database
                 </button>
               )}
-
-              <div className="flex items-center">
-                <input
+              { tournament.tournament_type === "single-elimination" && (
+                <div className="flex items-center">
+                  <input
                   type="checkbox"
                   checked={randomTeams}
                   onChange={(e) =>
@@ -205,8 +205,9 @@ export default function TiesheetGenerator() {
                 />
                 <label htmlFor="randomTeams" className="text-sm font-medium">
                   Randomize Teams
-                </label>
-              </div>
+                  </label>
+                </div>
+              )}
             </div>
           )}
 
@@ -218,7 +219,6 @@ export default function TiesheetGenerator() {
               Delete Tiesheet & Matches
             </button>
           )}
-
           {matches.length > 0 ? (
             tournament.tournament_type === "single-elimination" ? (
               <SingleEliminationBracket

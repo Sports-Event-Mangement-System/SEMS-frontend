@@ -9,6 +9,7 @@ import DragDropFile from "../../../Ui/DragDrop/DragDropFile";
 import "flatpickr/dist/themes/material_orange.css";
 import Flatpickr from "react-flatpickr";
 import {dateFormatBackend} from "../../../Helper/dateFormat";
+import PageHeader from "../../../Ui/Header/PageHeader";
 
 export default function TournamentForm() {
   const [tournamentName, setTournamentName] = useState("");
@@ -176,10 +177,19 @@ export default function TournamentForm() {
 
     setMinDate(currentDate);
   }, []);
+
+  const breadcrumbs = [
+    { label: 'Dashboard', link: '/admin/dashboardManagment' },
+    { label: 'Tournament', link: '/admin/tournament' },
+    { label: tournamentId ? "Edit Tournament" : "Add Tournament", link: '#' },
+  ];
   
   return (
-    <div>
-      <h2>{tournamentId ? "Edit Tournament" : "Add Tournament"}</h2>
+    <div className="flex flex-col flex-1 h-screen">
+      <PageHeader 
+        title={tournamentId ? "Edit Tournament" : "Add Tournament"}
+        breadcrumbItems={breadcrumbs}
+      />
       <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-4 p-8 shadow-2xl">
           <div className="flex flex-col gap-4">
