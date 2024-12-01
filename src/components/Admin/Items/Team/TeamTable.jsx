@@ -85,7 +85,6 @@ export default function TeamTable() {
     // Set loading state for the specific team
     updatedGroupedTeams[tournamentId].teams[index].isLoading = true;
     setGroupedTeams(updatedGroupedTeams);
-    setLoading(true);
     try {
       const newStatus = currentStatus === 1 ? 0 : 1;
 

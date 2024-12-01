@@ -180,7 +180,7 @@ export default function TournamentForm() {
 
   const breadcrumbs = [
     { label: 'Dashboard', link: '/admin/dashboardManagment' },
-    { label: 'Tournament', link: '/admin/tournament' },
+    { label: 'Tournament', link: '/admin/tournamentManagement' },
     { label: tournamentId ? "Edit Tournament" : "Add Tournament", link: '#' },
   ];
   

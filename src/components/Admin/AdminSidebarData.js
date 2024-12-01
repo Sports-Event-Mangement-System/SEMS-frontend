@@ -1,5 +1,5 @@
 import React from 'react';
-import { faTrophy, faPeopleGroup, faAddressBook, faClock, faMale, faTachometer } from '@fortawesome/free-solid-svg-icons'
+import { faTrophy, faPeopleGroup, faAddressBook, faClock, faMale, faTachometer, faCog } from '@fortawesome/free-solid-svg-icons'
 import VersusIcon from '../../../public/svg/versus-icon.svg';
 
 
@@ -42,6 +42,11 @@ export const AdminSideBarData = [
                 itemName: 'Contact',
                 link: 'adminContact',
                 icon: faAddressBook
+            },
+            {
+                itemName: 'Settings',
+                link: 'settings',
+                icon: faCog
             },
             
         ]
