@@ -9,6 +9,7 @@ import PlayerManagement from "../Admin/Items/Player/playerManagment";
 import TiesheetGenerator from "../Admin/Items/Schedule/TiesheetGenerator";
 import MatchManagment from "../Admin/Items/Match/MatchManagment";
 import DashboardManagment from "../Admin/Items/Dashboard/DashboardManagment";
+import Settings from "../Admin/Items/Setting/Settings";
 
 const adminRoutes = [
      {
@@ -55,6 +56,10 @@ const adminRoutes = [
      {
           path: 'tiesheetGenerator/:tournamentId',
           element: <TiesheetGenerator />,
+     },
+     {
+          path: 'settings',
+          element: <Settings />,
      },
 
 ];

@@ -34,9 +34,10 @@ const Tabs = ({ children }) => {
   );
 };
 
-const Tab = ({ label, children }) => {
+const Tab = ({ label, children, icon }) => {
   return (
     <div label={label} className="hidden">
+      {icon && <div className="flex items-center gap-2">{icon}</div>}
       {children}
     </div>
   );
