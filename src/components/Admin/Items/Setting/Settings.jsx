@@ -19,46 +19,48 @@ export default function Settings() {
     const [mailUsername, setMailUsername] = useState('')
     const [mailPassword, setMailPassword] = useState('')
     const [mailPort, setMailPort] = useState('')
-
+    const [error, setError] = useState(null);
+    
     //Get settings
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}api/site/settings`).then((res) => {
-            console.log(res)
             if (res.data.status === true) {
-                setSiteName(res.data.site_name)
-                setSiteEmail(res.data.site_email)
-                setMailMailer(res.data.mail_mailer)
-                setMailHost(res.data.mail_host)
-                setMailUsername(res.data.mail_username)
-                setMailPassword(res.data.mail_password)
-                setMailPort(res.data.mail_port)
+                setSiteName(res.data.data.site_name)
+                setSiteEmail(res.data.data.site_email)
+                setMailMailer(res.data.data.mail_mailer)
+                setMailHost(res.data.data.mail_host)
+                setMailUsername(res.data.data.mail_username)
+                setMailPassword(res.data.data.mail_password)
+                setMailPort(res.data.data.mail_port)
             }
         })
     }, [])
+
+
+    //Handle/ Update Email Submit
     const handleEmailSubmit = (e) => {
-        console.log(mailMailer, mailHost, mailUsername, mailPassword, mailPort)
-        e.preventDefault()
-        axios.post(`${import.meta.env.VITE_API_URL}api/update/site/email/settings`, {
-            mail_mailer: mailMailer,
-            mail_host: mailHost,
-            mail_username: mailUsername,
-            mail_password: mailPassword,
-            mail_port: mailPort,
-        },
-            {
-                headers: {
-                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }
-        }).then((res) => {
-            console.log(res)
-            console.log('submitted')
-            if (res.data.status === true) {
-                toast.success(res.data.message)
-            } else {
-                toast.error(res.data.message)
-            }
+        e.preventDefault();
+        const formData = new FormData();
+        formData.append("mail_mailer", mailMailer || "");
+        formData.append("mail_host", mailHost || "");
+        formData.append("mail_username", mailUsername || "");
+        formData.append("mail_password", mailPassword || "");
+        formData.append("mail_port", mailPort || "");
+    
+        axios.post(`${import.meta.env.VITE_API_URL}api/update/site/email/settings`, formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
         })
-    }
+          .then((res) => {
+            if (res.data.status) {
+              toast.success(res.data.message);
+            }
+          })
+          .catch((err) => {
+            setError(err.response?.data?.errors || { message: err.message });
+          });
+      };
     return (
         <div>
             <PageHeader
@@ -82,6 +84,7 @@ export default function Settings() {
                                         value={siteName}
                                         onChange={(e) => setSiteName(e.target.value)}
                                     />
+                                    {error && <p className="text-red-500">{error.site_name}</p>}
                                 </div>
                                 <div className="w-6/12">
                                     <Input
@@ -94,6 +97,7 @@ export default function Settings() {
                                         value={siteEmail}
                                         onChange={(e) => setSiteEmail(e.target.value)}
                                     />
+                                    {error && <p className="text-red-500">{error.site_email}</p>}
                                 </div>
                             </div>
                         </Tab>
@@ -113,6 +117,7 @@ export default function Settings() {
                                             value={mailMailer}
                                             onChange={(e) => setMailMailer(e.target.value)}
                                         />
+                                        {error && <p className="text-red-500">{error.mail_mailer}</p>}
                                     </div>
                                     <div className="w-6/12">
                                         <Input
@@ -125,6 +130,7 @@ export default function Settings() {
                                             value={mailHost}
                                             onChange={(e) => setMailHost(e.target.value)}
                                         />
+                                        {error && <p className="text-red-500">{error.mail_host}</p>}
                                     </div>
                                 </div>
                                 <div className="flex gap-4">
@@ -139,6 +145,7 @@ export default function Settings() {
                                             value={mailUsername}
                                             onChange={(e) => setMailUsername(e.target.value)}
                                         />
+                                        {error && <p className="text-red-500">{error.mail_username}</p>}
                                     </div>
                                     <div className="w-6/12">
                                         <Input
@@ -151,6 +158,7 @@ export default function Settings() {
                                             value={mailPassword}
                                             onChange={(e) => setMailPassword(e.target.value)}
                                         />
+                                        {error && <p className="text-red-500">{error.mail_password}</p>}    
                                     </div>
                                 </div>
                                 <div className="w-6/12">
@@ -164,6 +172,7 @@ export default function Settings() {
                                         value={mailPort}
                                         onChange={(e) => setMailPort(e.target.value)}
                                     />
+                                    {error && <p className="text-red-500">{error.mail_port}</p>}
                                 </div>
                                 <button type="submit" className="bg-blue-600 flex self-end text-white hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto mt-4 px-8 py-3 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                     Submit

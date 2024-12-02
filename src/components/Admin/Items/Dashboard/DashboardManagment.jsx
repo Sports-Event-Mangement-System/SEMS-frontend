@@ -4,10 +4,12 @@ import { FaTrophy } from "react-icons/fa6";
 import { HiUserGroup } from "react-icons/hi";
 import { IoMdMan } from "react-icons/io";
 import axios from 'axios';
-import "flatpickr/dist/themes/material_orange.css";
+import "flatpickr/dist/themes/light.css";
 import Flatpickr from "react-flatpickr";
 import CountUp from 'react-countup';
 import PageHeader from '../../../Ui/Header/PageHeader';
+import './Dashboard.css';
+import { FaCalendarAlt } from 'react-icons/fa';
 
 export default function DashboardManagement() {
   const [dashboardData, setDashboardData] = useState(null);
@@ -87,12 +89,15 @@ export default function DashboardManagement() {
       </div>
 
       <div className="mt-10 p-4 bg-white rounded-lg shadow-md">
+        <h1 className='text-2xl font-bold text-[#0ab39c] flex items-center gap-2'><FaCalendarAlt  size={24} />Schedules & Upcoming Events</h1>
         <Flatpickr
           value={selectedDate}
           onChange={handleDateChange}
           options={{
             inline: true,
+            altInput: true,
             dateFormat: 'Y-m-d',
+            altInputClass: 'invisible',
           }}
           className="h-14 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
           />
