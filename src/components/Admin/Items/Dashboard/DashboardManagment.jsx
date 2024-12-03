@@ -90,6 +90,7 @@ export default function DashboardManagement() {
 
       <div className="mt-10 p-4 bg-white rounded-lg shadow-md">
         <h1 className='text-2xl font-bold text-[#0ab39c] flex items-center gap-2'><FaCalendarAlt  size={24} />Schedules & Upcoming Events</h1>
+        <div className='event-calendar'>
         <Flatpickr
           value={selectedDate}
           onChange={handleDateChange}
@@ -101,8 +102,9 @@ export default function DashboardManagement() {
           }}
           className="h-14 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
           />
+          </div>
       <div className="events-list">
-        <h3>Events:</h3>
+        <span className='text-lg font-bold'>Events:</span>
         {events
           .filter(event => event.date === formatDate(selectedDate))
           .map((event, index) => (

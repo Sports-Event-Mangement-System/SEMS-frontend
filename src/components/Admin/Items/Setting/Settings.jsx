@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 export default function Settings() {
-    const breadcrumbs = [
+    const breadcrumbs = [        
         { label: 'Dashboard', link: '/admin/dashboardManagment' },
         { label: 'Settings', link: '/admin/settings' },
     ];
