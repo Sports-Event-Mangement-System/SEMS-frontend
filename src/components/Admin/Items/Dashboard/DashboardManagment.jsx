@@ -16,18 +16,10 @@ export default function DashboardManagement() {
 
 
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [events, setEvents] = useState([
-    { date: '2024-11-09', title: 'Development planning', time: '9:20 AM' },
-    { date: '2024-11-12', title: 'Design new UI and check sales', time: '11:30 AM' },
-    { date: '2024-11-25', title: 'Weekly catch-up', time: '2:00 PM' },
-  ]);
+  const [events, setEvents] = useState([]);
 
   const handleDateChange = (date) => {
     setSelectedDate(date[0]);
-  };
-
-  const formatDate = (date) => {
-    return date.toISOString().split('T')[0];
   };
 
   const cardData = [
@@ -48,6 +40,7 @@ export default function DashboardManagement() {
         }
       });
       setDashboardData(response.data.data);
+      setEvents(response.data.data.events);
     } catch (error) {
       console.log("Error in fetching", error);
     }
@@ -105,13 +98,12 @@ export default function DashboardManagement() {
           </div>
       <div className="events-list">
         <span className='text-lg font-bold'>Events:</span>
-        {events
-          .filter(event => event.date === formatDate(selectedDate))
-          .map((event, index) => (
-            <div key={index} className="event-item">
-              <strong>{event.title}</strong> at {event.time}
-            </div>
-          ))}
+        {events.map((event, index) => (
+          <div key={index}>
+            <div>{event.event_name}</div>
+            <div>{event.event_date}</div>
+          </div>
+        ))}
       </div>
     </div>
 
