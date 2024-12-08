@@ -54,60 +54,78 @@ export default function DashboardManagement() {
     { label: 'Dashboard', link: '/admin/dashboardManagment' },
   ];
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.getDate();
+  };
+
+
+  console.log(events)
   return (
     <div className="flex flex-col flex-1 h-screen">
-      <PageHeader 
+      <PageHeader
         title="Dashboard"
         breadcrumbItems={breadcrumbs}
       />
-    <div className="m-4"> 
-      <div className="font-bold text-2xl mb-7">DASHBOARD</div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {cardData.map((card, index) => (
-          
-          <Card key={index} background={card.color}>
-            <div className="m-6">
-              <div className="text-gray-500 font-medium text-base text-center w-[40vh] mb-6">
-                {card.title}
+      <div className="m-4">
+        <div className="font-bold text-2xl mb-7">DASHBOARD</div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {cardData.map((card, index) => (
+
+            <Card key={index} background={card.color}>
+              <div className="m-6">
+                <div className="text-gray-500 font-medium text-base text-center w-[40vh] mb-6">
+                  {card.title}
+                </div>
+                <div className="flex gap-8 items-center">
+                  <div className="p-2 h-fit w-fit rounded-md bg-[#dcdcdc]">{card.icon}</div>
+                  <h1 className="text-2xl font-medium">
+                    <CountUp end={card.value} />
+                  </h1>
+                </div>
               </div>
-              <div className="flex gap-8 items-center">
-                <div className="p-2 h-fit w-fit rounded-md bg-[#dcdcdc]">{card.icon}</div>
-                <h1 className="text-2xl font-medium">
-                <CountUp end={card.value} />
-                </h1>
-              </div>
+            </Card>
+          ))}
+        </div>
+
+        <div className="mt-10 p-4 bg-white rounded-lg shadow-md">
+          <h1 className='text-2xl font-bold text-[#0ab39c] flex items-center gap-2'><FaCalendarAlt size={24} />Schedules & Upcoming Events</h1>
+          <div className='event-calendar'>
+            <Flatpickr
+              value={selectedDate}
+              onChange={handleDateChange}
+              options={{
+                inline: true,
+                altInput: true,
+                dateFormat: 'Y-m-d',
+                altInputClass: 'invisible',
+              }}
+              className="h-14 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
+            />
+          </div>
+          <div className="mt-4">  {/* events_list */}
+            <span className='text-lg font-bold'>Events:</span>
+            <div className='mt-4'>
+              {events.filter(event => event !== null).map((event, index) => (
+                <div key={index}>
+                  <div className='flex justify-between items-center'>
+                    <div className='flex gap-6 items-center'>
+                      <div className="bg-[#19d3ba] p-4 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg">
+                        {formatDate(event.event_date)}
+                      </div>
+                      <div className='font-semibold'>{event.event_name}</div>
+                    </div>
+                    <div className='font-semibold text-gray-500'>{event.event_date}</div>
+                  </div>
+
+                </div>
+              ))}
             </div>
-          </Card>
-        ))}
-      </div>
 
-      <div className="mt-10 p-4 bg-white rounded-lg shadow-md">
-        <h1 className='text-2xl font-bold text-[#0ab39c] flex items-center gap-2'><FaCalendarAlt  size={24} />Schedules & Upcoming Events</h1>
-        <div className='event-calendar'>
-        <Flatpickr
-          value={selectedDate}
-          onChange={handleDateChange}
-          options={{
-            inline: true,
-            altInput: true,
-            dateFormat: 'Y-m-d',
-            altInputClass: 'invisible',
-          }}
-          className="h-14 w-full border rounded-lg px-3 py-2 focus:outline-orange-400"
-          />
           </div>
-      <div className="events-list">
-        <span className='text-lg font-bold'>Events:</span>
-        {events.map((event, index) => (
-          <div key={index}>
-            <div>{event.event_name}</div>
-            <div>{event.event_date}</div>
-          </div>
-        ))}
-      </div>
-    </div>
+        </div>
 
-    </div>
+      </div>
     </div>
   );
 }
