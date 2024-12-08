@@ -108,7 +108,7 @@ export default function DashboardManagement() {
             <div className='mt-4'>
               {events.filter(event => event !== null).map((event, index) => (
                 <div key={index}>
-                  <div className='flex justify-between items-center'>
+                  <div className='flex justify-between items-center mb-2'>
                     <div className='flex gap-6 items-center'>
                       <div className="bg-[#19d3ba] p-4 rounded-full w-12 h-12 flex items-center justify-center text-white font-bold text-lg">
                         {formatDate(event.event_date)}
