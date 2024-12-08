@@ -14,6 +14,8 @@ import { useWindowSize } from "@uidotdev/usehooks";
 import RoundRobinBracket from '../Admin/Items/Schedule/RoundRobinBracket';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import FixtureTable from '../Ui/RoundRobinBracket/FixtureTable';
+import PointsTable from '../Ui/RoundRobinBracket/PointsTable';
 
 
 export default function TournamentDetailsContent({ tabIndex, tournamentData, teamData }) {
@@ -207,7 +209,9 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                                         )}
                                     />
                                 ) : (
-                                    <RoundRobinBracket matches={matches} max_rounds={maxRounds} pointsTable={pointsTableData} />
+                                    <div className='w-6/12'>
+                                        <PointsTable pointsTable={pointsTableData} />
+                                    </div>
                                 )
                             ) : (
                                 <p>Tiesheet not found</p>
@@ -221,7 +225,7 @@ export default function TournamentDetailsContent({ tabIndex, tournamentData, tea
                 tabIndex == 5 && (
                     <>
                         <div>
-                            Fixtures here
+                            <FixtureTable matches={matches} max_rounds={maxRounds} />
                         </div>
                     </>
 
