@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { RiDeleteBin6Line, RiCloseFill } from "react-icons/ri";
 
-export default function DeleteModal({ closeModal, deleteRow }) {
+export default function DeleteModal({ closeModal, deleteRow, message= null }) {
     useEffect(() => {
         document.body.style.overflowY = 'hidden';
         return () => {
@@ -24,10 +24,11 @@ export default function DeleteModal({ closeModal, deleteRow }) {
                 </div>
                 <div className="text-xl font-semibold flex justify-center">Are you sure?</div>
                 <div className="text-lg font-medium text-gray-500 mt-3 flex justify-center">
-                    Are you sure you want to delete this row from the table?
+                   {message ? message : "Are you sure you want to delete this row from the table?"}
                 </div>
                 <div className="flex justify-center mt-4 gap-3">
                     <button
+
                         className="bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400"
                         onClick={closeModal}
                     >

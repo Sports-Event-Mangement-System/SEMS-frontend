@@ -11,6 +11,9 @@ import Alert from "../../../Ui/AlertBox/alert";
 import { toast } from "react-toastify";
 import RoundRobinBracket from "./RoundRobinBracket";
 import RollingBall from "../../../Ui/RollingBall/RollingBall";
+import PageHeader from "../../../Ui/Header/PageHeader";
+import DeleteModal from "../../../Ui/Modal/DeleteModal";
+import { MdDelete } from "react-icons/md";
 
 export default function TiesheetGenerator() {
   const [tournament, setTournament] = useState({});
@@ -18,9 +21,11 @@ export default function TiesheetGenerator() {
   const [showTiesheet, setShowTiesheet] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
   const [randomTeams, setRandomTeams] = useState(false);
   const [createMatches, setCreateMatches] = useState(false);
   const [pointsTableData, setPointsTableData] = useState([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const { tournamentId } = useParams();
   const { width, height } = useWindowSize();
@@ -133,21 +138,40 @@ export default function TiesheetGenerator() {
       setMatches([]);
       setShowTiesheet(false);
       toast.success(response.data.message);
+      closeDeleteModal();
     } catch (err) {
       toast.error(err.response?.data?.message || "Error deleting tiesheet");
     } finally {
       setLoading(false);
     }
+
   };
+
+  const breadcrumbs = [
+    { label: 'Dashboard', link: '/admin/dashboardManagment' },
+    { label: 'Schedule', link: '/admin/schedule' },
+    { label: 'Tiesheet Generator', link: `/admin/schedule/tiesheet-generator/${tournamentId}` },
+  ];
+
+  const closeDeleteModal = () => {
+    setShowDeleteModal(false);
+  };  
 
   return (
     <>
-      <h1 className="text-2xl font-semibold text-gray-800 dark:text-black">
-        Tiesheet Generator
-      </h1>
-      <h2 className="text-2xl font-semibold text-green-800 dark:text-green-600">
-        Tournament {tournament.t_name}
-      </h2>
+      {showDeleteModal && (
+          <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteTiesheet} message="Are you sure you want to delete the tiesheet and matches for this tournament?" />
+        )}
+      <div className="flex flex-col">
+        <PageHeader 
+          title="Tiesheet Generator"
+
+          breadcrumbItems={breadcrumbs}
+        />
+      </div>
+      <div className="text-2xl font-semibold mb-4">
+        Tournament: <span className="text-green-600 dark:text-green-600">{tournament.t_name}</span>
+      </div>
       <Alert
         type="info"
         message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database."
@@ -213,9 +237,10 @@ export default function TiesheetGenerator() {
 
           {showTiesheet && (
             <button
-              onClick={deleteTiesheet}
-              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700"
+              onClick={() => setShowDeleteModal(true)}
+              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 flex items-center gap-2"
             >
+              <MdDelete />
               Delete Tiesheet & Matches
             </button>
           )}
