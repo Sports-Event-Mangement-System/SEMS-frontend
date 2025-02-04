@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
 import { IoIosArrowForward } from "react-icons/io";
 
 const PageHeader = ({ title, breadcrumbItems }) => {
@@ -8,19 +8,19 @@ const PageHeader = ({ title, breadcrumbItems }) => {
   const getBreadcrumbs = () => {
     if (breadcrumbItems) return breadcrumbItems;
 
-    const paths = location.pathname.split('/').filter(path => path);
+    const paths = location.pathname.split("/").filter((path) => path);
     return paths.map((path, index) => ({
       label: path.charAt(0).toUpperCase() + path.slice(1),
-      link: '/' + paths.slice(0, index + 1).join('/')
+      link: "/" + paths.slice(0, index + 1).join("/"),
     }));
   };
 
   return (
-    <div className="bg-white shadow-sm w-full sticky top-0">
+    <div className="bg-white shadow-sm w-full sticky top-0 z-50">
       <div className="flex flex-col gap-1 px-6 py-4">
         {/* Page Title */}
         <h1 className="text-2xl font-semibold text-gray-800">
-          {title || getBreadcrumbs().slice(-1)[0]?.label || 'Dashboard'}
+          {title || getBreadcrumbs().slice(-1)[0]?.label || "Dashboard"}
         </h1>
 
         {/* Breadcrumbs */}
@@ -28,7 +28,7 @@ const PageHeader = ({ title, breadcrumbItems }) => {
           <Link to="/" className="text-gray-600 hover:text-theme-color">
             Home
           </Link>
-          
+
           {getBreadcrumbs().map((item, index) => (
             <React.Fragment key={index}>
               <IoIosArrowForward className="mx-2 text-gray-400" />
@@ -52,4 +52,4 @@ const PageHeader = ({ title, breadcrumbItems }) => {
   );
 };
 
-export default PageHeader; 
+export default PageHeader;

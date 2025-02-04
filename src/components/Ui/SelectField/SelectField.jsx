@@ -25,7 +25,9 @@ function SelectField({
       ...provided,
       backgroundColor: state.isSelected ? "rgb(255, 140, 0)" : "white",
       "&:hover": {
-        backgroundColor: state.isSelected ? "rgb(255, 140, 0)" : "rgba(255, 140, 0, 0.1)",
+        backgroundColor: state.isSelected
+          ? "rgb(255, 140, 0)"
+          : "rgba(255, 140, 0, 0.1)",
       },
     }),
     singleValue: (provided) => ({
@@ -58,7 +60,7 @@ function SelectField({
           options={options}
           value={value ? value : selectedOption}
           onChange={onChange}
-          className="w-full"
+          className="w-full border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
           styles={customStyles}
           classNamePrefix="custom-select"
         />

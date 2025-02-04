@@ -1,42 +1,39 @@
-import Home from '../Home/Home';
-import About from '../About Us/About';
-import Tournaments from '../Tournaments/Tournaments';
-import Gallery from '../Gallery/Gallery';
-import Contact from '../Contact Us/Contact';
-import LogIn from '../Account/LogIn';
-import SignUp from '../Account/SignUp';
-import PrivateRoute from './PrivateRoute';
-import TournamentCardDetails from '../Tournaments/TournamentCardDetails';
-import SingleTeamDetails from '../Team/SingleTeamDetails';
-
+import Home from "../Home/Home";
+// import About from "../About Us/About";
+import Tournaments from "../Tournaments/Tournaments";
+// import Gallery from "../Gallery/Gallery";
+import Contact from "../Contact Us/Contact";
+import LogIn from "../Account/LogIn";
+import SignUp from "../Account/SignUp";
+import PrivateRoute from "./PrivateRoute";
+import TournamentCardDetails from "../Tournaments/TournamentCardDetails";
+import SingleTeamDetails from "../Team/SingleTeamDetails";
+import About from "../About Us/About";
 
 const publicRoutes = [
   {
-    path: '/',
+    path: "/",
     element: <Home />,
   },
   {
-    path: '/about',
+    path: "/about",
     element: <About />,
   },
   {
-    path: '/tournaments',
+    path: "/tournaments",
     element: <Tournaments />,
   },
   {
-    path: '/tournamentDetails/:id',
+    path: "/tournamentDetails/:id",
     element: <TournamentCardDetails />,
   },
+
   {
-    path: '/gallery',
-    element: <Gallery />,
-  },
-  {
-    path: '/contact',
+    path: "/contact",
     element: <Contact />,
   },
   {
-    path: '/logIn',
+    path: "/logIn",
     element: (
       <PrivateRoute redirectAuthenticated={true}>
         <LogIn />
@@ -44,7 +41,7 @@ const publicRoutes = [
     ),
   },
   {
-    path: '/signup',
+    path: "/signup",
     element: (
       <PrivateRoute redirectAuthenticated={true}>
         <SignUp />
@@ -52,10 +49,8 @@ const publicRoutes = [
     ),
   },
   {
-    path: '/TeamDetails/:id',
-    element: (
-      <SingleTeamDetails />
-    ),
+    path: "/TeamDetails/:id",
+    element: <SingleTeamDetails />,
   },
 ];
 

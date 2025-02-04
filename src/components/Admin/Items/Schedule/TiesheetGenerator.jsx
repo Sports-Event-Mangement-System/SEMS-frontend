@@ -39,7 +39,6 @@ export default function TiesheetGenerator() {
     getTiesheetResponse();
   }, [tournamentId]);
 
-
   // Fetch Tournament Data
   const fetchTournamentData = async () => {
     try {
@@ -57,11 +56,11 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentId}`,
+        `${import.meta.env.VITE_API_URL}api/tiesheet/response/${tournamentId}`
       );
       setMatches(response.data.matches || []);
       setShowTiesheet(response.data.showTiesheet || false);
-      if (tournament.tournament_type = "round-robin") {
+      if ((tournament.tournament_type = "round-robin")) {
         setPointsTableData(response.data.points_table || []);
       }
       setMaxRounds(response.data.max_rounds);
@@ -76,10 +75,12 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}api/tiesheet/tournament/${tournamentId}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/tiesheet/tournament/${tournamentId}`,
         {
           params: {
-            randomTeams: randomTeams
+            randomTeams: randomTeams,
           },
           headers: {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -105,7 +106,8 @@ export default function TiesheetGenerator() {
     setLoading(true);
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL
+        `${
+          import.meta.env.VITE_API_URL
         }api/save/matches/tournament/${tournamentId}`,
         { pointsTableData, matches },
         {
@@ -144,33 +146,37 @@ export default function TiesheetGenerator() {
     } finally {
       setLoading(false);
     }
-
   };
 
   const breadcrumbs = [
-    { label: 'Dashboard', link: '/admin/dashboardManagment' },
-    { label: 'Schedule', link: '/admin/schedule' },
-    { label: 'Tiesheet Generator', link: `/admin/schedule/tiesheet-generator/${tournamentId}` },
+    { label: "Dashboard", link: "/admin/dashboardManagment" },
+    { label: "Schedule", link: "/admin/schedule" },
+    {
+      label: "Tiesheet Generator",
+      link: `/admin/schedule/tiesheet-generator/${tournamentId}`,
+    },
   ];
 
   const closeDeleteModal = () => {
     setShowDeleteModal(false);
-  };  
+  };
 
   return (
     <>
+      <PageHeader title="Tiesheet Generator" breadcrumbItems={breadcrumbs} />
       {showDeleteModal && (
-          <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteTiesheet} message="Are you sure you want to delete the tiesheet and matches for this tournament?" />
-        )}
-      <div className="flex flex-col">
-        <PageHeader 
-          title="Tiesheet Generator"
-
-          breadcrumbItems={breadcrumbs}
+        <DeleteModal
+          closeModal={closeDeleteModal}
+          deleteRow={deleteTiesheet}
+          message="Are you sure you want to delete the tiesheet and matches for this tournament?"
         />
-      </div>
-      <div className="text-2xl font-semibold mb-4">
-        Tournament: <span className="text-green-600 dark:text-green-600">{tournament.t_name}</span>
+      )}
+      <div className="flex flex-col mt-3"></div>
+      <div className="text-2xl font-semibold mb-4 pl-4">
+        Tournament:{" "}
+        <span className="text-green-600 dark:text-green-600">
+          {tournament.t_name}
+        </span>
       </div>
       <Alert
         type="info"
@@ -185,8 +191,8 @@ export default function TiesheetGenerator() {
         <>
           {tournament.tournament_type === "round-robin" && (
             <div className="text-sm text-blue-600">
-              Note: This tournament format is round-robin, where each team
-              plays against every other team.
+              Note: This tournament format is round-robin, where each team plays
+              against every other team.
             </div>
           )}
           {!showTiesheet && (
@@ -194,10 +200,11 @@ export default function TiesheetGenerator() {
               <button
                 disabled={loading}
                 onClick={generateTiesheet}
-                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading
+                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
+                  loading
                     ? "opacity-50 cursor-not-allowed"
                     : "hover:bg-green-700"
-                  }`}
+                }`}
               >
                 {matches.length > 0
                   ? "Generate Another Tiesheet"
@@ -208,27 +215,28 @@ export default function TiesheetGenerator() {
                 <button
                   disabled={loading}
                   onClick={saveMatches}
-                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${loading
+                  className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
+                    loading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-green-700"
-                    }`}
+                  }`}
                 >
                   Create Matches in Database
                 </button>
               )}
-              { tournament.tournament_type === "single-elimination" && (
+              {tournament.tournament_type === "single-elimination" && (
                 <div className="flex items-center">
                   <input
-                  type="checkbox"
-                  checked={randomTeams}
-                  onChange={(e) =>
-                    setRandomTeams(e.target.checked ? true : false)
-                  }
-                  id="randomTeams"
-                  className="w-4 h-4 mr-2"
-                />
-                <label htmlFor="randomTeams" className="text-sm font-medium">
-                  Randomize Teams
+                    type="checkbox"
+                    checked={randomTeams}
+                    onChange={(e) =>
+                      setRandomTeams(e.target.checked ? true : false)
+                    }
+                    id="randomTeams"
+                    className="w-4 h-4 mr-2"
+                  />
+                  <label htmlFor="randomTeams" className="text-sm font-medium">
+                    Randomize Teams
                   </label>
                 </div>
               )}
@@ -238,7 +246,7 @@ export default function TiesheetGenerator() {
           {showTiesheet && (
             <button
               onClick={() => setShowDeleteModal(true)}
-              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 flex items-center gap-2"
+              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 flex items-center gap-2 ml-6 mt-3"
             >
               <MdDelete />
               Delete Tiesheet & Matches
@@ -256,7 +264,11 @@ export default function TiesheetGenerator() {
                 )}
               />
             ) : (
-              <RoundRobinBracket matches={matches} max_rounds={maxRounds} pointsTable={pointsTableData} />
+              <RoundRobinBracket
+                matches={matches}
+                max_rounds={maxRounds}
+                pointsTable={pointsTableData}
+              />
             )
           ) : (
             <p>Click generate button to generate Tiesheet</p>
