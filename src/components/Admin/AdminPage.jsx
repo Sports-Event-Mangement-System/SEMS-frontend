@@ -1,14 +1,14 @@
-import React from 'react'
-import AdminSidebar from './AdminSidebar'
-import { Outlet } from 'react-router-dom'
+import React from "react";
+import AdminSidebar from "./AdminSidebar";
+import { Outlet } from "react-router-dom";
 
 export default function AdminPage() {
-      return (
-            <div className="flex min-h-screen">
-                  <AdminSidebar />
-                  <main className="flex-1 p-4 bg-gray-50">
-                        <Outlet />
-                  </main>
-            </div>
-      )
+  return (
+    <div className="flex">
+      <AdminSidebar />
+      <div className="flex-1 max-h-screen overflow-y-scroll">
+        <Outlet />
+      </div>
+    </div>
+  );
 }

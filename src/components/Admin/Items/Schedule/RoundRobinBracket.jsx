@@ -7,7 +7,7 @@ const RoundRobinBracket = ({ matches, max_rounds, pointsTable }) => {
   return (
     <div>
       {/* Loop through each round and display its matches */}
-      <div className="mt-4">
+      <div className="mt-4 ml-4">
         <div className="flex gap-8">
           {/* Fixture Table */}
           <div className="w-6/12">
