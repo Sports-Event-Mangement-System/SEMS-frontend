@@ -9,6 +9,8 @@ import Card from '../Ui/Card/Card';
 import { useDispatch, useSelector } from 'react-redux';
 import { setPendingAction, clearPendingAction } from '../../store/PendingActionsSlice';
 import { toast } from 'react-toastify';
+import { GiThink } from "react-icons/gi";
+import PredictionProgressBar from '../Ui/PredictionProgressBar/PredictionProgressBar';
 
 export default function SingleTeamDetails() {
     const { id } = useParams();
@@ -16,6 +18,8 @@ export default function SingleTeamDetails() {
     const [teamDetails, setTeamDetails] = useState(null);
     const [fixtureMatches, setFixtureMatches] = useState(null);
     const [resultMatches, setResultMatches] = useState(null);
+    const [prediction, setPrediction] = useState(null);
+    const [predictionBtn, setPredictionBtn] = useState(true);
     const dispatch = useDispatch();
     const [isFollowed, setIsFollowed] = useState(false);
 
@@ -67,7 +71,7 @@ export default function SingleTeamDetails() {
             }
 
             setIsFollowed(true);
-            toast.success(response.data.message);
+            toast.success(response.data.message);x
         } catch (error) {
             toast.error('Error following team');
         }
@@ -79,9 +83,26 @@ export default function SingleTeamDetails() {
             dispatch(clearPendingAction());
         }
     }, [user, pendingAction, id]);
+
+    const PredictMatch = async (matchId) => {
+        try {
+            const response = await axios.get(`${import.meta.env.VITE_API_URL}api/predict/match/${matchId}`);
+            console.log(response)
+            if( response.data.status ){
+                toast.success(response.data.message);
+                setPrediction(response.data.predictions);
+                setPredictionBtn(false);
+            }
+        } catch (error) {
+            console.error('Error predicting match:', error);
+        }
+
+
+    };
     return (
         <div>
             {teamDetails ? (
+
                 <>
                     <div className='bg-[url("/images/white-background.jpg")] bg-cover bg-center h-80 w-full flex items-center px-8 py-9 rounded-md pl-20 relative'>
                         <img
@@ -120,7 +141,7 @@ export default function SingleTeamDetails() {
                             <Tab label="Fixtures">
                                 <div className="py-4">
                                     <div>
-                                        <h2 className="font-bold text-lg mb-2">Matches:</h2>
+                                        <h2 className="font-bold text-lg mb-2">Upcoming Matches:</h2>
                                         <div className="grid lg:grid-cols-2 md:grid-cols-2 sm:grid-cols-1 gap-y-12 w-full justify-items-center mt-12">
                                             {fixtureMatches.length > 0 ? (
                                                 fixtureMatches.map((match, index) => (
@@ -173,13 +194,31 @@ export default function SingleTeamDetails() {
                                                                     <div className="text-black text-[16px] font-semibold">{match.startTime || "Not Decided"}</div>
                                                                 </div>
                                                             </div>
+                                                            {prediction && (
+                                                                <PredictionProgressBar
+                                                                    team1={match.participants[0]?.name} 
+                                                                    team2={match.participants[1]?.name} 
+                                                                    team1Percentage={prediction.team1_win} 
+                                                                    team2Percentage={prediction.team2_win} 
+                                                                />
 
+                                                            )}
                                                             <hr className="my-4 border-1 border-gray-300 w-full" />
-                                                            <div className="px-5">
-                                                                <h1>{teamDetails.tournament.t_name}</h1>
+                                                            <div className='flex justify-between'>
+                                                                <div className="px-5">
+                                                                    <h1>{teamDetails.tournament.t_name}</h1>
+                                                                </div>
+                                                                <div className="flex h-15 items-center justify-end w-full px-4">
+                                                                    {predictionBtn && (
+                                                                        <button className='bg-blue-600 text-white px-4 py-2 rounded-md flex items-center gap-2' onClick={() => PredictMatch(match.id)} >
+                                                                            <GiThink size={30} />
+                                                                            Predict This Match
+
+                                                                        </button>
+                                                                    )}
+                                                                </div>
                                                             </div>
                                                         </div>
-
                                                     </Card>
                                                 ))
                                             ) : (

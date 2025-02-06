@@ -35,38 +35,46 @@ export default function FixtureTable({ matches, max_rounds }) {
                             <React.Fragment key={participant.id}>
                               {/* Left Participant */}
                               {i === 0 && (
-                                <div className="flex items-center w-6/12">
-                                  <img 
-                                    src={participant.teamLogo} 
-                                    className="inline h-8 w-8 mx-2 rounded-full" 
-                                    alt={participant.name} 
+                                <div className="flex items-center w-2/12">
+                                  {participant.teamLogo && (
+                                    <img 
+                                      src={participant.teamLogo} 
+
+                                      className="inline h-8 w-8 mx-2 rounded-full" 
+                                      alt={participant.name} 
                                   />
+                                  )}
                                   <span className="font-semibold">{participant.name}</span>
                                 </div>
                               )}
                               
                               {/* VS Icon */}
                               {i === 0 && match.participants.length > 1 && (
-                                <div className="flex items-center mr-4">
+                                <div className="flex items-center w-1/12">
                                   <img 
                                     src={vsIcon} 
                                     alt="vs" 
                                     className="h-8" 
                                     style={{ filter: 'invert(100%)' }} 
+
                                   />
                                 </div>
                               )}
 
                               {/* Right Participant */}
                               {i === 1 && (
-                                <div className="flex items-center w-6/12">
+                                <div className="flex items-center">
+                                  {participant.teamLogo && (
                                   <img 
-                                    src={participant.teamLogo} 
+                                    src={participant.teamLogo}
                                     className="inline h-8 w-8 mx-2 rounded-full" 
                                     alt={participant.name} 
-                                  />
+                                    />
+
+                                  )}
                                   <span className="font-semibold">{participant.name}</span>
                                 </div>
+
                               )}
                               {match.participants.length === 1 && (
                                 <span className="font-bold">(Rest This Round)</span>
