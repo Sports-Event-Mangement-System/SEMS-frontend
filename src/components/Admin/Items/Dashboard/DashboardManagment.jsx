@@ -105,7 +105,7 @@ export default function DashboardManagement() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {cardData.map((card, index) => (
             <Card key={index} background={card.color}>
-              <div className="m-6">
+              <div className="m-4">
                 <div className="text-gray-500 font-medium text-base text-center w-[40vh] mb-6">
                   {card.title}
                 </div>

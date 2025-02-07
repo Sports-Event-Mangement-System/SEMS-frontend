@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Select from "react-select";
 
 function SelectField({
@@ -12,6 +12,7 @@ function SelectField({
   value,
   onChange,
 }) {
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const customStyles = {
     control: (provided, state) => ({
       ...provided,
@@ -44,6 +45,28 @@ function SelectField({
       ? options.find((option) => option.value === value)
       : null;
 
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const getPlaceholderText = () => {
+    if (!placeholder) return "";
+
+    if (windowWidth < 660) return "";
+    if (windowWidth < 679) return placeholder.substring(0, 2) + "..."; // Small screens
+    if (windowWidth < 768) return placeholder.substring(0, 5) + "..."; // Small screens
+    if (windowWidth < 1168) return placeholder.substring(0, 8) + "..."; // Medium screens
+    return placeholder; // Large screens
+  };
+
   return (
     <div className="flex flex-col relative">
       <label htmlFor={id} className="mb-1 text-md font-medium text-gray-700">
@@ -56,11 +79,11 @@ function SelectField({
           isSearchable={searchable}
           name={name}
           id={id}
-          placeholder={placeholder}
+          placeholder={getPlaceholderText()}
           options={options}
           value={value ? value : selectedOption}
           onChange={onChange}
-          className="w-full border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
+          className="w-[12vh] md:w-[19vh] lg:w-full sm:w-[12vh] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
           styles={customStyles}
           classNamePrefix="custom-select"
         />
