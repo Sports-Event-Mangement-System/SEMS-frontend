@@ -121,8 +121,15 @@ function Header() {
                   </span>
 
                   <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-400 text-white text-xl font-normal hover:border-2 border-blue-500">
-                    {user.user_details?.username?.charAt(0).toUpperCase()}
-                  </div>
+                  {user.user_details?.profile_image ? (
+                    <img
+                      src={user.user_details?.profile_image}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    user.user_details?.username?.charAt(0).toUpperCase()
+                  )}                  </div>
                   {profileDropdown && <ProfileDropdown />}
                 </div>
               ) : (
@@ -201,7 +208,15 @@ function Header() {
                 </span>
 
                 <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-400 text-white text-xl font-normal hover:border-2 border-blue-500">
-                  {user.user_details?.username?.charAt(0).toUpperCase()}
+                  {user.user_details?.profile_image ? (
+                    <img
+                      src={user.user_details?.profile_image}
+                      alt="Profile"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    user.user_details?.username?.charAt(0).toUpperCase()
+                  )}
                 </div>
                 {profileDropdown && <ProfileDropdown />}
               </div>
