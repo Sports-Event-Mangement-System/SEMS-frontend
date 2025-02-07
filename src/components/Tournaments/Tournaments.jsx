@@ -9,6 +9,7 @@ import { IoMdArrowRoundForward, IoMdArrowRoundBack } from "react-icons/io";
 function Tournaments() {
   const [tournaments, setTournaments] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedPerPage, setSelectedPerPage] = useState(4);
   const [selectedEventType, setSelectedEventType] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedFeatured, setSelectedFeatured] = useState(null);
@@ -16,9 +17,10 @@ function Tournaments() {
   const [selectedMonth, setSelectedMonth] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-  const tournamentsPerPage = 4;
-  const indexOfLastTournament = currentPage * tournamentsPerPage;
-  const indexOfFirstTournament = indexOfLastTournament - tournamentsPerPage;
+  const indexOfLastTournament = currentPage * selectedPerPage;
+  const indexOfFirstTournament = indexOfLastTournament - selectedPerPage;
+
+  const perPageOptions = [2, 4, 6, 8, 10, 12];
 
   const featuredOptions = [
     { value: "Featured", label: "Featured" },
@@ -82,6 +84,11 @@ function Tournaments() {
     }
   };
 
+  const handlePerPageChange = (e) => {
+    setSelectedPerPage(parseInt(e.target.value));
+    setCurrentPage(1);
+  };
+
   const formatDate = (dateString) => {
     const options = { month: "short", day: "numeric" };
     const date = new Date(dateString);
@@ -125,8 +132,8 @@ function Tournaments() {
             Tournaments
           </h1>
 
-          <span className="absolute top-0 w-[93%] transform translate-y-[44vh] bg-white h-auto py-6 flex flex-wrap justify-evenly items-center gap-4 md:gap-6 drop-shadow-lg rounded-lg">
-            <div className="flex flex-col w-full md:w-[20%]">
+          <span className="absolute top-0 w-[93%] transform translate-y-[44vh] bg-white h-auto py-6 flex justify-evenly items-center gap-4 md:gap-3 drop-shadow-lg rounded-lg">
+            <div className="w-fit flex flex-col sm:w-fit md:w-[20%]">
               <label
                 htmlFor="search"
                 className="text-md font-medium text-gray-700 mb-1"
@@ -139,41 +146,41 @@ function Tournaments() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Event title..."
-                className="w-full px-4 py-[5px] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
+                className=" px-4 py-[5px] w-[12vh] md:w-[19vh] lg:w-full sm:w-[12vh] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
               />
             </div>
 
-            <div className="w-full md:w-[20%]">
+            <div className="w-fit sm:w-52 md:w-[20%]">
               <SelectField
                 label="Featured"
                 id="featured"
                 name="featured"
-                placeholder="Select Featured Status"
+                placeholder="Featured Status"
                 options={featuredOptions}
                 value={selectedFeatured}
                 onChange={(option) => setSelectedFeatured(option)}
               />
             </div>
-            <div className="w-full md:w-[20%]">
+            <div className="w-fit md:w-[20%]">
               <SelectField
                 label="Event Type"
                 id="event_type"
                 name="event_type"
-                placeholder="Select Event Type"
+                placeholder="Event Type"
                 options={eventTypeOptions}
                 value={selectedEventType}
                 onChange={(option) => setSelectedEventType(option)}
               />
             </div>
-            <div className="w-full md:w-[20%]">
+            <div className="w-fit md:w-[20%]  ">
               <DatePicker
-                value={selectedDate} // Use the selectedDate state here
+                value={selectedDate}
                 label="When"
                 onChange={(dateString) => {
-                  setSelectedDate(dateString); // Set the selected date
+                  setSelectedDate(dateString);
                   const selectedDateObj = new Date(dateString);
-                  setSelectedYear(selectedDateObj.getFullYear()); // Update selected year
-                  setSelectedMonth(selectedDateObj.getMonth() + 1); // Update selected month
+                  setSelectedYear(selectedDateObj.getFullYear());
+                  setSelectedMonth(selectedDateObj.getMonth() + 1);
                 }}
               />
             </div>
@@ -195,7 +202,7 @@ function Tournaments() {
               No tournaments found.
             </p>
           ) : (
-            <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-1 justify-items-center mt-12 gap-y-12">
+            <div className="lg:mx-11 grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 justify-items-center mt-12 gap-y-12">
               {currentTournaments.map((details, index) => (
                 <TournamentCard
                   key={index}
@@ -216,20 +223,33 @@ function Tournaments() {
             </div>
           )}
 
-          <div className="flex justify-between mt-8">
+          <div className="flex justify-end gap-4 mt-8">
+            <select
+              value={selectedPerPage}
+              onChange={handlePerPageChange}
+              className="border-2 border-gray-500
+               rounded-md px-2 cursor-pointer"
+            >
+              {perPageOptions.map((num) => (
+                <option key={num} value={num}>
+                  {num}
+                </option>
+              ))}
+            </select>
+
             <button
               onClick={handlePrevious}
               disabled={currentPage === 1}
               className="px-3 py-2 flex items-center gap-2 bg-gray-600 text-white rounded-lg hover:bg-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <IoMdArrowRoundBack /> Previous
+              <IoMdArrowRoundBack />
             </button>
             <button
               onClick={handleNext}
               disabled={indexOfLastTournament >= filteredTournaments.length}
               className="px-3 py-2 flex items-center gap-2 bg-orange-600 text-white rounded-lg hover:bg-orange-500 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Next <IoMdArrowRoundForward />
+              <IoMdArrowRoundForward />
             </button>
           </div>
         </div>
