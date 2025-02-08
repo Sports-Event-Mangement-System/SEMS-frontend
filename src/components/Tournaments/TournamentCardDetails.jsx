@@ -45,8 +45,7 @@ export default function TournamentCardDetails() {
   }, [id]);
 
   if (!tournamentData) {
-    // Return a loading state while the data is being fetched
-    return <div>Loading...</div>;
+    return <div className="h-screen">Loading...</div>;
   }
 
   const formatDate = (dateString) => {

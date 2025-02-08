@@ -9,9 +9,7 @@ import { CgProfile } from "react-icons/cg";
 function ProfileDropdown() {
   const dispatch = useDispatch();
   return (
-    <div
-      className={`absolute flex items-center justify-center bg-white drop-shadow-[0-8px_10px_rgba(0,0,0,0.20)] w-fit right-0 p-4 rounded-sm mt-[23vh] mr-[2vh] `}
-    >
+    <div className="absolute flex items-center justify-center bg-white drop-shadow-[0-8px_10px_rgba(0,0,0,0.20)] w-fit right-0 p-4 rounded-sm top-full mt-1">
       <ul className="flex flex-col  gap-2">
         <li className="flex items-center gap-4">
           <NavLink

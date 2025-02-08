@@ -106,13 +106,6 @@ export default function AdminContact() {
     ];
   };
 
-  if (loading) {
-    return (
-      <div className="relative min-h-[600px]">
-        <RollingBall size={100} centered={true} />
-      </div>
-    );
-  }
   return (
     <>
       <PageHeader title="Contacts" breadcrumbItems={breadcrumbs} />
@@ -145,60 +138,67 @@ export default function AdminContact() {
           <DeleteModal closeModal={closeDeleteModal} deleteRow={deleteRow} />
         )}
 
-        <table className="table-auto w-full">
-          <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
-            <tr>
-              <th className="px-6 py-3 text-start">S.N</th>
-              <th className="px-6 py-3 text-start">Full Name</th>
-              <th className="px-6 py-3 text-start">Email</th>
-              <th className="px-6 py-3 text-start">Phone Number</th>
-              <th className="px-6 py-3 text-start">Message</th>
-              <th className="px-6 py-3 text-start">Action</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
-            {contactData.length > 0 ? (
-              contactData.map((contact, index) => (
-                <tr
-                  className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-semibold"
-                  key={contact.id}
-                >
-                  <td className="px-6 py-3">{index + 1}</td>
-                  <td className="px-6 py-3">
-                    {contact.first_name + " " + contact.last_name}
-                  </td>
-                  <td className="px-6 py-3">{contact.email}</td>
-                  <td className="px-6 py-3">{contact.phone_number}</td>
-                  <td className="px-6 py-3">
-                    {contact.message.split(" ").slice(0, 3).join(" ") + "..."}
-                  </td>
-                  <td>
-                    <div className="flex gap-2">
-                      <button
-                        className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500"
-                        onClick={() => fetchContactDetails(contact.id)}
-                      >
-                        <FaEye />
-                      </button>
-                      <button
-                        onClick={() => confirmDelete(contact.id)}
-                        className="flex justify-center bg-red-600 hover:bg-red-500 text-white rounded-xl w-16 py-2"
-                      >
-                        <MdDelete />
-                      </button>
-                    </div>
-                  </td>
+        {loading ? (
+          <RollingBall size={100} centered={true} />
+        ) : (
+          <>
+            <table className="table-auto w-full">
+              <thead className="text-gray-700 uppercase text-sm bg-gray-50 dark:bg-gray-800 dark:text-gray-200 font-bold">
+                <tr>
+                  <th className="px-6 py-3 text-start">S.N</th>
+                  <th className="px-6 py-3 text-start">Full Name</th>
+                  <th className="px-6 py-3 text-start">Email</th>
+                  <th className="px-6 py-3 text-start">Phone Number</th>
+                  <th className="px-6 py-3 text-start">Message</th>
+                  <th className="px-6 py-3 text-start">Action</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan="6" className="px-6 py-3 text-center">
-                  No data
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody className="bg-white border-b dark:bg-gray-600 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600">
+                {contactData.length > 0 ? (
+                  contactData.map((contact, index) => (
+                    <tr
+                      className="text-start border dark:text-gray-200 dark:border-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 font-semibold"
+                      key={contact.id}
+                    >
+                      <td className="px-6 py-3">{index + 1}</td>
+                      <td className="px-6 py-3">
+                        {contact.first_name + " " + contact.last_name}
+                      </td>
+                      <td className="px-6 py-3">{contact.email}</td>
+                      <td className="px-6 py-3">{contact.phone_number}</td>
+                      <td className="px-6 py-3">
+                        {contact.message.split(" ").slice(0, 3).join(" ") +
+                          "..."}
+                      </td>
+                      <td>
+                        <div className="flex gap-2">
+                          <button
+                            className="flex justify-center bg-blue-600 text-white rounded-xl w-14 py-2 hover:bg-blue-500"
+                            onClick={() => fetchContactDetails(contact.id)}
+                          >
+                            <FaEye />
+                          </button>
+                          <button
+                            onClick={() => confirmDelete(contact.id)}
+                            className="flex justify-center bg-red-600 hover:bg-red-500 text-white rounded-xl w-16 py-2"
+                          >
+                            <MdDelete />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-3 text-center">
+                      No data
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </>
+        )}
       </div>
     </>
   );
