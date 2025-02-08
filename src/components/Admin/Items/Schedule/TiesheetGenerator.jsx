@@ -150,7 +150,7 @@ export default function TiesheetGenerator() {
 
   const breadcrumbs = [
     { label: "Dashboard", link: "/admin/dashboardManagment" },
-    { label: "Schedule", link: "/admin/schedule" },
+    { label: "Schedule", link: "/admin/scheduleManagment" },
     {
       label: "Tiesheet Generator",
       link: `/admin/schedule/tiesheet-generator/${tournamentId}`,
@@ -164,117 +164,126 @@ export default function TiesheetGenerator() {
   return (
     <>
       <PageHeader title="Tiesheet Generator" breadcrumbItems={breadcrumbs} />
-      {showDeleteModal && (
-        <DeleteModal
-          closeModal={closeDeleteModal}
-          deleteRow={deleteTiesheet}
-          message="Are you sure you want to delete the tiesheet and matches for this tournament?"
+      <div className="h-screen">
+        {showDeleteModal && (
+          <DeleteModal
+            closeModal={closeDeleteModal}
+            deleteRow={deleteTiesheet}
+            message="Are you sure you want to delete the tiesheet and matches for this tournament?"
+          />
+        )}
+        <div className="flex flex-col mt-3"></div>
+        <div className="text-2xl font-semibold mb-4 pl-4">
+          Tournament:{" "}
+          <span className="text-green-600 dark:text-green-600">
+            {tournament.t_name}
+          </span>
+        </div>
+        <Alert
+          type="info"
+          message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database."
         />
-      )}
-      <div className="flex flex-col mt-3"></div>
-      <div className="text-2xl font-semibold mb-4 pl-4">
-        Tournament:{" "}
-        <span className="text-green-600 dark:text-green-600">
-          {tournament.t_name}
-        </span>
-      </div>
-      <Alert
-        type="info"
-        message="If your tournament does not have a completed registration date, then the matches displayed are just dummy data created according to the maximum number of teams in the tournament. Once registration is complete, the actual match data will be properly stored in the database."
-      />
 
-      {loading ? (
-        <RollingBall size={100} centered={true} />
-      ) : error ? (
-        <span className="text-red-600">{error}</span>
-      ) : (
-        <>
-          {tournament.tournament_type === "round-robin" && (
-            <div className="text-sm text-blue-600">
-              Note: This tournament format is round-robin, where each team plays
-              against every other team.
-            </div>
-          )}
-          {!showTiesheet && (
-            <div className="flex items-center space-x-4">
-              <button
-                disabled={loading}
-                onClick={generateTiesheet}
-                className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
-                  loading
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:bg-green-700"
-                }`}
-              >
-                {matches.length > 0
-                  ? "Generate Another Tiesheet"
-                  : "Generate Tiesheet"}
-              </button>
-
-              {createMatches && (
+        {loading ? (
+          <RollingBall size={100} centered={true} />
+        ) : error ? (
+          <span className="text-red-600">{error}</span>
+        ) : (
+          <>
+            {tournament.tournament_type === "round-robin" && (
+              <div className="text-sm text-blue-600">
+                Note: This tournament format is round-robin, where each team
+                plays against every other team.
+              </div>
+            )}
+            {!showTiesheet && (
+              <div className="flex items-center space-x-4">
                 <button
                   disabled={loading}
-                  onClick={saveMatches}
+                  onClick={generateTiesheet}
                   className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
                     loading
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-green-700"
                   }`}
                 >
-                  Create Matches in Database
+                  {matches.length > 0
+                    ? "Generate Another Tiesheet"
+                    : "Generate Tiesheet"}
                 </button>
-              )}
-              {tournament.tournament_type === "single-elimination" && (
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={randomTeams}
-                    onChange={(e) =>
-                      setRandomTeams(e.target.checked ? true : false)
-                    }
-                    id="randomTeams"
-                    className="w-4 h-4 mr-2"
-                  />
-                  <label htmlFor="randomTeams" className="text-sm font-medium">
-                    Randomize Teams
-                  </label>
-                </div>
-              )}
-            </div>
-          )}
 
-          {showTiesheet && (
-            <button
-              onClick={() => setShowDeleteModal(true)}
-              className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 flex items-center gap-2 ml-6 mt-3"
-            >
-              <MdDelete />
-              Delete Tiesheet & Matches
-            </button>
-          )}
-          {matches.length > 0 ? (
-            tournament.tournament_type === "single-elimination" ? (
-              <SingleEliminationBracket
-                matches={matches}
-                matchComponent={Match}
-                svgWrapper={({ children, ...props }) => (
-                  <SVGViewer width={finalWidth} height={finalHeight} {...props}>
-                    {children}
-                  </SVGViewer>
+                {createMatches && (
+                  <button
+                    disabled={loading}
+                    onClick={saveMatches}
+                    className={`bg-green-600 text-white px-8 py-3 rounded-lg ${
+                      loading
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-green-700"
+                    }`}
+                  >
+                    Create Matches in Database
+                  </button>
                 )}
-              />
+                {tournament.tournament_type === "single-elimination" && (
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={randomTeams}
+                      onChange={(e) =>
+                        setRandomTeams(e.target.checked ? true : false)
+                      }
+                      id="randomTeams"
+                      className="w-4 h-4 mr-2"
+                    />
+                    <label
+                      htmlFor="randomTeams"
+                      className="text-sm font-medium"
+                    >
+                      Randomize Teams
+                    </label>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {showTiesheet && (
+              <button
+                onClick={() => setShowDeleteModal(true)}
+                className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 flex items-center gap-2 ml-6 mt-3"
+              >
+                <MdDelete />
+                Delete Tiesheet & Matches
+              </button>
+            )}
+            {matches.length > 0 ? (
+              tournament.tournament_type === "single-elimination" ? (
+                <SingleEliminationBracket
+                  matches={matches}
+                  matchComponent={Match}
+                  svgWrapper={({ children, ...props }) => (
+                    <SVGViewer
+                      width={finalWidth}
+                      height={finalHeight}
+                      {...props}
+                    >
+                      {children}
+                    </SVGViewer>
+                  )}
+                />
+              ) : (
+                <RoundRobinBracket
+                  matches={matches}
+                  max_rounds={maxRounds}
+                  pointsTable={pointsTableData}
+                />
+              )
             ) : (
-              <RoundRobinBracket
-                matches={matches}
-                max_rounds={maxRounds}
-                pointsTable={pointsTableData}
-              />
-            )
-          ) : (
-            <p>Click generate button to generate Tiesheet</p>
-          )}
-        </>
-      )}
+              <p>Click generate button to generate Tiesheet</p>
+            )}
+          </>
+        )}
+      </div>
     </>
   );
 }

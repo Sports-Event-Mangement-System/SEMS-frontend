@@ -4,7 +4,7 @@ function About() {
   return (
     <>
       <div className="h-screen flex justify-center mt-5 px-4">
-        <div className="w-fit h-fit p-10 bg-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.15)] rounded-2xl flex flex-col item-center">
+        <div className="w-full h-fit p-10 bg-white drop-shadow-[0_3px_3px_rgba(0,0,0,0.15)] rounded-2xl flex flex-col item-center">
           <h1 className="text-3xl font-bold text-center mt-4">
             About <span className="text-orange-600">Us</span>
           </h1>

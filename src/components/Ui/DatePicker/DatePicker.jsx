@@ -10,7 +10,7 @@ function DatePicker({ value, onChange, label }) {
         type="date"
         id="date"
         placeholder="Any date"
-        className="w-[12vh] md:w-[19vh] lg:w-full sm:w-[12vh] px-4 py-[5px] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
+        className="w-[75px] md:w-[132px] lg:w-full sm:w-[110px] px-4 py-[5px] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />

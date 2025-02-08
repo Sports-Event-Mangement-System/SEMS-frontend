@@ -2,7 +2,6 @@ import React from "react";
 import HomeServiceCard from "./HomeServiceCard";
 import { TbTournament } from "react-icons/tb";
 import { MdOutlineDisplaySettings, MdOutlineMail } from "react-icons/md";
-import About from "../About Us/About";
 import { Typewriter } from "react-simple-typewriter";
 
 function Home() {
@@ -105,9 +104,6 @@ function Home() {
           />
         ))}
       </div>
-      <div className="w-full h-[1px] bg-orange-500 m-[18vh_0_0_0] opacity-55"></div>
-
-      <About />
     </>
   );
 }

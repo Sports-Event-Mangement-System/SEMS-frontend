@@ -20,7 +20,7 @@ function Tournaments() {
   const indexOfLastTournament = currentPage * selectedPerPage;
   const indexOfFirstTournament = indexOfLastTournament - selectedPerPage;
 
-  const perPageOptions = [2, 4, 6, 8, 10, 12];
+  const perPageOptions = [3, 6, 9, 12];
 
   const featuredOptions = [
     { value: "Featured", label: "Featured" },
@@ -132,65 +132,68 @@ function Tournaments() {
             Tournaments
           </h1>
 
-          <span className="absolute top-0 w-[93%] transform translate-y-[44vh] bg-white h-auto py-6 flex justify-evenly items-center gap-4 md:gap-3 drop-shadow-lg rounded-lg">
-            <div className="w-fit flex flex-col sm:w-fit md:w-[20%]">
-              <label
-                htmlFor="search"
-                className="text-md font-medium text-gray-700 mb-1"
-              >
-                Search for
-              </label>
-              <input
-                type="text"
-                id="search"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Event title..."
-                className=" px-4 py-[5px] w-[12vh] md:w-[19vh] lg:w-full sm:w-[12vh] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
-              />
-            </div>
+          <span className="absolute top-0 w-[93%] transform translate-y-[44vh] bg-white h-auto py-6 flex justify-center items-center gap-4 md:gap-3 drop-shadow-lg rounded-lg">
+            <div className="flex flex-wrap w-full gap-3 sm:gap-3 md:gap-3 lg:gap-6 px-10 justify-center h-fit py-2 items-center">
+              <div className="w-fit flex flex-col sm:w-fit md:w-[20%]">
+                <label
+                  htmlFor="search"
+                  className="text-md font-medium text-gray-700 mb-1"
+                >
+                  Search for
+                </label>
+                <input
+                  type="text"
+                  id="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Event title..."
+                  className=" px-4 py-[5px] w-[75px] md:w-[132px] lg:w-full sm:w-[110px] border border-black rounded-[4px] focus:outline-none focus:ring-1 focus:ring-[rgb(255,140,0)] focus:border-[rgb(255,140,0)] text-gray-700 hover:border-[rgb(255,140,0)]"
+                />
+              </div>
 
-            <div className="w-fit sm:w-52 md:w-[20%]">
-              <SelectField
-                label="Featured"
-                id="featured"
-                name="featured"
-                placeholder="Featured Status"
-                options={featuredOptions}
-                value={selectedFeatured}
-                onChange={(option) => setSelectedFeatured(option)}
-              />
+              <div className="w-fit md:w-[20%]">
+                <SelectField
+                  label="Featured"
+                  id="featured"
+                  name="featured"
+                  placeholder="Featured "
+                  options={featuredOptions}
+                  value={selectedFeatured}
+                  onChange={(option) => setSelectedFeatured(option)}
+                />
+              </div>
+              <div className="w-fit md:w-[20%]">
+                <SelectField
+                  label="Event Type"
+                  id="event_type"
+                  name="event_type"
+                  placeholder="Event Type"
+                  options={eventTypeOptions}
+                  value={selectedEventType}
+                  onChange={(option) => setSelectedEventType(option)}
+                />
+              </div>
+              <div className="w-fit md:w-[20%]">
+                <DatePicker
+                  value={selectedDate}
+                  label="When"
+                  onChange={(dateString) => {
+                    setSelectedDate(dateString);
+                    const selectedDateObj = new Date(dateString);
+                    setSelectedYear(selectedDateObj.getFullYear());
+                    setSelectedMonth(selectedDateObj.getMonth() + 1);
+                  }}
+                />
+              </div>
+              <div>
+                <button
+                  onClick={resetFilters}
+                  className="flex items-center justify-center w-fit h-fit px-2 py-1 rounded-lg bg-orange-600 text-white hover:bg-orange-500"
+                >
+                  Reset
+                </button>
+              </div>
             </div>
-            <div className="w-fit md:w-[20%]">
-              <SelectField
-                label="Event Type"
-                id="event_type"
-                name="event_type"
-                placeholder="Event Type"
-                options={eventTypeOptions}
-                value={selectedEventType}
-                onChange={(option) => setSelectedEventType(option)}
-              />
-            </div>
-            <div className="w-fit md:w-[20%]  ">
-              <DatePicker
-                value={selectedDate}
-                label="When"
-                onChange={(dateString) => {
-                  setSelectedDate(dateString);
-                  const selectedDateObj = new Date(dateString);
-                  setSelectedYear(selectedDateObj.getFullYear());
-                  setSelectedMonth(selectedDateObj.getMonth() + 1);
-                }}
-              />
-            </div>
-
-            <button
-              onClick={resetFilters}
-              className="flex items-center justify-center w-fit h-fit px-2 py-1 rounded-lg bg-orange-600 text-white hover:bg-orange-500"
-            >
-              Reset
-            </button>
           </span>
         </div>
 
@@ -224,6 +227,7 @@ function Tournaments() {
           )}
 
           <div className="flex justify-end gap-4 mt-8">
+            <div className="flex items-center text-xs">Card per page</div>
             <select
               value={selectedPerPage}
               onChange={handlePerPageChange}

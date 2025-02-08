@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, NavLink } from "react-router-dom";
 import ProfileDropdown from "../Account/ProfileDropdown";
@@ -11,6 +11,18 @@ function Header() {
   const isAdmin = user?.role === "admin";
   const [profileDropdown, setProfileDropdown] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  useEffect(() => {
+    if (isSidebarOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+
+    return () => {
+      document.body.style.overflow = "auto";
+    };
+  }, [isSidebarOpen]);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -120,16 +132,17 @@ function Header() {
                       user.user_details?.username?.slice(1)}
                   </span>
 
-                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-400 text-white text-xl font-normal hover:border-2 border-blue-500">
-                  {user.user_details?.profile_image ? (
-                    <img
-                      src={user.user_details?.profile_image}
-                      alt="Profile"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    user.user_details?.username?.charAt(0).toUpperCase()
-                  )}                  </div>
+                  <div className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-400 text-white text-xl font-normal border-blue-500">
+                    {user.user_details?.profile_image ? (
+                      <img
+                        src={user.user_details?.profile_image}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      user.user_details?.username?.charAt(0).toUpperCase()
+                    )}{" "}
+                  </div>
                   {profileDropdown && <ProfileDropdown />}
                 </div>
               ) : (
