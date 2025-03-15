@@ -105,7 +105,6 @@ export default function SingleTeamDetails() {
       const response = await axios.get(
         `${import.meta.env.VITE_API_URL}api/predict/match/${matchId}`
       );
-      console.log(response);
       if (response.data.status) {
         toast.success(response.data.message);
         setPrediction(response.data.predictions);

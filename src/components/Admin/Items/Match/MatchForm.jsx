@@ -66,7 +66,6 @@ export default function MatchForm({ match, closeModal, onFormUpdate }) {
     formData.append("state", matchState || "");
     formData.append("team1ResultText", team1ResultText || "");
     formData.append("team2ResultText", team2ResultText || "");
-    console.log(formData);
     axios.post(`${import.meta.env.VITE_API_URL}api/update/match/${match.id}`, formData, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

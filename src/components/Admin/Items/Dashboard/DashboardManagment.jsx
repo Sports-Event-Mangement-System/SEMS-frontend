@@ -79,7 +79,6 @@ export default function DashboardManagement() {
       setDashboardData(response.data.data);
       setEvents(response.data.data.events);
     } catch (error) {
-      console.log("Error in fetching", error);
     }
   };
 
@@ -96,7 +95,6 @@ export default function DashboardManagement() {
     return date.getDate();
   };
 
-  // console.log(events)
   return (
     <div className="flex flex-col flex-1 h-screen">
       <PageHeader title="Dashboard" breadcrumbItems={breadcrumbs} />

@@ -36,7 +36,7 @@ function Header() {
             <div className="font-extrabold text-2xl">
               <Link to="/">
                 <img
-                  src="images/Logo.png"
+                  src="/public/images/Logo.png"
                   alt=""
                   className="lg:h-14 lg:w-15 md:h-11 md:w-14 sm:h-9 sm:w-12 h-7 w-10 ml-7"
                 />

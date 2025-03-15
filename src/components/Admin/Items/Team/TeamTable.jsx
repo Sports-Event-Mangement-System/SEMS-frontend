@@ -79,12 +79,11 @@ export default function TeamTable() {
 
   // Toggle the status of a team
   const toggleStatus = async (id, currentStatus, tournamentId, index) => {
-    // Clone the groupedTeams state to avoid mutating the original state
-    const updatedGroupedTeams = { ...groupedTeams };
-
-    // Set loading state for the specific team
+    const updatedGroupedTeams = JSON.parse(JSON.stringify(groupedTeams));
+    
     updatedGroupedTeams[tournamentId].teams[index].isLoading = true;
     setGroupedTeams(updatedGroupedTeams);
+
     try {
       const newStatus = currentStatus === 1 ? 0 : 1;
 
@@ -100,20 +99,18 @@ export default function TeamTable() {
           },
         }
       );
-      if (response.data.status === true) {
-        updatedGroupedTeams[tournamentId].teams[index].status = newStatus;
-        updatedGroupedTeams[tournamentId].teams[index].isLoading = false;
 
-        // Update the state with the new groupedTeams
-        setGroupedTeams(updatedGroupedTeams);
-        toast.success(response.data.message);
-      }
+      const updatedTeams = JSON.parse(JSON.stringify(groupedTeams));
+      updatedTeams[tournamentId].teams[index].status = newStatus;
+      updatedTeams[tournamentId].teams[index].isLoading = false;
+      setGroupedTeams(updatedTeams);
+      
+      toast.success(response.data.message);
     } catch (err) {
+      const errorUpdatedTeams = JSON.parse(JSON.stringify(groupedTeams));
+      errorUpdatedTeams[tournamentId].teams[index].isLoading = false;
+      setGroupedTeams(errorUpdatedTeams);
       toast.error("Error updating Team status");
-
-      // Reset loading state in case of an error
-      updatedGroupedTeams[tournamentId].teams[index].isLoading = false;
-      setGroupedTeams(updatedGroupedTeams);
     }
   };
 

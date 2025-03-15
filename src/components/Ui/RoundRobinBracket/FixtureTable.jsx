@@ -35,7 +35,7 @@ export default function FixtureTable({ matches, max_rounds }) {
                             <React.Fragment key={participant.id}>
                               {/* Left Participant */}
                               {i === 0 && (
-                                <div className="flex items-center w-2/12">
+                                <div className="flex items-center w-4/12">
                                   {participant.teamLogo && (
                                     <img 
                                       src={participant.teamLogo} 

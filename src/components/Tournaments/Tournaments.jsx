@@ -105,7 +105,6 @@ function Tournaments() {
         );
         setTournaments(response.data.tournaments);
       } catch (error) {
-        console.log("Error in fetching", error);
       }
     };
 

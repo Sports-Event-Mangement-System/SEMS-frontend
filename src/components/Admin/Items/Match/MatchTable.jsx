@@ -72,7 +72,6 @@ export default function MatchTable() {
   const fetchMatchDetails = async (id) => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}api/match/details/${id}`);
-      console.log(response.data.data)
       setSelectedMatch(response.data.data);
       setShowModal(true);
     } catch (error) {
@@ -85,7 +84,6 @@ export default function MatchTable() {
 
   if (loading) return <RollingBall size={100} color="#4a90e2" centered={true} />;
   if (error) return <div>{error}</div>;
-  console.log(tournaments)
   return (
     <div className="p-4 w-full shadow-2xl">
       <table className="table-auto w-full border-spacing-1 border border-gray-200">

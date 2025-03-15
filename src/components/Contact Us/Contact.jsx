@@ -23,12 +23,9 @@ function Contact() {
       phone_number,
       message,
     };
-
-    console.log(contactValues);
     axios
       .post(`${import.meta.env.VITE_API_URL}api/store/contacts`, contactValues)
       .then((response) => {
-        console.log(response.data);
         if (response.data.status === true) {
           setError("");
           toast.success(response.data.message);
@@ -38,7 +35,6 @@ function Contact() {
       .catch((error) => {
         const errorMessage = error?.response?.data?.errors;
         setError(errorMessage ? errorMessage : {});
-        console.log(error);
       });
   };
 

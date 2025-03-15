@@ -74,7 +74,6 @@ export default function TournamentForm() {
             }
           );
           const data = response.data;
-          console.log(data);
           if (data && data.tournament) {
             setTournamentName(data.tournament.t_name || "");
             setTournamentDescription(data.tournament.t_description || "");

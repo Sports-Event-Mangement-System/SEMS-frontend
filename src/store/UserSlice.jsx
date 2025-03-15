@@ -80,7 +80,6 @@ export const updateProfileImage = createAsyncThunk(
             const formData = new FormData();
             formData.append('profile_image', userProfileImage.profile_image);
             formData.append('id', userProfileImage.id);
-            console.log(userProfileImage);
             const response = await axios.post(
                 `${import.meta.env.VITE_API_URL}api/update/profile_image/${userProfileImage.id}`,
                 formData,
@@ -107,7 +106,6 @@ export const deleteProfileImage = createAsyncThunk(
     'auth/deleteProfileImage',
     async ({ data }, { rejectWithValue }) => {
         try {
-            console.log(data);
             const response = await axios.delete(
                 `${import.meta.env.VITE_API_URL}api/delete/profile_image/${data.id}`,
                 {
@@ -116,10 +114,8 @@ export const deleteProfileImage = createAsyncThunk(
                     },
                 }
             );
-            console.log(response.data);
             return response.data;
         } catch (error) {
-            console.log(error)
             if (error.response && error.response.data.errors) {
                 return rejectWithValue(error.response.data.errors);
             } else if (error.response && error.response.data.message) {
