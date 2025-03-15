@@ -24,7 +24,6 @@ export default function TournamentCardDetails() {
       );
       setTournamentData(response.data.tournament);
     } catch (error) {
-      console.log("Error in fetching:", error);
     }
   };
 
@@ -35,7 +34,6 @@ export default function TournamentCardDetails() {
       );
       setTeamData(response.data.teams);
     } catch (error) {
-      console.log("Error in fetching:", error);
     }
   };
 
@@ -55,7 +53,6 @@ export default function TournamentCardDetails() {
       ? date.toLocaleDateString(undefined, options)
       : "Invalid date";
   };
-  // console.log(teamData)
 
   return (
     <div className="flex flex-col items-center">

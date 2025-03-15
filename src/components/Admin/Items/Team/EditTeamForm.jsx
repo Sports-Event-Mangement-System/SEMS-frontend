@@ -36,7 +36,6 @@ export default function EditTeamForm() {
             }api/show/team/${teamId}`,
           );
           const data = response.data;
-          console.log(data);
           if (data && data.team) {
             setTournament(data.team.tournament || "");
             setTeamName(data.team.team_name || "");
@@ -66,14 +65,12 @@ export default function EditTeamForm() {
 
 
   const handlePlayerChange = (index, field, value) => {
-    console.log(index, field, value);
     const updatedPlayers = [...playerList];
     updatedPlayers[index][field] = value;
     setPlayerList(updatedPlayers);
   };
 
   const addPlayer = () => {
-    console.log(playerList);
     if (playerList.length < tournament.max_players_per_team) {
       setPlayerList([...playerList, { playerName: "", playerEmail: "" }]);
     }

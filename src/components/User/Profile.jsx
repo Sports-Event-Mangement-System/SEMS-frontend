@@ -114,7 +114,6 @@ function Profile() {
         toast.success(result.payload.message);
       }
       else {
-        console.log(result.payload);
         setError(result.payload);
       }
     });

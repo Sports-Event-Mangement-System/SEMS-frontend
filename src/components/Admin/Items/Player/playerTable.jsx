@@ -42,7 +42,6 @@ export default function PlayerTable() {
             setLoading(false);
             setPlayers(response.data.data);
         } catch (err) {
-            console.log(err);
         } finally {
             setLoading(false);
         }

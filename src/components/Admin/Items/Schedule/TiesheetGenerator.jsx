@@ -1,8 +1,8 @@
 import {
   SingleEliminationBracket,
   Match,
-  SVGViewer,
 } from "@g-loot/react-tournament-brackets";
+import { CustomTheme } from "../../../Ui/SingleEliminationBracket/CustomTheme";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -33,7 +33,7 @@ export default function TiesheetGenerator() {
   const finalHeight = Math.max(height - 100, 500);
 
   const [maxRounds, setMaxRounds] = useState([]);
-
+  
   useEffect(() => {
     fetchTournamentData();
     getTiesheetResponse();
@@ -261,15 +261,17 @@ export default function TiesheetGenerator() {
                 <SingleEliminationBracket
                   matches={matches}
                   matchComponent={Match}
-                  svgWrapper={({ children, ...props }) => (
-                    <SVGViewer
-                      width={finalWidth}
-                      height={finalHeight}
-                      {...props}
-                    >
-                      {children}
-                    </SVGViewer>
-                  )}
+                  theme={CustomTheme}
+                  options={{
+                    style: {
+                      roundHeader: {
+                        backgroundColor: CustomTheme.roundHeader.backgroundColor,
+                        fontColor: CustomTheme.roundHeader.fontColor,
+                      },
+                      connectorColor: CustomTheme.connectorColor,
+                      connectorColorHighlight: CustomTheme.connectorColorHighlight,
+                    },
+                  }}                
                 />
               ) : (
                 <RoundRobinBracket

@@ -2,16 +2,14 @@ import React, { useEffect, useState } from "react";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaBuildingCircleCheck } from "react-icons/fa6";
 import { FaUsers, FaTrophy } from "react-icons/fa";
-import { GiWallet } from "react-icons/gi";
 import { TbTournament } from "react-icons/tb";
 import { NavLink } from "react-router-dom";
 import {
   SingleEliminationBracket,
   Match,
-  SVGViewer,
 } from "@g-loot/react-tournament-brackets";
+import { CustomTheme } from "../Ui/SingleEliminationBracket/CustomTheme";
 import { useWindowSize } from "@uidotdev/usehooks";
-import RoundRobinBracket from "../Admin/Items/Schedule/RoundRobinBracket";
 import axios from "axios";
 import { toast } from "react-toastify";
 import FixtureTable from "../Ui/RoundRobinBracket/FixtureTable";
@@ -35,7 +33,6 @@ export default function TournamentDetailsContent({
   const [pointsTableData, setPointsTableData] = useState([]);
 
   const getTiesheetResponse = async () => {
-    console.log("hello");
     setLoading(true);
     try {
       const response = await axios.get(
@@ -43,7 +40,6 @@ export default function TournamentDetailsContent({
           tournamentData.id
         }`
       );
-      console.log(response.data);
       setMatches(response.data.matches || []);
       setShowTiesheet(response.data.showTiesheet || false);
       if ((tournamentData.tournament_type = "round-robin")) {
@@ -52,7 +48,6 @@ export default function TournamentDetailsContent({
       setMaxRounds(response.data.max_rounds);
     } catch (err) {
       toast.error(err.response?.data?.message || "Error fetching tiesheet");
-      console.log(err);
     } finally {
       setLoading(false);
     }
@@ -60,7 +55,6 @@ export default function TournamentDetailsContent({
 
   useEffect(() => {
     getTiesheetResponse();
-    console.log(matches);
   }, []);
 
   return (
@@ -266,15 +260,17 @@ export default function TournamentDetailsContent({
                 <SingleEliminationBracket
                   matches={matches}
                   matchComponent={Match}
-                  svgWrapper={({ children, ...props }) => (
-                    <SVGViewer
-                      width={finalWidth}
-                      height={finalHeight}
-                      {...props}
-                    >
-                      {children}
-                    </SVGViewer>
-                  )}
+                  theme={CustomTheme}
+                  options={{
+                    style: {
+                      roundHeader: {
+                        backgroundColor: CustomTheme.roundHeader.backgroundColor,
+                        fontColor: CustomTheme.roundHeader.fontColor,
+                      },
+                      connectorColor: CustomTheme.connectorColor,
+                      connectorColorHighlight: CustomTheme.connectorColorHighlight,
+                    },
+                  }}
                 />
               ) : (
                 <div className="w-6/12">

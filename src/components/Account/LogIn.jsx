@@ -38,7 +38,6 @@ export default function LogIn() {
         toast.success(result.payload.message);
       }
       else {
-        console.log(result.payload);
         setError(result.payload);
       }
     });

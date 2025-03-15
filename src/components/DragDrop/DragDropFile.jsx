@@ -21,8 +21,6 @@ export default function DragDropFile({ setFile, accepts }) {
       console.warn('No accepted files dropped.');
       return;
     }
-    
-    console.log(acceptedFiles);
     setFile(acceptedFiles);
   };
 

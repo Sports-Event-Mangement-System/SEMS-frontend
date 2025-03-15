@@ -22,7 +22,6 @@ function SignUp() {
         password_confirmation: e.target.elements.password_confirmation.value,
       })
       .then((res) => {
-        console.log(res);
         if (res.data.status === true) {
           navigate('/')
           toast.success(res.data.message);
@@ -32,7 +31,6 @@ function SignUp() {
 
         if (err.message === "Network Error") {
           setError({ message: err.message })
-          console.log(err)
         }
         else {
           setError(err.response.data.errors);

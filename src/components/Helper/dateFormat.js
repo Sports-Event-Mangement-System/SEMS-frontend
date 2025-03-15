@@ -4,8 +4,7 @@ export const dateFormatBackend = (date) => {
     const year = localDate.getFullYear();
     const month = String(localDate.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
     const day = String(localDate.getDate()).padStart(2, '0');
-    const formattedDate = `${year}-${month}-${day}`; // Convert to YYYY-MM-DD
-    console.log(formattedDate);
+    const formattedDate = `${year}-${month}-${day}`;
     return formattedDate;
 };
 
